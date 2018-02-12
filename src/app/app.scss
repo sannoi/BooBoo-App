@@ -1,0 +1,57 @@
+// http://ionicframework.com/docs/v2/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+.transparent-header .toolbar-background, .transparent-header ion-header, .transparent-header ion-navbar {
+    background: 0 0!important;
+    background-color: transparent!important;
+}
+.transparent-header .header-md::after, .transparent-header .tabs-md[tabsPlacement="top"] > .tabbar::after, .transparent-header .footer-md::before, .transparent-header .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+	background-image: none;
+}
+.transparent-header .bar-button-default-md, .transparent-header .bar-button-clear-md-default, .transparent-header .bar-button-md-default {
+    color: #ffffff;
+    background-color: transparent;
+}
+.transparent-header .bar-button-default-md:hover, .transparent-header .bar-button-clear-md-default:hover, .transparent-header .bar-button-md-default:hover {
+	color: #ffffff;
+    background-color: transparent;
+}
+
+/* Compatible with Leaflet 0.7 */
+.leaflet-control-locate {
+  a {
+    font-size: 1.4em;
+    color: #444;
+    cursor: pointer;
+	padding:0!important;
+  }
+  &.active {
+    a {
+      color: #2074B6;
+    }
+    &.following a {
+      color: #FC8428;
+    }
+  }
+}
+.gradient {
+    background: #81aaf9;
+    background: -webkit-linear-gradient(-54deg, #a870fe 20%, #81aaf9 90%);
+    background: -o-linear-gradient(-54deg, #a870fe 20%, #81aaf9 90%);
+    background: -moz-linear-gradient(-54deg, #a870fe 20%, #81aaf9 90%);
+    background: linear-gradient(-54deg, rgba(255, 139, 187, 0.58) 20%, #81a9f9 90%);
+}	

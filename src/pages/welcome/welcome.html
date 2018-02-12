@@ -1,0 +1,12 @@
+<ion-content scroll="false">
+  <div class="splash-bg"></div>
+  <div class="splash-info">
+    <div class="splash-logo"></div>
+    <div class="splash-intro">
+      {{ 'home.welcome_intro' | translate }}
+    </div>
+  </div>
+  <div padding>
+    <button ion-button block (click)="login()" class="login">{{ 'page.login' | translate }}</button>
+  </div>
+</ion-content>

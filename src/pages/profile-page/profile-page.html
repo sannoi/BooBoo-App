@@ -1,0 +1,115 @@
+<ion-content padding class="transparent-header" *ngIf="user">
+  <ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title></ion-title>
+    </ion-navbar>
+  </ion-header>
+  <div id="profile-bg" class="gradient"></div>
+  <div id="content">
+    <div id="profile-info" padding>
+      <img id="profile-image" [src]="user.imagenes.md">
+      <h3 id="profile-name">{{user.nombre}}</h3>
+      <p>{{user.email}} &bull; {{user.categorias_formateadas}}</p>
+      <p class="profile-description" [innerHtml]="user.localizacion_html"></p>
+      <!--<button ion-button *ngIf="isUserProvider()" small color="purple">Follow</button>-->
+    </div>
+    <hr/>
+    <!--<ion-row class="profile-numbers">
+      <ion-col col-4>
+        <p>Followers</p>
+        <span>85</span>
+      </ion-col>
+      <ion-col col-4>
+        <p>Following</p>
+        <span>32</span>
+      </ion-col>
+      <ion-col col-4>
+        <p>Posts</p>
+        <span>6</span>
+      </ion-col>
+    </ion-row>
+	<hr/>-->
+	<ion-card>
+	<ion-list>
+		<button ion-item (click)="openPage('ListMasterPage', 'page.orders.list')">
+			<ion-avatar item-start>
+				<img src="assets/img/envios_disponibles.png">
+			</ion-avatar>
+			<h2>MIS PEDIDOS</h2>
+			<p>Consulta tus pedidos activos y completados</p>
+		</button>
+	</ion-list>
+	</ion-card>
+	
+	<ion-card *ngIf="isUserProvider()">
+	<ion-list>
+		<button ion-item (click)="openPage('ListMasterPage', 'page.orders.listNotAssigned', 'onlyNotAssigned')">
+			<ion-avatar item-start>
+				<img src="assets/img/mis_vehiculos.png">
+			</ion-avatar>
+			<h2>ENVÍOS DISPONIBLES</h2>
+			<p>Comprueba si hay nuevos envíos y asígnalos a un conductor</p>
+		</button>
+	</ion-list>
+	</ion-card>
+	
+	<ion-card>
+	<ion-list>
+		<button ion-item (click)="openPage('MapPage', 'page.map')">
+			<ion-icon name="map" color="secondary" item-start></ion-icon>
+			<h2>MAPA</h2>
+			<p>Visualiza tus pedidos en un mapa</p>
+		</button>
+	</ion-list>
+	</ion-card>
+	
+	<ion-card>
+	<ion-list>
+		<button ion-item (click)="openPage('SettingsListPage', 'page.settings')">
+			<ion-avatar item-start>
+				<img src="assets/img/misdatos.png">
+			</ion-avatar>
+			<h2>CONFIGURACIÓN</h2>
+			<p>Modifica los ajustes de la aplicación</p>
+		</button>
+	</ion-list>
+	</ion-card>
+    <!--<div id="posts">
+      <ion-card *ngFor="let post of posts">
+        <ion-item>
+          <ion-avatar item-start>
+            <img [src]="user.imagenes.sd">
+          </ion-avatar>
+          <h2 class="sticky">{{user.nombre}}</h2>
+          <p>10/12/2017</p>
+        </ion-item>
+        <img [src]="post.postImageUrl" (click)="imageTapped(post)">
+        <ion-card-content>
+          <p>{{post.text}}</p>
+        </ion-card-content>
+        <ion-row>
+          <ion-col col-4>
+            <button ion-button color="purple" clear small icon-left (click)="like(post)">
+                <ion-icon name='thumbs-up'></ion-icon>
+                {{post.likes}} Likes
+              </button>
+          </ion-col>
+          <ion-col col-5>
+            <button ion-button no-padding color="purple" clear small icon-left (click)="comment(post)">
+                <ion-icon name='text'></ion-icon>
+                {{post.comments}} Comments
+              </button>
+          </ion-col>
+          <ion-col col-3 align-self-center text-center>
+            <p>
+              {{post.timestamp}}
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>-->
+  </div>
+</ion-content>

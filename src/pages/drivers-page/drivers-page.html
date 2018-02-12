@@ -1,0 +1,45 @@
+<ion-header>
+
+    <ion-navbar>
+        <!--<button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>-->
+        <ion-title>{{ customTitle | translate }}</ion-title>
+		<ion-buttons start>
+            <button ion-button (click)="dismiss()">
+                <span ion-text color="primary">Cerrar</span>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+
+    </ion-header>
+
+    <ion-content>
+
+      <ion-list>
+        <ion-item-sliding *ngFor="let item of drivers">
+            <button ion-item (click)="selectDriver(item)">
+                <ion-avatar item-start>
+					<img [src]="item.imagenes.md">
+				</ion-avatar>
+                <h2>{{item.nombre}}</h2>
+				<p>{{item.email}}</p>
+            </button>
+
+          <!--<ion-item-options>
+            <button ion-button color="danger" (click)="deleteItem(item)">
+              {{ 'DELETE_BUTTON' | translate }}
+            </button>
+          </ion-item-options>-->
+        </ion-item-sliding>
+		
+		<ion-item *ngIf="!drivers">
+		<ion-card>
+		<ion-card-content>
+		<h2 align="center">No hay conductores</h2>
+		</ion-card-content>
+		</ion-card>
+		</ion-item>
+		
+        </ion-list>
+        </ion-content>

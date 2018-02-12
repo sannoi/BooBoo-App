@@ -1,0 +1,52 @@
+{
+  "label": {
+    "email": "Email",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "confirm_password": "Confirmar contraseña",
+    "title": "Título",
+    "author_name": "Autor",
+    "pages": "Páginas",
+    "login_title": "Identificarse"
+  },
+  "button" : {
+    "login" : "Acceder",
+    "register" : "Registro",
+    "new_registration" : "Nuevo registro",
+    "forgotten_password" : "Olvidaste tu contraseña?",
+    "submit" : "Enviar",
+    "add_book": "Nuevo libro",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "notes":  "Notas",
+	"assign": "Asignar pedido",
+	"pickup": "Recoger pedido"
+  },
+  "page": {
+    "login": "Accede con tus datos",
+    "logout": "Salir",
+    "register": "Nuevo registro",
+    "forgotten_password": "Recuperar contraseña",
+    "profile": "Escritorio",
+	"settings": "Configuración",
+	"drivers": "Conductores",
+	"map": "Mapa",
+    "books": {
+      "list": "Mis libros",
+      "add": "Nuevo libro",
+      "edit": "Editar libro",
+      "preview": "Previsualizar"
+    },
+    "orders": {
+      "list": "Mis pedidos",
+      "add": "Nuevo pedido",
+      "edit": "Editar pedido",
+      "preview": "Previsualizar",
+      "notes": "Notas",
+      "listNotAssigned": "Envíos disponibles"
+    }
+  },
+  "home": {
+    "welcome_intro":  "Servicios de transporte para todos los niveles"
+  }
+}

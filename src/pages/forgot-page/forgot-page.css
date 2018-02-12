@@ -1,0 +1,10 @@
+page-forgot-page scroll-content {
+  display: flex;
+  flex-direction: column; }
+page-forgot-page ion-item.item-ios {
+  padding-left: 0; }
+page-forgot-page ion-grid {
+  padding: 0;
+  height: 100%; }
+page-forgot-page ion-row {
+  flex: 1; }

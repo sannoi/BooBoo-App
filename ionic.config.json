@@ -1,0 +1,8 @@
+{
+  "name": "ionic3-seed-jwt",
+  "app_id": "",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

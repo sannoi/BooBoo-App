@@ -1,0 +1,52 @@
+{
+  "label": {
+    "email": "Email address",
+    "password": "Password",
+    "name": "Name",
+    "confirm_password": "Confirm password",
+    "title": "Title",
+    "author_name": "Author",
+    "pages": "Pages",
+    "login_title":  "Login"
+  },
+  "button": {
+    "login": "Login",
+    "register": "Register",
+    "new_registration": "New registration",
+    "forgotten_password": "Forgotten password?",
+    "submit": "Submit",
+    "add_book": "Add new book",
+    "edit": "Edit",
+    "delete": "Delete",
+    "notes":  "Notes",
+	"assign": "Assign order",
+	"pickup": "Pick up order"
+  },
+  "page": {
+    "login": "Login with your credentials",
+    "logout": "Logout",
+    "register": "New registration",
+    "forgotten_password": "Password recovery",
+    "profile": "Dashboard",
+	"settings": "Settings",
+	"drivers": "Drivers",
+	"map": "Map",
+    "books": {
+      "list": "My books",
+      "add": "Add book",
+      "edit": "Edit book",
+      "preview": "Preview"
+    },
+    "orders": {
+      "list": "My orders",
+      "add": "Add order",
+      "edit": "Edit order",
+      "preview": "Preview",
+      "notes": "Notes",
+      "listNotAssigned":  "Unassigned Orders"
+    }
+  },
+  "home": {
+    "welcome_intro": "Shipping service for all levels"
+  }
+}

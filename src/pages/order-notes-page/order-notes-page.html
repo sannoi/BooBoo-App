@@ -1,0 +1,26 @@
+﻿<ion-header>
+    <ion-toolbar>
+        <!--<button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>-->
+        <ion-title>{{ 'page.orders.notes' | translate }}</ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="dismiss()">
+                <span ion-text color="primary">Cerrar</span>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item text-wrap *ngFor="let item of notes">
+			<h2>{{item.nota}}</h2>
+			<p>{{parseTwitterDate(item.fecha)}}</p>
+			<ion-icon name="{{noteIcon(item)}}" item-end></ion-icon>
+			<hr *ngIf="item.adjunto != ''" />
+			<img *ngIf="item.adjunto != ''" [src]="baseUrl(item.adjunto)" width="100%" height="auto">
+        </ion-item>
+    </ion-list>
+</ion-content>
