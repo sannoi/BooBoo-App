@@ -16,6 +16,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
+import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
+
+import { IonTextAvatar } from 'ionic-text-avatar';
 
 let storage = new Storage({});
 
@@ -42,7 +45,8 @@ export function createTranslateLoader(http: Http) {
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+	IonTextAvatar
   ],
   imports: [
     BrowserModule,
@@ -75,7 +79,8 @@ export function createTranslateLoader(http: Http) {
 	OrdersService,
 	UsersService,
     LocationServiceProvider,
-	Geolocation
+	Geolocation,
+    MessagesServiceProvider
   ]
 })
 export class AppModule {}

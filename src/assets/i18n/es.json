@@ -31,6 +31,7 @@
 	"settings": "Configuración",
 	"drivers": "Conductores",
 	"map": "Mapa",
+	"messages": "Mensajes",
     "books": {
       "list": "Mis libros",
       "add": "Nuevo libro",

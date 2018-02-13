@@ -31,6 +31,7 @@
 	"settings": "Settings",
 	"drivers": "Drivers",
 	"map": "Map",
+	"messages": "Messages",
     "books": {
       "list": "My books",
       "add": "Add book",

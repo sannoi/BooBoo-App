@@ -13,6 +13,10 @@ export let cfg = {
 	  list: '/shop/pedido/buscar.json',
 	  assign: '/shop/pedido/asociarProveedor.json',
 	  info: '/shop/pedido/##ID##/info.json'
+  },
+  messages: {
+	  list: '/mensajes/mensaje/buscar.json',
+	  info: '/mensajes/mensaje/##ID##/info.json'
   }
 };
 

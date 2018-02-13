@@ -21,24 +21,27 @@ export class LocationServiceProvider {
 		
 		this.storage.get('gps').then(gps => {
 			this.gps = gps;
+			
+			if (this.gps == 'on'){
+				this.enableGeolocation();
+			} else {
+				this.disableGeolocation();
+			}
 		});
   }
   
   enableGeolocation() {
-	  this.geolocation.getCurrentPosition().then((resp) => {
-		 // resp.coords.latitude
-		 // resp.coords.longitude
+	this.geolocation.getCurrentPosition().then((resp) => {
 		 this.position = resp.coords;
-		 console.log(resp);
-		}).catch((error) => {
+	}).catch((error) => {
 		  console.log('Error getting location', error);
-		});
+	});
 		
-		this.watcher = this.geolocation.watchPosition()
-                              .subscribe(position => {
-								  this.position = position.coords;
-								  console.log(position.coords.longitude + ' ' + position.coords.latitude);
-		});
+	this.watcher = this.geolocation.watchPosition()
+						  .subscribe(position => {
+							  this.position = position.coords;
+							  console.log("enableLocation: " + position.coords.longitude + ' ' + position.coords.latitude);
+	});
   }
   
   disableGeolocation() {
@@ -52,10 +55,8 @@ export class LocationServiceProvider {
 	return this.storage.get('gps')
 	.then(gps => {
 		if (gps == 'on'){
-			this.enableGeolocation();
 			return true;
 		} else {
-			this.disableGeolocation();
 			return false;
 		}
 	});

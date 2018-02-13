@@ -1,0 +1,41 @@
+<ion-header>
+
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>{{ customTitle | translate }}</ion-title>
+
+        <ion-buttons end>
+      <button ion-button icon-only (click)="newMessage()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+    </ion-navbar>
+
+    </ion-header>
+
+    <ion-content>
+
+      <ion-list>
+        <ion-item-sliding *ngFor="let item of messages">
+            <button ion-item (click)="messageInfo(item)">
+				<ion-avatar item-start>
+				<img [src]="item.imagenes.md" />
+				</ion-avatar>
+                <h3>yo</h3>
+				<h3>{{item.titulo_formateado}}</h3>
+				<p>{{removeHTMLTags(item.contenido_formateado)}}<p>
+            </button>
+        </ion-item-sliding>
+		
+		<ion-item *ngIf="!messages">
+		<ion-card>
+		<ion-card-content>
+		<h2 align="center">No hay mensajes</h2>
+		</ion-card-content>
+		</ion-card>
+		</ion-item>
+		
+        </ion-list>
+        </ion-content>
