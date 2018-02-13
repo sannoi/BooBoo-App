@@ -1,12 +1,14 @@
 <ion-content scroll="false">
-  <div class="splash-bg"></div>
+  <div class="splash-bg gradient"><div class="circle-shape"><div class="dot c1 c100"></div><div class="dot c2 c53"></div><div class="dot c3 c355"></div><div class="dot c4 c172"></div><div class="dot c5 c206"></div><div class="dot c6 c84"></div><div class="dot c7 c140"></div><div class="dot c8 c100"></div><div class="dot c9 c53"></div><div class="dot c10 c100"></div><div class="dot c11 c100"></div><div class="dot c12 c44"></div><div class="dot c13 c44"></div><div class="dot c14 c34"></div><div class="dot c15 c44"></div><div class="dot c16 c393"></div></div>
   <div class="splash-info">
     <div class="splash-logo"></div>
-    <div class="splash-intro">
+    <div class="splash-intro ">
       {{ 'home.welcome_intro' | translate }}
     </div>
+    <div padding>
+      <button ion-button block (click)="login()" >{{ 'page.login' | translate }}</button>
+    </div>
   </div>
-  <div padding>
-    <button ion-button block (click)="login()" class="login">{{ 'page.login' | translate }}</button>
-  </div>
+
+</div>
 </ion-content>

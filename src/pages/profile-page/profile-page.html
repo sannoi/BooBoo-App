@@ -7,7 +7,7 @@
         <ion-title></ion-title>
     </ion-navbar>
   </ion-header>
-  <div id="profile-bg" class="gradient"></div>
+  <div id="profile-bg" class="gradient"><div class="circle-shape"><div class="dot c1 c100"></div><div class="dot c2 c53"></div><div class="dot c3 c355"></div><div class="dot c4 c172"></div><div class="dot c5 c206"></div><div class="dot c6 c84"></div><div class="dot c7 c140"></div><div class="dot c8 c100"></div><div class="dot c9 c53"></div><div class="dot c10 c100"></div><div class="dot c11 c100"></div><div class="dot c12 c44"></div><div class="dot c13 c44"></div><div class="dot c14 c34"></div><div class="dot c15 c44"></div><div class="dot c16 c393"></div></div></div>
   <div id="content">
     <div id="profile-info" padding>
       <img id="profile-image" [src]="user.imagenes.md">
@@ -43,7 +43,7 @@
 		</button>
 	</ion-list>
 	</ion-card>
-	
+
 	<ion-card *ngIf="isUserProvider()">
 	<ion-list>
 		<button ion-item (click)="openPage('ListMasterPage', 'page.orders.listNotAssigned', 'onlyNotAssigned')">
@@ -55,7 +55,7 @@
 		</button>
 	</ion-list>
 	</ion-card>
-	
+
 	<ion-card>
 	<ion-list>
 		<button ion-item (click)="openPage('MapPage', 'page.map')">
@@ -65,7 +65,7 @@
 		</button>
 	</ion-list>
 	</ion-card>
-	
+
 	<ion-card>
 	<ion-list>
 		<button ion-item (click)="openPage('SettingsListPage', 'page.settings')">
