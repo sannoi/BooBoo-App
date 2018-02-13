@@ -19,8 +19,8 @@ export class MessagesServiceProvider {
     this.cfg = AppConfig.cfg;
   }
   
-  getAll() {
-	  var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=14&lat=&lon=&solo_usuario_actual=1';
+  getAll(tipo: string) {
+	  var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=14&lat=&lon=&incluir_respuestas=0&tipo_resultados=' + tipo;
 	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.messages.list + '/?' + _def)
       .toPromise()
       .then(rs => {
@@ -28,5 +28,15 @@ export class MessagesServiceProvider {
         return rs.json().resultados;
       });
   }
-
+  
+  getOne(id: number) {
+	  var infoUrl = this.cfg.messages.info;
+	  var parsedUrl = infoUrl.replace('##ID##',id);
+	  return this.authHttp.get(this.cfg.apiUrl + parsedUrl)
+      .toPromise()
+      .then(rs => {
+		console.log(rs, rs.json());
+        return rs.json();
+      });
+  }
 }

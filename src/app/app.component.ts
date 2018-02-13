@@ -49,7 +49,7 @@ export class MyApp {
 				  {title: 'page.profile', icon: 'desktop', component: 'ProfilePage'},
 				  {title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage'},
 				  {title: 'page.orders.listNotAssigned', icon: 'share-alt', component: 'ListMasterPage', method: 'onlyNotAssigned' },
-				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage'},
+				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'entrada'},
 				  {title: 'page.map', icon: 'map', component: 'MapPage'},
 				  {title: 'page.settings', icon: 'cog', component: 'SettingsListPage'},
 				  {title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout'}
@@ -58,7 +58,7 @@ export class MyApp {
 			  this.pages = [
 				  {title: 'page.profile', icon: 'desktop', component: 'ProfilePage'},
 				  {title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage'},
-				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage'},
+				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'entrada'},
 				  {title: 'page.map', icon: 'map', component: 'MapPage'},
 				  {title: 'page.settings', icon: 'cog', component: 'SettingsListPage'},
 				  {title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout'}
@@ -77,6 +77,8 @@ export class MyApp {
     }
 	if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
         this.nav.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
+	} else if (page.component === 'MessagesPage' && page.method) {
+		this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
     } else {
         this.nav.setRoot(page.component, { pageTitle: page.title });
     }

@@ -17,6 +17,8 @@ export class MessagesPage extends ProtectedPage {
 
     public customTitle: string;
 	
+	public pageType: string;
+	
 	public loading: any;
 
   constructor(
@@ -30,13 +32,18 @@ export class MessagesPage extends ProtectedPage {
 	  super(navCtrl, navParams, storage, authService);
 
       this.customTitle = navParams.get('pageTitle');
+	  
+	  this.pageType = navParams.get('pageType');
+	  if (!this.pageType ||this.pageType == ''){
+		  this.pageType = 'entrada';
+	  }
   }
   
   ionViewWillEnter() {
 	  this.loading = this.loadingCtr.create({content: "Cargando mensajes..."});
 	  
 	  this.loading.present().then(() => {
-		  this.messagesService.getAll().then((messages) => { 
+		  this.messagesService.getAll(this.pageType).then((messages) => { 
 			this.messages = messages;
 			this.loading.dismiss();
 		  });

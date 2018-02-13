@@ -114,8 +114,6 @@ export class OrderInfoPage extends ProtectedPage {
 						this.loading.dismiss();
 						alert.present();
 					} else {
-						//order.proveedor_id = this.authService.usr.id;
-						
 						this.ordersService.getOne(order.id).then(updatedOrder => {
 							this.order = updatedOrder;
 							
@@ -131,20 +129,6 @@ export class OrderInfoPage extends ProtectedPage {
 				  });
 			  });
 		  }
-		  //console.log(data);
 	   });
   }
-  
-  /*editBook(book: BookModel) {
-    this.navCtrl.push('BookEditPage', {book: book});
-  }
-  
-  deleteBook(book: BookModel) {
-    this.booksService.remove(book.id)
-      .then(() => this.navCtrl.pop())
-      .catch(e => console.log("delete book error", e)); 
-  }*/
-
-
-
 }

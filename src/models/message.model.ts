@@ -1,6 +1,6 @@
 export class MessageModel {
  
-  public id: string;
+  public id: number;
   public title: string;
   public content: string;
    

@@ -18,8 +18,6 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
 
-import { IonTextAvatar } from 'ionic-text-avatar';
-
 let storage = new Storage({});
 
 
@@ -45,8 +43,7 @@ export function createTranslateLoader(http: Http) {
 
 @NgModule({
   declarations: [
-    MyApp,
-	IonTextAvatar
+    MyApp
   ],
   imports: [
     BrowserModule,
