@@ -13,6 +13,8 @@ import {UsersService} from '../providers/users-service';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
+import { SharedModule } from '../modules/shared-module';
+
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
@@ -50,6 +52,7 @@ export function createTranslateLoader(http: Http) {
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HttpModule,
+    SharedModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
