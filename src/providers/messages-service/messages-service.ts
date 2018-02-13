@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AuthHttp} from 'angular2-jwt';
-import {Headers} from '@angular/http';
+/*import {Headers} from '@angular/http';
 import { RequestOptions } from '@angular/http';
 import {MessageModel} from '../../models/message.model';
-import {UserModel} from '../../models/user.model';
+import {UserModel} from '../../models/user.model';*/
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import *  as AppConfig from '../../app/config';
