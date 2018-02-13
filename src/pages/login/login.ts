@@ -3,7 +3,7 @@ import {IonicPage, NavController, NavParams, MenuController, LoadingController} 
 import {Storage} from '@ionic/storage';
 import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../providers/auth-service';
-
+import { TouchID } from '@ionic-native/touch-id';
 import {UserModel} from '../../models/user.model';
 
 @IonicPage()
@@ -20,13 +20,27 @@ export class LoginPage {
   loading: any;
 
   constructor(
+    private touchId: TouchID,
     public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
     public storage: Storage,
-	public loadingCtr: LoadingController,
+    public loadingCtr: LoadingController,
     public formBuilder: FormBuilder,
     public authService: AuthService) {
+
+    this.touchId.isAvailable()
+      .then(
+        res => console.log('TouchID is available!'),
+        err => console.error('TouchID is not available', err)
+      );
+
+    this.touchId.verifyFingerprint('Scan your fingerprint please')
+      .then(
+        res => console.log('Ok', res),
+        err => console.error('Error', err)
+      );
+
 
     this.loginData = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required])],
@@ -41,7 +55,7 @@ export class LoginPage {
 
   login() {
 	  this.loading = this.loadingCtr.create({content: "Conectando..."});
-	  
+
 	  this.loading.present().then(() => {
 		  //use this.loginData.value to authenticate the user
 			this.authService.login(this.loginData.value)
@@ -54,7 +68,7 @@ export class LoginPage {
 				  console.log("login error", e);
 			  });
 	  });
-    
+
   }
 
   redirectToHome() {
@@ -64,7 +78,7 @@ export class LoginPage {
 
   /**
    * Opens a paage
-   * 
+   *
    * @param page string Page name
    */
   openPage(page: string) {

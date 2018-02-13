@@ -1,0 +1,10 @@
+{
+  "cordova-plugin-touch-id": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-touch-id"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}

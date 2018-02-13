@@ -14,6 +14,7 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import { SharedModule } from '../modules/shared-module';
+import { TouchID } from '@ionic-native/touch-id';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -68,6 +69,7 @@ export function createTranslateLoader(http: Http) {
   providers: [
     StatusBar,
     JwtHelper,
+    TouchID,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     {
