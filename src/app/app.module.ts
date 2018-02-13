@@ -17,7 +17,6 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
-import { TextAvatarDirective } from '../directives/text-avatar/text-avatar';
 
 let storage = new Storage({});
 
@@ -45,7 +44,6 @@ export function createTranslateLoader(http: Http) {
 @NgModule({
   declarations: [
     MyApp,
-    TextAvatarDirective
   ],
   imports: [
     BrowserModule,

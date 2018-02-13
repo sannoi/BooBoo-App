@@ -21,6 +21,9 @@
         <ion-item-sliding *ngFor="let item of messages">
             <button ion-item (click)="messageInfo(item)">
 				<text-avatar [text]="item.from_text" item-left></text-avatar>
+				<!--<ion-avatar item-start>
+				<img [src]="item.imagenes.md" />
+				</ion-avatar>-->
                 <h3>{{item.from_text}}</h3>
 				<h3>{{item.titulo_formateado}}</h3>
 				<p>{{removeHTMLTags(item.contenido_formateado)}}<p>

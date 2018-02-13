@@ -8,7 +8,7 @@ import { ColorGenerator } from "./color-generator";
 export class TextAvatarDirective {
 
   constructor(private element: ElementRef, private colorGenerator: ColorGenerator) { }
-  
+
   @Input() text: string;
   @Input() color: string;
   @Input() textColor: string;
@@ -29,5 +29,4 @@ export class TextAvatarDirective {
   private backgroundColorHexString(color: string, text: string): string {
     return color || this.colorGenerator.getColor(text);
   }
-
 }
