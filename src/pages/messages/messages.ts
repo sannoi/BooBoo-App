@@ -12,13 +12,13 @@ import {MessageModel} from '../../models/message.model';
   templateUrl: 'messages.html',
 })
 export class MessagesPage extends ProtectedPage {
-	
+
 	public messages: any;
 
     public customTitle: string;
-	
+
 	public pageType: string;
-	
+
 	public loading: any;
 
   constructor(
@@ -32,33 +32,52 @@ export class MessagesPage extends ProtectedPage {
 	  super(navCtrl, navParams, storage, authService);
 
       this.customTitle = navParams.get('pageTitle');
-	  
+
 	  this.pageType = navParams.get('pageType');
 	  if (!this.pageType ||this.pageType == ''){
 		  this.pageType = 'entrada';
 	  }
   }
-  
+
   ionViewWillEnter() {
 	  this.loading = this.loadingCtr.create({content: "Cargando mensajes..."});
-	  
+
 	  this.loading.present().then(() => {
-		  this.messagesService.getAll(this.pageType).then((messages) => { 
+		  this.messagesService.getAll(this.pageType).then((messages) => {
 			this.messages = messages;
 			this.loading.dismiss();
 		  });
 	  });
   }
-  
+
   messageInfo(message: MessageModel) {
     this.navCtrl.push('MessageInfoPage', {message: message});
   }
-  
+
   removeHTMLTags(txt: string) {
 	  return  txt ? String(txt).replace(/<[^>]+>/gm, '') : '';
   }
 
   ionViewDidLoad() {
   }
+
+  parseTwitterDate(time: string){
+		var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+			diff = (((new Date()).getTime() - date.getTime()) / 1000),
+			day_diff = Math.floor(diff / 86400);
+
+		if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
+			return;
+
+		return day_diff == 0 && (
+				diff < 60 && "ahora mismo" ||
+				diff < 120 && "hace 1 minuto" ||
+				diff < 3600 && "hace " + Math.floor( diff / 60 ) + " minutos" ||
+				diff < 7200 && "hace 1 hora" ||
+				diff < 86400 && "hace " + Math.floor( diff / 3600 ) + " horas") ||
+			day_diff == 1 && "ayer" ||
+			day_diff < 7 && "hace " + day_diff + " días" ||
+			day_diff < 31 && "hace " + Math.ceil( day_diff / 7 ) + " semanas";
+	}
 
 }

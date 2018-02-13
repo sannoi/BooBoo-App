@@ -12,7 +12,7 @@ import { MessageModel } from '../../models/message.model';
   templateUrl: 'message-info.html',
 })
 export class MessageInfoPage extends ProtectedPage {
-	
+
   loading: any;
 
   private message: MessageModel;
@@ -26,14 +26,14 @@ export class MessageInfoPage extends ProtectedPage {
 	public authService: AuthService,
     public messagesService: MessagesServiceProvider) {
 		super(navCtrl, navParams, storage, authService);
-    
+
 		this.message = navParams.get('message');
   }
-  
+
   ionViewWillEnter() {
-	  
+
 	  this.loading = this.loadingCtr.create({content: "Cargando mensaje..."});
-	  
+
 	  this.loading.present().then(() => {
 		  this.messagesService.getOne(this.message.id).then(updatedMessage => {
 			  //console.log(updatedOrder);
@@ -45,5 +45,24 @@ export class MessageInfoPage extends ProtectedPage {
 
   ionViewDidLoad() {
   }
+
+  parseTwitterDate(time: string){
+		var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+			diff = (((new Date()).getTime() - date.getTime()) / 1000),
+			day_diff = Math.floor(diff / 86400);
+
+		if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
+			return;
+
+		return day_diff == 0 && (
+				diff < 60 && "ahora mismo" ||
+				diff < 120 && "hace 1 minuto" ||
+				diff < 3600 && "hace " + Math.floor( diff / 60 ) + " minutos" ||
+				diff < 7200 && "hace 1 hora" ||
+				diff < 86400 && "hace " + Math.floor( diff / 3600 ) + " horas") ||
+			day_diff == 1 && "ayer" ||
+			day_diff < 7 && "hace " + day_diff + " días" ||
+			day_diff < 31 && "hace " + Math.ceil( day_diff / 7 ) + " semanas";
+	}
 
 }

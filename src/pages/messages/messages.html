@@ -24,12 +24,17 @@
 				<!--<ion-avatar item-start>
 				<img [src]="item.imagenes.md" />
 				</ion-avatar>-->
+        <ion-note float-right>
+          <small>{{parseTwitterDate(item.fecha)}}</small>
+        </ion-note>
                 <h3>{{item.from_text}}</h3>
 				<h3>{{item.titulo_formateado}}</h3>
 				<p>{{removeHTMLTags(item.contenido_formateado)}}<p>
+
+
             </button>
         </ion-item-sliding>
-		
+
 		<ion-item *ngIf="!messages || messages.length <= 0">
 		<ion-card>
 		<ion-card-content>
@@ -37,6 +42,6 @@
 		</ion-card-content>
 		</ion-card>
 		</ion-item>
-		
+
         </ion-list>
         </ion-content>

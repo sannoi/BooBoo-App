@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { TextAvatarDirective } from '../directives/text-avatar/text-avatar';
+import {SafeHtmlPipe} from "../pipes/safehtml.pipe";
 
 @NgModule({
     declarations: [
-        TextAvatarDirective
+        TextAvatarDirective,
+        SafeHtmlPipe
     ],
 
     exports: [
-        TextAvatarDirective
+        TextAvatarDirective,
+        SafeHtmlPipe
     ]
 })
 export class SharedModule{}

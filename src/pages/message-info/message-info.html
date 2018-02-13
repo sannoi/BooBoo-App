@@ -4,9 +4,9 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-		
+
     </ion-navbar>
-	
+
 	<ion-toolbar>
 		<ion-title>{{ message.titulo_formateado }}</ion-title>
 	</ion-toolbar>
@@ -14,8 +14,29 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding>
 
-<span [innerHtml]="message.contenido_formateado"></span>
+  <ion-item>
+    <ion-avatar item-start>
+      <text-avatar [text]="message.from_text" style="margin-top: 2px !important"></text-avatar>
+    </ion-avatar>
+
+      <ion-card style="margin: 0;width: auto;">
+        <ion-card-content>
+          <h2>{{message.from_text}}</h2>
+          <ion-note right>
+            {{parseTwitterDate(message.fecha)}}
+          </ion-note>
+          <hr>
+
+        <span [innerHtml]="message.contenido_formateado | safeHtml" text-wrap></span>
+      </ion-card-content>
+      </ion-card>
+
+
+
+  </ion-item>
+
+
 
 </ion-content>

@@ -54,4 +54,10 @@
     background: -o-linear-gradient(-54deg, #a870fe 20%, #81aaf9 90%);
     background: -moz-linear-gradient(-54deg, #a870fe 20%, #81aaf9 90%);
     background: linear-gradient(-54deg, rgba(255, 139, 187, 0.58) 20%, #81a9f9 90%);
-}	
+}
+.item.item-block.item-md {
+  align-items: flex-start;
+}
+.item.item-block.item-md > ion-avatar {
+  margin-top: 26px;
+}
