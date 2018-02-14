@@ -54,8 +54,8 @@
         </ion-card-header>
 
         <ion-list>
-          <ion-item *ngIf="order.conductor_id != '0'">
-              {{driverName(order.consuctor_id)}}
+          <ion-item *ngIf="driver">
+              #{{driver.id}} {{driver.nombre}}
               <ion-note item-end>
                   Conductor
               </ion-note>

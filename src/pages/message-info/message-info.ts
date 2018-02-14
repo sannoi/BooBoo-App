@@ -20,6 +20,8 @@ export class MessageInfoPage extends ProtectedPage {
 
   content: any;
 
+  usr: any;
+
   private message: MessageModel;
 
   public messageForm: any;
@@ -38,6 +40,8 @@ export class MessageInfoPage extends ProtectedPage {
 		super(navCtrl, navParams, storage, authService);
 
 		this.message = navParams.get('message');
+
+    this.usr = this.authService.usr;
 
     this.messageForm = formBuilder.group({
       message: new FormControl('')

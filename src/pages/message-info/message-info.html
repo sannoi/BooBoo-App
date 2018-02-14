@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{ message.titulo_formateado }}</ion-title>
+        <ion-title>{{ message.from_text }}</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -12,22 +12,39 @@
 
 
   <div class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
-    <div>
 
-      <!--<img class="profile-pic right" [src]="message.imagenes.md" />-->
+    <div *ngIf="message.propietario != '-' + usr.id">
+      <!--<img class="profile-pic left" [src]="item.imagenes.md" />-->
 
-      <text-avatar [text]="message.from_text" class="profile-pic right"></text-avatar>
+      <text-avatar [text]="message.creador_name" class="profile-pic left"></text-avatar>
 
-      <div class="chat-bubble right slide-right">
+      <!--  wave-->
+      <div class="chat-bubble left slide-left">
 
         <div class="message" [innerHTML]="message.contenido_formateado | safeHtml" autolinker>
         </div>
 
         <div class="message-detail">
-          <span class="bold">{{message.from_text}}</span>,
+          <span class="bold">{{message.creador_name}}</span>,
           <span>{{parseTwitterDate(message.fecha) | lowercase}}</span>
         </div>
 
+      </div>
+    </div>
+
+    <div *ngIf="message.propietario === '-' + usr.id">
+
+      <!--<img class="profile-pic right" [src]="item.imagenes.md" />-->
+
+      <text-avatar [text]="message.creador_name" class="profile-pic right"></text-avatar>
+
+      <div class="chat-bubble right slide-right">
+        <div class="message" [innerHTML]="message.contenido_formateado | safeHtml" autolinker>
+        </div>
+        <div class="message-detail">
+          <span class="bold">{{message.creador_name}}</span>,
+          <span>{{parseTwitterDate(message.fecha) | lowercase}}</span>
+        </div>
       </div>
 
     </div>
@@ -36,10 +53,10 @@
   </div>
 
   <div *ngFor="let item of message.respuestas" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
-  		<div *ngIf="item.propietario != message.propietario">
+  		<div *ngIf="item.propietario != '-' + usr.id">
   			<!--<img class="profile-pic left" [src]="item.imagenes.md" />-->
 
-        <text-avatar [text]="item.from_text" class="profile-pic left"></text-avatar>
+        <text-avatar [text]="item.creador_name" class="profile-pic left"></text-avatar>
 
   			<!--  wave-->
   			<div class="chat-bubble left slide-left">
@@ -48,24 +65,24 @@
   				</div>
 
   				<div class="message-detail">
-  					<span class="bold">{{item.from_text}}</span>,
+  					<span class="bold">{{item.creador_name}}</span>,
   					<span>{{parseTwitterDate(item.fecha) | lowercase}}</span>
   				</div>
 
   			</div>
   		</div>
 
-  		<div *ngIf="item.propietario === message.propietario">
+  		<div *ngIf="item.propietario === '-' + usr.id">
 
   			<!--<img class="profile-pic right" [src]="item.imagenes.md" />-->
 
-        <text-avatar [text]="item.from_text" class="profile-pic right"></text-avatar>
+        <text-avatar [text]="item.creador_name" class="profile-pic right"></text-avatar>
 
   			<div class="chat-bubble right slide-right">
   				<div class="message" [innerHTML]="item.contenido_formateado | safeHtml" autolinker>
   				</div>
   				<div class="message-detail">
-  					<span class="bold">{{item.from_text}}</span>,
+  					<span class="bold">{{item.creador_name}}</span>,
   					<span>{{parseTwitterDate(item.fecha) | lowercase}}</span>
   				</div>
   			</div>

@@ -17,7 +17,6 @@ export class OrderInfoPage extends ProtectedPage {
     map: any;
     center: any;
 	  loading: any;
-
     driver: any;
 
   private order: OrderModel;
@@ -94,10 +93,6 @@ export class OrderInfoPage extends ProtectedPage {
 	  } else {
 		  return false;
 	  }
-  }
-
-  driverName(driverId: any) {
-    return this.driver.nombre;
   }
 
   viewNotes(order: OrderModel) {
