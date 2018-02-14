@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, MenuController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, MenuController, NavParams, LoadingController, ModalController } from 'ionic-angular';
 import {ProtectedPage} from '../protected-page/protected-page';
 import {Storage} from '@ionic/storage';
 import {AuthService} from '../../providers/auth-service';
@@ -22,12 +22,13 @@ export class MessagesPage extends ProtectedPage {
 	public loading: any;
 
   constructor(
-	public navCtrl: NavController,
+	  public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
-	public loadingCtr: LoadingController,
+	  public loadingCtr: LoadingController,
+    public modalCtrl: ModalController,
     public storage: Storage,
-	public authService: AuthService,
+	  public authService: AuthService,
     public messagesService: MessagesServiceProvider) {
 	  super(navCtrl, navParams, storage, authService);
 
@@ -50,15 +51,26 @@ export class MessagesPage extends ProtectedPage {
 	  });
   }
 
+  ionViewDidLoad() {
+  }
+
+  newMessage() {
+    let modal = this.modalCtrl.create('DriversPage', {pageTitle: 'page.drivers', listType: 'owner'});
+      modal.present();
+
+	  modal.onDidDismiss(data => {
+		  if (data && data.driver){
+          console.log(data.driver);
+      }
+    });
+  }
+
   messageInfo(message: MessageModel) {
     this.navCtrl.push('MessageInfoPage', {message: message});
   }
 
   removeHTMLTags(txt: string) {
 	  return  txt ? String(txt).replace(/<[^>]+>/gm, '') : '';
-  }
-
-  ionViewDidLoad() {
   }
 
   parseTwitterDate(time: string){

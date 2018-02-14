@@ -14,9 +14,19 @@ export class UsersService {
 
     this.cfg = AppConfig.cfg;
   }
-  
+
   getDrivers() {
 	  var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=&categoria=7';
+	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
+      .toPromise()
+      .then(rs => {
+		console.log(rs, rs.json().resultados);
+        return rs.json().resultados;
+      });
+  }
+
+  getAllByOwner() {
+	  var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=&solo_usuario_actual=1&incluir_padre=1';
 	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
