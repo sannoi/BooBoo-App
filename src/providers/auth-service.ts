@@ -28,20 +28,20 @@ export class AuthService {
     private jwtHelper:JwtHelper,
     private authHttp: AuthHttp) {
     this.cfg = AppConfig.cfg;
-		
-	console.log(this.storage.get('id_token'));	
+
+	console.log(this.storage.get('id_token'));
     this.storage.get('id_token').then(token => {
         this.idToken = token;
     });
-	
+
 	this.storage.get('formToken').then(token => {
         this.formToken = token;
     });
-	
+
 	this.storage.get("userType").then(userType => {
 	   this.userType = userType;
    });
-   
+
    this.storage.get("user").then(user => {
 	   this.usr = user;
    });
@@ -59,7 +59,7 @@ export class AuthService {
       })
       .catch(e => console.log("reg error", e));
   }
-	
+
   login(credentials: CredentialsModel) {
 	let headers = new Headers({
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
@@ -90,13 +90,13 @@ export class AuthService {
 	  .catch(e => console.log('login error', e));
 
   }
-	
+
   saveData(data: any) {
     let rs = data.json();
 	//console.log(rs.data.usr);
     this.storage.set("user", rs.data.usr);
     this.storage.set("id_token", rs.data.jwt);
-	
+
 	if (rs.data.usr.permisos_app.canAssignOrders == '1'){
 		this.userType = "proveedor";
 	} else if (rs.data.usr.permisos_app.canManageOrderStates == '1'){
@@ -104,7 +104,7 @@ export class AuthService {
 	} else {
 		this.userType = "cliente";
 	}
-	
+
 	this.storage.set("userType", this.userType);
   }
 
@@ -120,7 +120,7 @@ export class AuthService {
   isValid() {
     return tokenNotExpired();
   }
-  
+
   public isUserAuthenticated() {
 	  if (this.idToken === null){
 		  return false;
@@ -128,7 +128,7 @@ export class AuthService {
 		  return true;
 	  }
   }
-	
+
 	public serializeObj(obj) {
 		var result = [];
 
@@ -156,10 +156,10 @@ export class AuthService {
            // this need to be fixed on Laravel project to retun the New Token ;
             if(res.response == 'ok') {
                    this.storage.set("id_token", thetoken);
-				   this.storage.set("formToken", res.response_text);
-				   
-				   this.idToken = thetoken;
-				   this.formToken = res.response_text;
+                   this.storage.set("formToken", res.response_text);
+
+                   this.idToken = thetoken;
+                   this.formToken = res.response_text;
 
              } else {
                console.log("The Token Black Listed");
@@ -184,13 +184,13 @@ export class AuthService {
       // between the expiry time and the issued at time
       let jwtIat = this.jwtHelper.decodeToken(token).iat;
       let jwtExp = this.jwtHelper.decodeToken(token).exp;
-		
+
 		console.log(jwtIat);
 		console.log(jwtExp);
-		
+
       let iat = new Date(0);
       let exp = new Date(0);
-		
+
 		console.log(iat);
 		console.log(exp);
 		let delay = 10000;
@@ -242,16 +242,16 @@ public startupTokenRefresh() {
 
       }else{
         //there is no user logined
-        console.info("there is no user logined "); 
+        console.info("there is no user logined ");
       }
 
     });*/
 
 
     }
-	
+
 public getFormToken(){
-	
+
 	  return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.formToken,'')
       .toPromise()
       .then(data => {
@@ -261,15 +261,15 @@ public getFormToken(){
 		 console.log(rs.response_text);
 		 this.storage.set("formToken", rs.response_text);
 		 this.formToken = rs.response_text;
-         //return rs.response_text;
-		  
+         return rs.response_text;
+
 		  //this.idToken = rs.token;
          //this.scheduleRefresh();
       })
       .catch(e => console.log('login error', e));
-	
-	
-	
+
+
+
 //				var promise = $http({
 //						url: urls.BASE_API + '/apps/Mideas/formToken.json',
 //						method: 'get',
@@ -282,8 +282,8 @@ public getFormToken(){
 //					return response.data;
 //				});
 //				return promise;
-			
-		}	
+
+		}
 
 
 

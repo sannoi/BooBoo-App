@@ -16,8 +16,7 @@ export let cfg = {
   },
   messages: {
 	  list: '/mensajes/mensaje/buscar.json',
-	  info: '/mensajes/mensaje/##ID##/info.json'
+	  info: '/mensajes/mensaje/##ID##/info.json',
+    response: '/mensajes/mensaje/nuevo.json'
   }
 };
-
-

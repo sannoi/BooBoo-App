@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, MenuController, ModalController, LoadingController} from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import {IonicPage, NavController, NavParams, MenuController, ModalController, AlertController, ToastController, LoadingController, Content} from 'ionic-angular';
+import { FormControl, FormBuilder } from '@angular/forms';
 import {ProtectedPage} from '../protected-page/protected-page';
 import {Storage} from '@ionic/storage';
 import {AuthService} from '../../providers/auth-service';
@@ -13,21 +14,34 @@ import { MessageModel } from '../../models/message.model';
 })
 export class MessageInfoPage extends ProtectedPage {
 
+  @ViewChild(Content) contenido: Content;
+
   loading: any;
 
+  content: any;
+
   private message: MessageModel;
+
+  public messageForm: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
     public modalCtrl: ModalController,
     public storage: Storage,
-	public loadingCtr: LoadingController,
-	public authService: AuthService,
+    public alertCtrl: AlertController,
+	  public toastCtrl: ToastController,
+	  public loadingCtr: LoadingController,
+	  public authService: AuthService,
+    public formBuilder: FormBuilder,
     public messagesService: MessagesServiceProvider) {
 		super(navCtrl, navParams, storage, authService);
 
 		this.message = navParams.get('message');
+
+    this.messageForm = formBuilder.group({
+      message: new FormControl('')
+    });
   }
 
   ionViewWillEnter() {
@@ -39,11 +53,48 @@ export class MessageInfoPage extends ProtectedPage {
 			  //console.log(updatedOrder);
 			  this.message = updatedMessage;
 			  this.loading.dismiss();
+        this.scrollToBottom();
 		  });
 	  });
   }
 
   ionViewDidLoad() {
+  }
+
+  sendResponse() {
+      let data = { token: null, padre: this.message.id, categorias: [1], contenido: this.content, titulo: "Re: " + this.message.titulo_formateado, estado: 1, destinatarios: JSON.parse(this.message.destinatarios) };
+
+		  if (data && data.contenido){
+			  this.loading = this.loadingCtr.create({content: "Enviando mensaje..."});
+			  this.loading.present().then(() => {
+          this.authService.getFormToken().then(newFormToken => {
+            data.token = newFormToken;
+            this.messagesService.sendResponse(data).then(result => {
+    					if (result.response == 'error'){
+    						let alert = this.alertCtrl.create({
+    						  title: 'Error',
+    						  subTitle: result.response_text,
+    						  buttons: ['OK']
+    						});
+    						this.loading.dismiss();
+    						alert.present();
+    					} else {
+    						this.messagesService.getOne(this.message.id).then(updatedMsg => {
+    							this.message = updatedMsg;
+    							let toast = this.toastCtrl.create({
+    							  message: 'Mensaje enviado',
+    							  duration: 3000
+    							});
+    							toast.present();
+    							this.loading.dismiss();
+                  this.scrollToBottom();
+    						});
+    					}
+  				  });
+          });
+			  });
+		  }
+
   }
 
   parseTwitterDate(time: string){
@@ -64,5 +115,11 @@ export class MessageInfoPage extends ProtectedPage {
 			day_diff < 7 && "hace " + day_diff + " días" ||
 			day_diff < 31 && "hace " + Math.ceil( day_diff / 7 ) + " semanas";
 	}
+
+  scrollToBottom() {
+    setTimeout(() => {
+      this.contenido.scrollToBottom();
+    }, 100);
+  }
 
 }

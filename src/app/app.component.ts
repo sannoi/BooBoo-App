@@ -37,11 +37,11 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.authService.startupTokenRefresh();
-	  
+
 	  this.configPages();
     });
   }
-  
+
   public configPages() {
 	  this.storage.get("userType").then((uType)=>{
 		  if (uType == 'proveedor') {
@@ -49,7 +49,7 @@ export class MyApp {
 				  {title: 'page.profile', icon: 'desktop', component: 'ProfilePage'},
 				  {title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage'},
 				  {title: 'page.orders.listNotAssigned', icon: 'share-alt', component: 'ListMasterPage', method: 'onlyNotAssigned' },
-				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'entrada'},
+				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all'},
 				  {title: 'page.map', icon: 'map', component: 'MapPage'},
 				  {title: 'page.settings', icon: 'cog', component: 'SettingsListPage'},
 				  {title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout'}
@@ -58,16 +58,16 @@ export class MyApp {
 			  this.pages = [
 				  {title: 'page.profile', icon: 'desktop', component: 'ProfilePage'},
 				  {title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage'},
-				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'entrada'},
+				  {title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all'},
 				  {title: 'page.map', icon: 'map', component: 'MapPage'},
 				  {title: 'page.settings', icon: 'cog', component: 'SettingsListPage'},
 				  {title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout'}
 				];
 		  }
 	  });
-	  
-	  
-	  
+
+
+
   }
 
   openPage(page) {
@@ -83,7 +83,7 @@ export class MyApp {
         this.nav.setRoot(page.component, { pageTitle: page.title });
     }
   }
-  
+
   isUserProvider() {
 	  if (this.authService.userType == 'proveedor'){
 		  return true;
@@ -91,7 +91,7 @@ export class MyApp {
 		  return false;
 	  }
   }
-  
+
   isUserDriver() {
 	  if (this.authService.userType == 'conductor'){
 		  return true;
@@ -99,7 +99,7 @@ export class MyApp {
 		  return false;
 	  }
   }
-  
+
   isUserCustomer() {
 	  if (this.authService.userType == 'cliente'){
 		  return true;

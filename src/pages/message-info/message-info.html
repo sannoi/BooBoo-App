@@ -14,29 +14,82 @@
 </ion-header>
 
 
-<ion-content no-padding>
-
-  <ion-item>
-    <ion-avatar item-start>
-      <text-avatar [text]="message.from_text" style="margin-top: 2px !important"></text-avatar>
-    </ion-avatar>
-
-      <ion-card style="margin: 0;width: auto;">
-        <ion-card-content>
-          <h2>{{message.from_text}}</h2>
-          <ion-note right>
-            {{parseTwitterDate(message.fecha)}}
-          </ion-note>
-          <hr>
-
-        <span [innerHtml]="message.contenido_formateado | safeHtml" text-wrap></span>
-      </ion-card-content>
-      </ion-card>
+<ion-content>
 
 
+  <div class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
+    <div>
 
-  </ion-item>
+      <!--<img class="profile-pic right" [src]="message.imagenes.md" />-->
 
+      <text-avatar [text]="message.from_text" class="profile-pic right"></text-avatar>
 
+      <div class="chat-bubble right slide-right">
+
+        <div class="message" [innerHTML]="message.contenido_formateado | safeHtml" autolinker>
+        </div>
+
+        <div class="message-detail">
+          <span (click)="viewProfile(message)" class="bold">{{message.from_text}}</span>,
+          <span>{{parseTwitterDate(message.fecha) | lowercase}}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="cf"></div>
+  </div>
+
+  <div *ngFor="let item of message.respuestas" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
+  		<div *ngIf="item.propietario != message.propietario">
+  			<!--<img class="profile-pic left" [src]="item.imagenes.md" />-->
+
+        <text-avatar [text]="item.from_text" class="profile-pic left"></text-avatar>
+
+  			<!--  wave-->
+  			<div class="chat-bubble left slide-left">
+
+  				<div class="message" [innerHTML]="item.contenido_formateado | safeHtml" autolinker>
+  				</div>
+
+  				<div class="message-detail">
+  					<span class="bold">{{item.from_text}}</span>,
+  					<span>{{parseTwitterDate(item.fecha) | lowercase}}</span>
+  				</div>
+
+  			</div>
+  		</div>
+
+  		<div *ngIf="item.propietario === message.propietario">
+
+  			<!--<img class="profile-pic right" [src]="item.imagenes.md" />-->
+
+        <text-avatar [text]="item.from_text" class="profile-pic right"></text-avatar>
+
+  			<div class="chat-bubble right slide-right">
+
+  				<div class="message" [innerHTML]="item.contenido_formateado | safeHtml" autolinker>
+  				</div>
+
+  				<div class="message-detail">
+  					<span (click)="viewProfile(message)" class="bold">{{item.from_text}}</span>,
+  					<span>{{parseTwitterDate(item.fecha) | lowercase}}</span>
+  				</div>
+
+  			</div>
+
+  		</div>
+
+  		<div class="cf"></div>
+
+  	</div>
 
 </ion-content>
+
+<ion-footer>
+		<ion-item>
+			<ion-input [(ngModel)]="content" placeholder="Enviar un mensaje..."></ion-input>
+			<button ion-button clear (click)="sendResponse()" item-end><ion-icon class="footer-btn" name="send"></ion-icon></button>
+		</ion-item>
+</ion-footer>

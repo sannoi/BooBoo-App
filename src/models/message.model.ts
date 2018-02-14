@@ -1,7 +1,8 @@
 export class MessageModel {
- 
+
   public id: number;
-  public title: string;
-  public content: string;
-   
+  public titulo_formateado: string;
+  public contenido_formateado: string;
+  public destinatarios: any;
+
 }
