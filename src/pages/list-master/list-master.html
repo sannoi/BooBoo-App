@@ -17,11 +17,11 @@
 
     <ion-content>
 
-      <ion-list>
+      <ion-list *ngIf="orders && orders.length > 0">
         <ion-item-sliding *ngFor="let item of orders">
             <button ion-item (click)="orderInfo(item)">
                 <ion-icon name="cube" item-start large></ion-icon>
-                <h2>Pedido #{{item.id}} | <span [innerHtml]="item.estado_pedido_html"></span></h2>
+                <h2>Pedido #{{item.id}} <ion-badge [innerHtml]="item.estado_pedido_html"></ion-badge></h2>
                 <p>de {{item.datos.recogida.recogida_localidad}} a {{item.datos.envio.envio_localidad}}</p>
                 <p><b>Recogida:</b> {{item.datos.recogida.recogida_fecha}} de {{item.datos.recogida.recogida_horario_inicio}} a {{item.datos.recogida.recogida_horario_fin}}</p>
                 <p><b>Entrega:</b> {{item.datos.envio.envio_fecha}} de {{item.datos.envio.envio_horario_inicio}} a {{item.datos.envio.envio_horario_fin}}</p>
@@ -34,14 +34,17 @@
             </button>
           </ion-item-options>-->
         </ion-item-sliding>
-		
-		<ion-item *ngIf="!orders">
-		<ion-card>
-		<ion-card-content>
-		<h2 align="center">No hay pedidos</h2>
-		</ion-card-content>
-		</ion-card>
-		</ion-item>
-		
+
         </ion-list>
+
+        <ion-list *ngIf="!orders || orders.length <= 0">
+          <ion-item>
+        		<ion-card>
+          		<ion-card-content>
+          		    <h2 align="center">No hay pedidos</h2>
+          		</ion-card-content>
+        		</ion-card>
+      		</ion-item>
+        </ion-list>
+
         </ion-content>

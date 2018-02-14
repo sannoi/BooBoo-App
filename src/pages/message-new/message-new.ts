@@ -1,68 +1,58 @@
 import { Component, ViewChild } from '@angular/core';
-import {IonicPage, NavController, NavParams, MenuController, ModalController, AlertController, ToastController, LoadingController, Content} from 'ionic-angular';
-import { FormControl, FormBuilder } from '@angular/forms';
+import {IonicPage, NavController, NavParams, MenuController, AlertController, ToastController, LoadingController, Content} from 'ionic-angular';
 import {ProtectedPage} from '../protected-page/protected-page';
 import {Storage} from '@ionic/storage';
 import {AuthService} from '../../providers/auth-service';
 import {MessagesServiceProvider} from '../../providers/messages-service/messages-service';
-import { MessageModel } from '../../models/message.model';
 
 @IonicPage()
 @Component({
-  selector: 'page-message-info',
-  templateUrl: 'message-info.html',
+  selector: 'page-message-new',
+  templateUrl: 'message-new.html',
 })
-export class MessageInfoPage extends ProtectedPage {
+export class MessageNewPage extends ProtectedPage {
 
   @ViewChild(Content) contenido: Content;
 
-  loading: any;
+  public destinatario: any;
+
+  public customTitle: string;
 
   content: any;
 
-  private message: MessageModel;
+  loading: any;
 
-  public messageForm: any;
+  message: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
-    public modalCtrl: ModalController,
-    public storage: Storage,
     public alertCtrl: AlertController,
 	  public toastCtrl: ToastController,
 	  public loadingCtr: LoadingController,
+    public storage: Storage,
 	  public authService: AuthService,
-    public formBuilder: FormBuilder,
     public messagesService: MessagesServiceProvider) {
-		super(navCtrl, navParams, storage, authService);
+      super(navCtrl, navParams, storage, authService);
 
-		this.message = navParams.get('message');
+      this.customTitle = navParams.get('pageTitle');
 
-    this.messageForm = formBuilder.group({
-      message: new FormControl('')
-    });
-  }
-
-  ionViewWillEnter() {
-
-	  this.loading = this.loadingCtr.create({content: "Cargando mensaje..."});
-
-	  this.loading.present().then(() => {
-		  this.messagesService.getOne(this.message.id).then(updatedMessage => {
-			  //console.log(updatedOrder);
-			  this.message = updatedMessage;
-			  this.loading.dismiss();
-        this.scrollToBottom();
-		  });
-	  });
+      this.destinatario = navParams.get('destinatario');
   }
 
   ionViewDidLoad() {
   }
 
   sendResponse() {
-      let data = { token: null, padre: this.message.id, categorias: [1], contenido: this.content, titulo: "Re: " + this.message.titulo_formateado, estado: 1, destinatarios: JSON.parse(this.message.destinatarios) };
+      let data = { token: null, padre: '0', categorias: [1], contenido: this.content, titulo: this.customTitle, estado: 1, destinatarios: ['-'+this.destinatario.id], alias: this.makeid() };
+      if (this.message){
+        data.padre = this.message.id;
+        data.destinatarios = JSON.parse(this.message.destinatarios);
+        if (this.message.propietario != '-' + this.authService.usr.id){
+          data.destinatarios.push(this.message.propietario);
+        }
+        data.titulo = "Re: " + this.message.titulo_formateado;
+      }
 
 		  if (data && data.contenido){
 			  this.loading = this.loadingCtr.create({content: "Enviando mensaje..."});
@@ -79,7 +69,11 @@ export class MessageInfoPage extends ProtectedPage {
     						this.loading.dismiss();
     						alert.present();
     					} else {
-    						this.messagesService.getOne(this.message.id).then(updatedMsg => {
+                let idMsg = result.data.id;
+                if (this.message){
+                  idMsg = this.message.id;
+                }
+    						this.messagesService.getOne(idMsg).then(updatedMsg => {
     							this.message = updatedMsg;
     							let toast = this.toastCtrl.create({
     							  message: 'Mensaje enviado',
@@ -89,12 +83,23 @@ export class MessageInfoPage extends ProtectedPage {
     							this.loading.dismiss();
                   this.scrollToBottom();
                   this.content = "";
+                  //this.navCtrl.setRoot('MessagesPage', {viewMessage: updatedMsg, pageTitle: 'pages.messages'});
     						});
     					}
   				  });
           });
 			  });
 		  }
+  }
+
+  makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+    for (var i = 0; i < 16; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
   }
 
   parseTwitterDate(time: string){

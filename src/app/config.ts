@@ -5,9 +5,10 @@ export let cfg = {
   user: {
     register: '/apps/Mideas/register.json',
     login: '/apps/Mideas/login.json',
-	formToken:'/apps/Mideas/formToken.json',
+	  formToken:'/apps/Mideas/formToken.json',
     refresh:'/apps/Mideas/login.json',
-	list:'/usuarios/usuario/buscar.json'
+	  list:'/usuarios/usuario/buscar.json',
+    info: '/usuarios/usuario/##ID##/info.json'
   },
   orders: {
 	  list: '/shop/pedido/buscar.json',

@@ -32,6 +32,7 @@
 	"drivers": "Drivers",
 	"map": "Map",
 	"messages": "Messages",
+  "users": "Users",
     "books": {
       "list": "My books",
       "add": "Add book",

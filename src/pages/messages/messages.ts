@@ -15,7 +15,7 @@ export class MessagesPage extends ProtectedPage {
 
 	public messages: any;
 
-    public customTitle: string;
+  public customTitle: string;
 
 	public pageType: string;
 
@@ -46,7 +46,8 @@ export class MessagesPage extends ProtectedPage {
 	  this.loading.present().then(() => {
 		  this.messagesService.getAll(this.pageType).then((messages) => {
 			this.messages = messages;
-			this.loading.dismiss();
+
+      this.loading.dismiss();
 		  });
 	  });
   }
@@ -55,12 +56,18 @@ export class MessagesPage extends ProtectedPage {
   }
 
   newMessage() {
-    let modal = this.modalCtrl.create('DriversPage', {pageTitle: 'page.drivers', listType: 'owner'});
+    let modal = this.modalCtrl.create('DriversPage', {pageTitle: 'page.users', listType: 'owner'});
       modal.present();
 
 	  modal.onDidDismiss(data => {
 		  if (data && data.driver){
-          console.log(data.driver);
+          this.messagesService.getUserChat(data.driver.id).then(chatResp => {
+            if (chatResp && chatResp.length == 1){
+              this.messageInfo(chatResp[0]);
+            } else {
+              this.navCtrl.push('MessageNewPage', {destinatario: data.driver, pageTitle: data.driver.nombre});
+            }
+          });
       }
     });
   }

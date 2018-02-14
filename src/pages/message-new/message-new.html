@@ -1,17 +1,23 @@
 <ion-header>
-  <ion-navbar *ngIf="message">
+  <ion-navbar *ngIf="destinatario">
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{ message.titulo_formateado }}</ion-title>
+
+        <ion-title>{{ customTitle }}</ion-title>
+
+        <ion-buttons end>
+          <button ion-button icon-only>
+            <text-avatar [text]="customTitle"></text-avatar>
+          </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
-
 
 <ion-content>
 
 
-  <div class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
+  <div class="message-wrapper" *ngIf="message" on-hold="onMessageHold($event, $index, message)">
     <div>
 
       <!--<img class="profile-pic right" [src]="message.imagenes.md" />-->
@@ -35,6 +41,7 @@
     <div class="cf"></div>
   </div>
 
+  <span *ngIf="message && message.respuestas">
   <div *ngFor="let item of message.respuestas" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">
   		<div *ngIf="item.propietario != message.propietario">
   			<!--<img class="profile-pic left" [src]="item.imagenes.md" />-->
@@ -75,6 +82,7 @@
   		<div class="cf"></div>
 
   	</div>
+  </span>
 
 </ion-content>
 

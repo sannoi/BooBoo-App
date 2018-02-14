@@ -40,6 +40,15 @@ export class MessagesServiceProvider {
       });
   }
 
+  getUserChat(idUser: any) {
+    var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=1&incluir_respuestas=0&tipo_resultados=userChat&userChatId=' + idUser;
+    return this.authHttp.get(this.cfg.apiUrl + this.cfg.messages.list + '/?' + _def)
+      .toPromise()
+      .then(rs => {
+        return rs.json().resultados;
+      });
+  }
+
   sendResponse(data: any) {
   	let headers = new Headers({
   		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
@@ -48,7 +57,9 @@ export class MessagesServiceProvider {
   		headers: headers
   	});
 
-  	return this.authHttp.post(this.cfg.apiUrl + this.cfg.messages.response, this.serializeObj(data), options)
+    let datos = this.serializeObj(data);
+
+  	return this.authHttp.post(this.cfg.apiUrl + this.cfg.messages.response, datos, options)
   	.toPromise()
   	.then(rs => {
   		return rs.json();
@@ -58,8 +69,15 @@ export class MessagesServiceProvider {
   public serializeObj(obj) {
   	var result = [];
 
-  	for (var property in obj)
-  		result.push(encodeURIComponent(property) + "=" + encodeURIComponent(obj[property]));
+  	for (var property in obj){
+      if (property == 'destinatarios'){
+          result.push(encodeURIComponent(property) + "[]=" + encodeURIComponent(obj[property]));
+      } else if (property == 'alias'){
+          result.push(encodeURIComponent(property) + "[es]=" + encodeURIComponent(obj[property]));
+      } else {
+  		    result.push(encodeURIComponent(property) + "=" + encodeURIComponent(obj[property]));
+      }
+    }
 
   	return result.join("&");
   }

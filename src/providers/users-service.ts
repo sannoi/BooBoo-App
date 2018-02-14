@@ -15,12 +15,22 @@ export class UsersService {
     this.cfg = AppConfig.cfg;
   }
 
+  getAll() {
+	  var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=';
+	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
+      .toPromise()
+      .then(rs => {
+		    console.log(rs, rs.json().resultados);
+        return rs.json().resultados;
+      });
+  }
+
   getDrivers() {
 	  var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=&categoria=7';
 	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
-		console.log(rs, rs.json().resultados);
+		    console.log(rs, rs.json().resultados);
         return rs.json().resultados;
       });
   }
@@ -30,8 +40,18 @@ export class UsersService {
 	  return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
-		console.log(rs, rs.json().resultados);
+		    console.log(rs, rs.json().resultados);
         return rs.json().resultados;
+      });
+  }
+
+  getOne(id: any) {
+	  var infoUrl = this.cfg.user.info;
+	  var parsedUrl = infoUrl.replace('##ID##',id);
+	  return this.authHttp.get(this.cfg.apiUrl + parsedUrl)
+      .toPromise()
+      .then(rs => {
+        return rs.json();
       });
   }
 

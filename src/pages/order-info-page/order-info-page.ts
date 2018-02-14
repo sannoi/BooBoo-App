@@ -4,6 +4,7 @@ import {ProtectedPage} from '../protected-page/protected-page';
 import {Storage} from '@ionic/storage';
 import {AuthService} from '../../providers/auth-service';
 import {OrdersService} from '../../providers/orders-service';
+import {UsersService} from '../../providers/users-service';
 import { OrderModel } from '../../models/order.model';
 import leaflet from 'leaflet';
 
@@ -15,7 +16,9 @@ import leaflet from 'leaflet';
 export class OrderInfoPage extends ProtectedPage {
     map: any;
     center: any;
-	loading: any;
+	  loading: any;
+
+    driver: any;
 
   private order: OrderModel;
 
@@ -29,7 +32,8 @@ export class OrderInfoPage extends ProtectedPage {
 	  public toastCtrl: ToastController,
 	  public loadingCtr: LoadingController,
     public authService: AuthService,
-    public ordersService: OrdersService) {
+    public ordersService: OrdersService,
+    public usersService: UsersService) {
 
     super(navCtrl, navParams, storage, authService);
 
@@ -47,7 +51,14 @@ export class OrderInfoPage extends ProtectedPage {
 		  this.ordersService.getOne(this.order.id).then(updatedOrder => {
 			  //console.log(updatedOrder);
 			  this.order = updatedOrder;
-			  this.loading.dismiss();
+        if (updatedOrder.conductor_id != '0'){
+          this.usersService.getOne(updatedOrder.conductor_id).then(driver => {
+            this.driver = driver;
+            this.loading.dismiss();
+          });
+        } else {
+  			  this.loading.dismiss();
+        }
 		  });
 	  });
   }
@@ -83,6 +94,10 @@ export class OrderInfoPage extends ProtectedPage {
 	  } else {
 		  return false;
 	  }
+  }
+
+  driverName(driverId: any) {
+    return this.driver.nombre;
   }
 
   viewNotes(order: OrderModel) {

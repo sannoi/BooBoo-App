@@ -58,7 +58,7 @@ export class DriversPage extends ProtectedPage {
   	  this.loading = this.loadingCtr.create({content: "Cargando usuarios..."});
 
   	  this.loading.present().then(() => {
-  		  this.usersService.getAllByOwner().then((drivers) => {
+  		  this.usersService.getAll().then((drivers) => {
   			this.drivers = drivers;
   			this.loading.dismiss();
   		  });
