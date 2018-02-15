@@ -85,11 +85,13 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
-    <engine name="android" spec="7.0.0" />
-    <plugin name="cordova-plugin-touch-id" spec="^3.3.1" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="your usage message" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="your usage message" />
     </plugin>
+    <allow-navigation href="http://192.168.1.44:8100" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
+    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-touch-id" spec="^3.3.1" />
 </widget>

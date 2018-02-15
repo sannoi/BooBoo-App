@@ -13,8 +13,8 @@ import { UsersService } from '../providers/users-service';
 import { CameraService } from '../providers/camera-service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Camera } from '@ionic-native/camera';
+import { FileTransfer } from '@ionic-native/file-transfer';
 
 import { SharedModule } from '../modules/shared-module';
 import { TouchID } from '@ionic-native/touch-id';

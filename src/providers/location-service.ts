@@ -30,9 +30,22 @@ export class LocationServiceProvider {
     });
   }
 
+  refreshGeolocation() {
+    this.storage.get('gps').then(gps => {
+      this.gps = gps;
+
+      if (this.gps == 'on') {
+        this.enableGeolocation();
+      } else {
+        this.disableGeolocation();
+      }
+    });
+  }
+
   enableGeolocation() {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.position = resp.coords;
+      //alert("geolocation activated!");
     }).catch((error) => {
       console.log('Error getting location', error);
     });
@@ -40,12 +53,14 @@ export class LocationServiceProvider {
     this.watcher = this.geolocation.watchPosition()
       .subscribe(position => {
         this.position = position.coords;
+        //alert("geolocation updated!");
         console.log("enableLocation: " + position.coords.longitude + ' ' + position.coords.latitude);
       });
   }
 
   disableGeolocation() {
     if (this.watcher) {
+      //alert("geolocation disabled!");
       this.watcher.unsubscribe();
       console.log("Geolocation off");
     }

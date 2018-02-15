@@ -15,6 +15,7 @@ import leaflet from 'leaflet';
 })
 export class OrderInfoPage extends ProtectedPage {
   map: any;
+  marker: any;
   center: any;
   loading: any;
   driver: any;
@@ -73,17 +74,15 @@ export class OrderInfoPage extends ProtectedPage {
       maxZoom: 18
     }).addTo(this.map);
 
-    var marker = new leaflet.Marker(this.center);
-    this.map.addLayer(marker);
+    this.marker = new leaflet.Marker(this.center);
+    this.map.addLayer(this.marker);
 
-    marker.bindPopup("<p>Pedido #" + this.order.id + "</p>");
+    this.marker.bindPopup("<p>Pedido #" + this.order.id + "</p>");
+  }
 
-	  /*this.map.locate({
-		setView: true,
-		maxZoom: 10
-	  }).on('locationfound', (e) => {
-		console.log('found you');
-	  });*/
+  updateMapMarkerPosition() {
+    var newLatLng = new leaflet.LatLng(this.order.latitud.replace(',', '.'), this.order.longitud.replace(',', '.'));
+    this.marker.setLatLng(newLatLng);
   }
 
   isOrderDriver(order: OrderModel) {
@@ -114,6 +113,10 @@ export class OrderInfoPage extends ProtectedPage {
     } else {
       return false;
     }
+  }
+
+  canCompleteOrder(order: OrderModel) {
+    return this.canStoreOrder(order);
   }
 
   canAddDocumentOrder(order: OrderModel) {
@@ -160,6 +163,15 @@ export class OrderInfoPage extends ProtectedPage {
       });
     }
 
+    if (this.canCompleteOrder(order)) {
+      buttons.push({
+        text: 'Finalizar pedido',
+        handler: () => {
+          this.completeOrder(order);
+        }
+      });
+    }
+
     if (this.canAddDocumentOrder(order)) {
       buttons.push({
         text: 'Añadir documento',
@@ -189,12 +201,12 @@ export class OrderInfoPage extends ProtectedPage {
     modal.present();
 
     modal.onDidDismiss(data => {
-        if (data && (data.text || data.documentUrl)) {
-          this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
-          this.loading.present().then(() => {
-            this.authService.getFormToken().then(newFormToken => {
+      if (data && (data.text || data.documentUrl)) {
+        this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
+        this.loading.present().then(() => {
+          this.authService.getFormToken().then(newFormToken => {
+            if (this.usersService.locationService.gps == 'on') {
               this.usersService.saveGeolocation().then(result_geo => {
-
                 this.ordersService.addDocumentOrder(order, this.authService.usr, data.text, data.documentUrl, newFormToken).then(result => {
                   if (result.response == 'error') {
                     let alert = this.alertCtrl.create({
@@ -213,15 +225,38 @@ export class OrderInfoPage extends ProtectedPage {
                       });
                       toast.present();
                       this.loading.dismiss();
+                      this.updateMapMarkerPosition();
                     });
                   }
                 });
-
               });
-
-            });
+            } else {
+              this.ordersService.addDocumentOrder(order, this.authService.usr, data.text, data.documentUrl, newFormToken).then(result => {
+                if (result.response == 'error') {
+                  let alert = this.alertCtrl.create({
+                    title: 'Error',
+                    subTitle: result.response_text,
+                    buttons: ['OK']
+                  });
+                  this.loading.dismiss();
+                  alert.present();
+                } else {
+                  this.ordersService.getOne(order.id).then(updatedOrder => {
+                    this.order = updatedOrder;
+                    let toast = this.toastCtrl.create({
+                      message: 'Nota añadida al pedido',
+                      duration: 3000
+                    });
+                    toast.present();
+                    this.loading.dismiss();
+                    this.updateMapMarkerPosition();
+                  });
+                }
+              });
+            }
           });
-        }
+        });
+      }
     });
   }
 
@@ -273,6 +308,30 @@ export class OrderInfoPage extends ProtectedPage {
     confirm.present();
   }
 
+  completeOrder(order: OrderModel) {
+    let confirm = this.alertCtrl.create({
+      title: '¿Seguro que quieres finalizar el pedido?',
+      message: 'Ya no podrás realizar ninguna acción más y el pedido pasará a estado completado',
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.usersService.saveGeolocation().then(result_geo => {
+              this.completeOrderProcess(order);
+            });
+          }
+        },
+        {
+          text: 'Cancelar',
+          handler: () => {
+            //console.log('Cancelar clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
   pickupOrderProcess(order: OrderModel) {
     this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
     this.loading.present().then(() => {
@@ -295,6 +354,7 @@ export class OrderInfoPage extends ProtectedPage {
               });
               toast.present();
               this.loading.dismiss();
+              this.updateMapMarkerPosition();
             });
           }
         });
@@ -324,6 +384,37 @@ export class OrderInfoPage extends ProtectedPage {
               });
               toast.present();
               this.loading.dismiss();
+              this.updateMapMarkerPosition();
+            });
+          }
+        });
+      });
+    });
+  }
+
+  completeOrderProcess(order: OrderModel) {
+    this.loading = this.loadingCtr.create({ content: "Finalizando pedido..." });
+    this.loading.present().then(() => {
+      this.authService.getFormToken().then(newFormToken => {
+        this.ordersService.completeOrder(order, this.authService.usr, newFormToken).then(result => {
+          if (result.response == 'error') {
+            let alert = this.alertCtrl.create({
+              title: 'Error',
+              subTitle: result.response_text,
+              buttons: ['OK']
+            });
+            this.loading.dismiss();
+            alert.present();
+          } else {
+            this.ordersService.getOne(order.id).then(updatedOrder => {
+              this.order = updatedOrder;
+              let toast = this.toastCtrl.create({
+                message: 'Pedido finalizado',
+                duration: 3000
+              });
+              toast.present();
+              this.loading.dismiss();
+              this.updateMapMarkerPosition();
             });
           }
         });
@@ -358,6 +449,7 @@ export class OrderInfoPage extends ProtectedPage {
                   });
                   toast.present();
                   this.loading.dismiss();
+                  this.updateMapMarkerPosition();
                 });
               }
             });
