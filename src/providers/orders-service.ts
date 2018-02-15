@@ -96,6 +96,22 @@ export class OrdersService {
       });
   }
 
+  completeOrder(order: OrderModel, driver: UserModel, token: string) {
+    let headers = new Headers({
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
+    });
+    let options = new RequestOptions({
+      headers: headers
+    });
+    let data = { pedido_id: order.id, conductor_id: driver.id, token: token };
+
+    return this.authHttp.post(this.cfg.apiUrl + this.cfg.orders.complete, this.serializeObj(data), options)
+      .toPromise()
+      .then(rs => {
+        return rs.json();
+      });
+  }
+
   addDocumentOrder(order: OrderModel, driver: UserModel, text: any, docUrl: any, token: string) {
     let headers = new Headers({
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'

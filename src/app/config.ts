@@ -3,6 +3,9 @@ export let cfg = {
   apiUrl: 'https://lastmile.mideas.es/api',
   configUrl: '/sistema/general/config.json',
   tokenName: 'token',
+  system: {
+    upload: '/sistema/archivo/upload.json'
+  },
   user: {
     register: '/apps/Mideas/register.json',
     login: '/apps/Mideas/login.json',
@@ -17,6 +20,7 @@ export let cfg = {
 	  assign: '/shop/pedido/asociarProveedor.json',
     pickup: '/shop/pedido/recogerPedidoConductor.json',
     store: '/shop/pedido/almacenarPedidoConductor.json',
+    complete: '/shop/pedido/completarPedidoConductor.json',
     add_document: '/shop/pedido/addDocumentOrder.json',
 	  info: '/shop/pedido/##ID##/info.json'
   },

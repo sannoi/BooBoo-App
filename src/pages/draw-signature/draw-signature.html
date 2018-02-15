@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Firmar</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+                <span ion-text color="primary">Cerrar</span>
+            </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div [ngClass]="{'drawing-active': isDrawing}" text-center>
+      <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+  <button ion-button full color="danger" (click)="clearPad()">Limpiar</button>
+  <button ion-button full color="secondary" (click)="savePad()">Guardar</button>
+</ion-toolbar>
+</ion-footer>

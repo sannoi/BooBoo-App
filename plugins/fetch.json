@@ -1,12 +1,4 @@
 {
-  "cordova-plugin-touch-id": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-touch-id"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-whitelist": {
     "source": {
       "type": "registry",
@@ -60,7 +52,7 @@
   "cordova-plugin-file-transfer": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-file-transfer"
+      "id": "cordova-plugin-file-transfer@^1.7.1"
     },
     "is_top_level": true,
     "variables": {}
@@ -76,12 +68,28 @@
   "cordova-plugin-camera": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-camera@4.0.2"
+      "id": "cordova-plugin-camera@^4.0.2"
     },
     "is_top_level": true,
     "variables": {
       "CAMERA_USAGE_DESCRIPTION": "your usage message",
       "PHOTOLIBRARY_USAGE_DESCRIPTION": "your usage message"
     }
+  },
+  "cordova-plugin-statusbar": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-statusbar@2.4.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-touch-id": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-touch-id"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

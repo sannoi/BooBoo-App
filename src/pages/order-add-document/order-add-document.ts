@@ -1,11 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, MenuController, NavParams, LoadingController, ViewController, ToastController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, MenuController, NavParams, ModalController, LoadingController, ViewController, ToastController } from 'ionic-angular';
 import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { CameraService } from '../../providers/camera-service';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
-//import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import *  as AppConfig from '../../app/config';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 @IonicPage()
 @Component({
@@ -14,14 +14,7 @@ import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 })
 export class OrderAddDocumentPage extends ProtectedPage {
 
-  @ViewChild(SignaturePad) signaturePad: SignaturePad;
-  private signaturePadOptions: Object = { // Check out https://github.com/szimek/signature_pad
-    'minWidth': 2,
-    'canvasWidth': 400,
-    'canvasHeight': 200,
-    'backgroundColor': '#f6fbff',
-    'penColor': '#666a73'
-  };
+  private cfg: any;
 
   signature: any;
 
@@ -40,13 +33,16 @@ export class OrderAddDocumentPage extends ProtectedPage {
     public navParams: NavParams,
     public menuCtrl: MenuController,
     public loadingCtr: LoadingController,
+    public modalCtrl: ModalController,
     public viewCtrl: ViewController,
     public storage: Storage,
     public toastCtrl: ToastController,
     public authService: AuthService,
-    public cameraService: CameraService) {
-
+    public cameraService: CameraService,
+    public transfer: FileTransfer) {
     super(navCtrl, navParams, storage, authService);
+
+    this.cfg = AppConfig.cfg;
 
     this.order = navParams.get('order');
 
@@ -54,41 +50,29 @@ export class OrderAddDocumentPage extends ProtectedPage {
   }
 
   ionViewDidEnter() {
-    this.signaturePad.clear();
-    this.storage.get('savedSignature').then((data) => {
-      this.signature = data;
-    });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad OrderAddDocumentPage');
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
   }
 
-  drawComplete() {
-    this.isDrawing = false;
-  }
+  openSignature() {
+    let modal = this.modalCtrl.create('DrawSignaturePage');
+    modal.present();
 
-  drawStart() {
-    this.isDrawing = true;
-  }
-
-  savePad() {
-    this.signature = this.signaturePad.toDataURL();
-    this.storage.set('savedSignature', this.signature);
-    this.signaturePad.clear();
-    let toast = this.toastCtrl.create({
-      message: 'New Signature saved.',
-      duration: 3000
+    modal.onDidDismiss(data => {
+      if (data && data.signature) {
+        this.signature = data.signature;
+        let toast = this.toastCtrl.create({
+          message: 'Firma añadida',
+          duration: 3000
+        });
+        toast.present();
+      }
     });
-    toast.present();
-  }
-
-  clearPad() {
-    this.signaturePad.clear();
   }
 
   saveDocument() {
@@ -102,11 +86,7 @@ export class OrderAddDocumentPage extends ProtectedPage {
     loading.present();
     return this.cameraService.getPictureFromCamera().then(picture => {
       if (picture) {
-        //alert("llega");
-        //console.log(picture);
-        //this.chosenPicture = picture;
         this.signature = picture;
-        this.storage.set('savedSignature', this.signature);
       }
       loading.dismiss();
     }, error => {
@@ -120,11 +100,7 @@ export class OrderAddDocumentPage extends ProtectedPage {
     loading.present();
     return this.cameraService.getPictureFromPhotoLibrary().then(picture => {
       if (picture) {
-        //alert("llega");
-        //console.log(picture);
-        //this.chosenPicture = picture;
         this.signature = picture;
-        this.storage.set('savedSignature', this.signature);
       }
       loading.dismiss();
     }, error => {
@@ -132,32 +108,49 @@ export class OrderAddDocumentPage extends ProtectedPage {
     });
   }
 
+  generateId() {
+    return (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+  }
+
   upload() {
-    this.getFromCamera();
-    /*let options = {
-      quality: 100
-    };
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64:
+    const loading = this.loadingCtr.create();
+
+    loading.present();
+
+    if (this.signature) {
 
       const fileTransfer: FileTransferObject = this.transfer.create();
 
       let options1: FileUploadOptions = {
         fileKey: 'file',
-        fileName: 'name.jpg',
+        fileName: this.generateId() + '.jpg',
         headers: {}
       }
 
-      fileTransfer.upload(imageData, 'https://localhost/ionic/upload.php', options1)
+      fileTransfer.upload(this.signature, this.cfg.apiUrl + this.cfg.system.upload, options1)
         .then((data) => {
-          // success
-          alert("success");
+          let resp = JSON.parse(data.response);
+
+          if (resp.response == "ok") {
+            this.documentUrl = resp.data.url;
+            this.saveDocument();
+            loading.dismiss();
+          } else {
+            let toast = this.toastCtrl.create({
+              message: 'Se ha producido un error al subir la imagen',
+              duration: 3000
+            });
+            toast.present();
+            loading.dismiss();
+          }
         }, (err) => {
           // error
           alert("error" + JSON.stringify(err));
         });
-    });*/
+    } else {
+      this.saveDocument();
+      loading.dismiss();
+    }
   }
 
 }
