@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, MenuController, LoadingController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, MenuController, LoadingController, AlertController} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../providers/auth-service';
@@ -26,6 +26,7 @@ export class LoginPage {
     public menuCtrl: MenuController,
     public storage: Storage,
     public loadingCtr: LoadingController,
+    public alertCtrl: AlertController,
     public formBuilder: FormBuilder,
     public authService: AuthService) {
 
@@ -59,9 +60,19 @@ export class LoginPage {
 	  this.loading.present().then(() => {
 		  //use this.loginData.value to authenticate the user
 			this.authService.login(this.loginData.value)
-			  .then(() => {
-				  this.loading.dismiss();
-				  this.redirectToHome();
+			  .then(resp => {
+          if (resp === true) {
+  				  this.loading.dismiss();
+  				  this.redirectToHome();
+          } else {
+            let alert = this.alertCtrl.create({
+              title: 'Error',
+              subTitle: this.authService.lastError,
+              buttons: ['OK']
+            });
+            alert.present();
+            this.loading.dismiss();
+          }
 			  })
 			  .catch(e => {
 				  this.loading.dismiss();

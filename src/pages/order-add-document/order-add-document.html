@@ -26,11 +26,43 @@
     </ion-item>
 
   </ion-list>
+
+  <ion-row>
+    <ion-col>
+      <img [src]="signature" />
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <button (click)="getFromCamera()" ion-button button-block icon-left><ion-icon name="camera"></ion-icon> Cámara </button>
+    </ion-col>
+    <ion-col center>
+      <button (click)="getFromGallery()" ion-button button-block icon-left><ion-icon name="images"></ion-icon> Galería </button>
+    </ion-col>
+    <ion-col right>
+      <button ion-button button-block icon-left><ion-icon name="create"></ion-icon> Firma </button>
+    </ion-col>
+  </ion-row>
+
+  <div class="title">Please draw your Signature</div>
+  <ion-row [ngClass]="{'drawing-active': isDrawing}">
+    <ion-col></ion-col>
+    <ion-col>
+      <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+    </ion-col>
+    <ion-col></ion-col>
+
+  </ion-row>
+  <button ion-button full color="danger" (click)="clearPad()">Clear</button>
+  <button ion-button full color="secondary" (click)="savePad()">Save</button>
+
+
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-      <button block ion-button (click)="saveDocument()" color="primary">
+    <button block ion-button (click)="saveDocument()" color="primary">
         Guardar
       </button>
   </ion-toolbar>

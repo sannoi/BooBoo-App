@@ -21,6 +21,7 @@ export class AuthService {
   usr: any;
   userType: string;
   refreshSubscription: any;
+  lastError: any;
 
   constructor(
     public alertCtrl: AlertController,
@@ -48,7 +49,7 @@ export class AuthService {
 
     this.storage.get("config").then(config => {
       this.config = config;
-      if (!this.config){
+      if (!this.config) {
         this.loadConfig();
       }
     });
@@ -86,21 +87,16 @@ export class AuthService {
     });
     return this.http.post(this.cfg.apiUrl + this.cfg.user.login, this.serializeObj(credentials), options)
       .toPromise().then(data => {
-        console.log(data);
         let rs = data.json();
         if (rs.response == "error") {
-          let alert = this.alertCtrl.create({
-            title: 'Error',
-            subTitle: rs.response_text,
-            buttons: ['OK']
-          });
-          alert.present();
+          this.lastError = rs.response_text;
+          return false;
         } else {
           this.saveData(data);
-          console.log(rs);
           this.idToken = rs.data.jwt;
           this.usr = rs.data.usr;
           this.getFormToken();
+          return true;
           //this.scheduleRefresh();
         }
       })
@@ -110,7 +106,6 @@ export class AuthService {
 
   saveData(data: any) {
     let rs = data.json();
-    //console.log(rs.data.usr);
     this.storage.set("user", rs.data.usr);
     this.storage.set("id_token", rs.data.jwt);
 
@@ -132,6 +127,12 @@ export class AuthService {
     this.storage.remove('id_token');
     this.storage.remove('userType');
     this.storage.remove('formToken');
+
+    this.idToken = null;
+    this.usr = null;
+    this.userType = null;
+
+    this.getFormToken();
   }
 
   isValid() {
@@ -268,14 +269,13 @@ export class AuthService {
   }
 
   public getFormToken() {
-
     return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.formToken, '')
       .toPromise()
       .then(data => {
         let rs = data.json();
         //this.saveData(data);
         //console.log(rs);
-        console.log(rs.response_text);
+        //console.log(rs.response_text);
         this.storage.set("formToken", rs.response_text);
         this.formToken = rs.response_text;
         return rs.response_text;
@@ -284,22 +284,6 @@ export class AuthService {
         //this.scheduleRefresh();
       })
       .catch(e => console.log('login error', e));
-
-
-
-    //				var promise = $http({
-    //						url: urls.BASE_API + '/apps/Mideas/formToken.json',
-    //						method: 'get',
-    //						transformRequest: transformRequestAsFormPost,
-    //						headers: {'withCredentials': 'true', 'Bearer':Bearer}
-    //						//data: Object.toparams(formData)
-    //						//data: formData
-    //					}).then(function(response) {
-    //				   //console.log(response);
-    //					return response.data;
-    //				});
-    //				return promise;
-
   }
 
 
