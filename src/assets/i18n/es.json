@@ -9,18 +9,19 @@
     "pages": "Páginas",
     "login_title": "Identificarse"
   },
-  "button" : {
-    "login" : "Acceder",
-    "register" : "Registro",
-    "new_registration" : "Nuevo registro",
-    "forgotten_password" : "Olvidaste tu contraseña?",
-    "submit" : "Enviar",
+  "button": {
+    "login": "Acceder",
+    "register": "Registro",
+    "new_registration": "Nuevo registro",
+    "forgotten_password": "Olvidaste tu contraseña?",
+    "submit": "Enviar",
     "add_book": "Nuevo libro",
     "edit": "Editar",
     "delete": "Borrar",
-    "notes":  "Notas",
-	"assign": "Asignar pedido",
-	"pickup": "Recoger pedido"
+    "notes": "Notas",
+    "assign": "Asignar pedido",
+    "pickup": "Recoger pedido",
+    "actions": "Acciones"
   },
   "page": {
     "login": "Accede con tus datos",
@@ -28,11 +29,12 @@
     "register": "Nuevo registro",
     "forgotten_password": "Recuperar contraseña",
     "profile": "Escritorio",
-	"settings": "Configuración",
-	"drivers": "Conductores",
-	"map": "Mapa",
-	"messages": "Mensajes",
-  "users": "Usuarios",
+    "settings": "Configuración",
+    "drivers": "Conductores",
+    "map": "Mapa",
+    "messages": "Mensajes",
+    "users": "Usuarios",
+    "user_info": "Información",
     "books": {
       "list": "Mis libros",
       "add": "Nuevo libro",
@@ -49,6 +51,6 @@
     }
   },
   "home": {
-    "welcome_intro":  "Servicios de transporte para todos los niveles"
+    "welcome_intro": "Servicios de transporte para todos los niveles"
   }
 }

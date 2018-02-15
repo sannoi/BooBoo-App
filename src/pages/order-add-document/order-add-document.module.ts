@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
-import { DriversPage } from './drivers-page';
+import { OrderAddDocumentPage } from './order-add-document';
 
 @NgModule({
   declarations: [
-    DriversPage,
+    OrderAddDocumentPage,
   ],
   imports: [
-    IonicPageModule.forChild(DriversPage),
+    IonicPageModule.forChild(OrderAddDocumentPage),
     TranslateModule.forChild()
   ],
   exports: [
-    DriversPage
+    OrderAddDocumentPage
   ]
 })
-export class DriversPageModule { }
+export class OrderAddDocumentPageModule {}

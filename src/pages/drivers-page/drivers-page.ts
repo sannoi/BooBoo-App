@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, MenuController, NavParams, LoadingController, ViewController } from 'ionic-angular';
-import {ProtectedPage} from '../protected-page/protected-page';
-import {Storage} from '@ionic/storage';
-import {AuthService} from '../../providers/auth-service';
-import {UsersService} from '../../providers/users-service';
-import {UserModel} from '../../models/user.model';
+import { ProtectedPage } from '../protected-page/protected-page';
+import { Storage } from '@ionic/storage';
+import { AuthService } from '../../providers/auth-service';
+import { UsersService } from '../../providers/users-service';
+import { UserModel } from '../../models/user.model';
 import *  as AppConfig from '../../app/config';
 
 @IonicPage()
@@ -14,64 +14,64 @@ import *  as AppConfig from '../../app/config';
 })
 export class DriversPage extends ProtectedPage {
 
-	private cfg: any;
+  private cfg: any;
 
-    public drivers: any;
+  public drivers: any;
 
-    public customTitle: string;
+  public customTitle: string;
 
-    public listType: string;
+  public listType: string;
 
-	public loading: any;
+  public loading: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
-	  public loadingCtr: LoadingController,
-	  public viewCtrl: ViewController,
+    public loadingCtr: LoadingController,
+    public viewCtrl: ViewController,
     public storage: Storage,
-	  public authService: AuthService,
+    public authService: AuthService,
     public usersService: UsersService) {
 
-      super(navCtrl, navParams, storage, authService);
+    super(navCtrl, navParams, storage, authService);
 
-	    this.cfg = AppConfig.cfg;
+    this.cfg = AppConfig.cfg;
 
-      this.customTitle = navParams.get('pageTitle');
+    this.customTitle = navParams.get('pageTitle');
 
-      this.listType = navParams.get('listType');
+    this.listType = navParams.get('listType');
 
   }
 
   ionViewWillEnter() {
     if (this.listType != 'owner') {
-      this.loading = this.loadingCtr.create({content: "Cargando conductores..."});
+      this.loading = this.loadingCtr.create({ content: "Cargando conductores..." });
 
-  	  this.loading.present().then(() => {
-  		  this.usersService.getDrivers().then((drivers) => {
-  			this.drivers = drivers;
-  			this.loading.dismiss();
-  		  });
-  	  });
+      this.loading.present().then(() => {
+        this.usersService.getDrivers().then((drivers) => {
+          this.drivers = drivers;
+          this.loading.dismiss();
+        });
+      });
     } else {
-  	  this.loading = this.loadingCtr.create({content: "Cargando usuarios..."});
+      this.loading = this.loadingCtr.create({ content: "Cargando usuarios..." });
 
-  	  this.loading.present().then(() => {
-  		  this.usersService.getAll().then((drivers) => {
-  			this.drivers = drivers;
-  			this.loading.dismiss();
-  		  });
-  	  });
+      this.loading.present().then(() => {
+        this.usersService.getAll().then((drivers) => {
+          this.drivers = drivers;
+          this.loading.dismiss();
+        });
+      });
     }
   }
 
   getBaseUrl() {
-	  return this.cfg.baseUrl + '/';
+    return this.cfg.baseUrl + '/';
   }
 
   dismiss() {
-	  this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss();
   }
 
   /**
@@ -81,7 +81,7 @@ export class DriversPage extends ProtectedPage {
   }
 
   selectDriver(driver: UserModel) {
-	let data = { driver: driver };
+    let data = { driver: driver };
     this.viewCtrl.dismiss(data);
   }
 }

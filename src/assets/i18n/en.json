@@ -7,7 +7,7 @@
     "title": "Title",
     "author_name": "Author",
     "pages": "Pages",
-    "login_title":  "Login"
+    "login_title": "Login"
   },
   "button": {
     "login": "Login",
@@ -18,9 +18,10 @@
     "add_book": "Add new book",
     "edit": "Edit",
     "delete": "Delete",
-    "notes":  "Notes",
-	"assign": "Assign order",
-	"pickup": "Pick up order"
+    "notes": "Notes",
+    "assign": "Assign order",
+    "pickup": "Pick up order",
+    "actions": "Actions"
   },
   "page": {
     "login": "Login with your credentials",
@@ -28,11 +29,12 @@
     "register": "New registration",
     "forgotten_password": "Password recovery",
     "profile": "Dashboard",
-	"settings": "Settings",
-	"drivers": "Drivers",
-	"map": "Map",
-	"messages": "Messages",
-  "users": "Users",
+    "settings": "Settings",
+    "drivers": "Drivers",
+    "map": "Map",
+    "messages": "Messages",
+    "users": "Users",
+    "user_info": "Info",
     "books": {
       "list": "My books",
       "add": "Add book",
@@ -45,7 +47,7 @@
       "edit": "Edit order",
       "preview": "Preview",
       "notes": "Notes",
-      "listNotAssigned":  "Unassigned Orders"
+      "listNotAssigned": "Unassigned Orders"
     }
   },
   "home": {

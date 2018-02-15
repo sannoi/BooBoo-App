@@ -1,147 +1,138 @@
 <ion-header>
 
-    <ion-navbar *ngIf="order">
-        <button ion-button menuToggle>
+  <ion-navbar *ngIf="order">
+    <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Pedido #{{ order.id }}</ion-title>
-    </ion-navbar>
+    <ion-title>Pedido #{{ order.id }}</ion-title>
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content no-padding>
 
-    <div id="map" style="width:100%; height:200px;"></div>
+  <div id="map" style="width:100%; height:200px;"></div>
 
-    <ion-card *ngIf="order">
+  <ion-card *ngIf="order">
 
-        <ion-row>
-			<ion-col *ngIf="isUserProvider() && order.proveedor_id === '0'">
-                <button ion-button icon-left clear small color="primary" (click)="assignOrder(order)">
+    <ion-row>
+      <!--<ion-col *ngIf="isUserProvider() && order.proveedor_id === '0'">
+        <button ion-button icon-left clear small color="primary" (click)="assignOrder(order)">
                     <ion-icon name="contacts"></ion-icon>
                     <div>{{ 'button.assign' | translate }}</div>
                 </button>
-            </ion-col>
-			<ion-col *ngIf="isUserDriver() && isOrderDriver(order)">
-                <button ion-button icon-left clear small color="primary" (click)="pickupOrder(order)">
-                    <ion-icon name="refresh"></ion-icon>
-                    <div>{{ 'button.pickup' | translate }}</div>
+      </ion-col>-->
+      <ion-col *ngIf="(isUserProvider() && order.proveedor_id === '0') || (isUserDriver() && isOrderDriver(order))">
+        <button ion-button icon-left clear small color="primary" (click)="openActions(order)">
+                    <ion-icon name="cog"></ion-icon>
+                    <div>{{ 'button.actions' | translate }}</div>
                 </button>
-            </ion-col>
-            <ion-col text-right>
-                <button ion-button icon-left clear small color="secondary" (click)="viewNotes(order)">
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button icon-left clear small color="secondary" (click)="viewNotes(order)">
                     <ion-icon name="list-box"></ion-icon>
                     <div>{{ 'button.notes' | translate }}</div>
                 </button>
-            </ion-col>
+      </ion-col>
 
-            <!--<ion-col text-right>
-        <button ion-button icon-left clear small color="danger" (click)="deleteBook(book)">
-            <ion-icon name="trash"></ion-icon>
-            <div>{{ 'button.delete' | translate }}</div>
-        </button>
-    </ion-col>-->
+    </ion-row>
 
-        </ion-row>
+  </ion-card>
 
-    </ion-card>
+  <ion-card *ngIf="order">
 
-    <ion-card *ngIf="order">
+    <ion-card-header>
+      INFORMACION
+    </ion-card-header>
 
-        <ion-card-header>
-            INFORMACION
-        </ion-card-header>
+    <ion-list>
+      <ion-item *ngIf="driver">
+        #{{driver.id}} {{driver.nombre}}
+        <ion-note item-end>
+          Conductor
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.tipo}} | {{order.datos.envio.envio_tipo_servicio}}
+        <ion-note item-end>
+          Tipo de pedido
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        <span [innerHtml]="order.estado_pedido_html"></span>
+        <ion-note item-end>
+          Estado
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.datos.recogida.recogida}}<br /> {{order.datos.recogida.recogida_fecha}} de {{order.datos.recogida.recogida_horario_inicio}} a {{order.datos.recogida.recogida_horario_fin}}
+        <ion-note item-end>
+          Recogida
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.datos.envio.envio}}<br /> {{order.datos.envio.envio_fecha}} de {{order.datos.envio.envio_horario_inicio}} a {{order.datos.envio.envio_horario_fin}}
+        <ion-note item-end>
+          Entrega
+        </ion-note>
+      </ion-item>
+    </ion-list>
 
-        <ion-list>
-          <ion-item *ngIf="driver">
-              #{{driver.id}} {{driver.nombre}}
-              <ion-note item-end>
-                  Conductor
-              </ion-note>
-          </ion-item>
-            <ion-item>
-                {{order.tipo}} | {{order.datos.envio.envio_tipo_servicio}}
-                <ion-note item-end>
-                    Tipo de pedido
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                <span [innerHtml]="order.estado_pedido_html"></span>
-                <ion-note item-end>
-                    Estado
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                {{order.datos.recogida.recogida}}<br />
-                {{order.datos.recogida.recogida_fecha}} de {{order.datos.recogida.recogida_horario_inicio}} a {{order.datos.recogida.recogida_horario_fin}}
-                <ion-note item-end>
-                    Recogida
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                {{order.datos.envio.envio}}<br />
-                {{order.datos.envio.envio_fecha}} de {{order.datos.envio.envio_horario_inicio}} a {{order.datos.envio.envio_horario_fin}}
-                <ion-note item-end>
-                    Entrega
-                </ion-note>
-            </ion-item>
-        </ion-list>
+  </ion-card>
 
-    </ion-card>
+  <ion-card *ngIf="order">
 
-    <ion-card *ngIf="order">
+    <ion-card-header>
+      BULTOS
+    </ion-card-header>
 
-        <ion-card-header>
-            BULTOS
-        </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let linea of order.lineas">
+        <ion-icon name="cube" item-start large></ion-icon>
+        <h2>{{linea.producto.titulo_formateado}}</h2>
+        <p>{{linea.producto.peso}} Kgs. | {{linea.producto.medidas}}</p>
+        <ion-badge item-end>
+          x{{linea.cantidad}}
+        </ion-badge>
+      </ion-item>
+    </ion-list>
 
-        <ion-list>
-            <ion-item *ngFor="let linea of order.lineas">
-                <ion-icon name="cube" item-start large></ion-icon>
-                <h2>{{linea.producto.titulo_formateado}}</h2>
-                <p>{{linea.producto.peso}} Kgs. | {{linea.producto.medidas}}</p>
-                <ion-badge item-end>
-                    x{{linea.cantidad}}
-                </ion-badge>
-            </ion-item>
-        </ion-list>
+  </ion-card>
 
-    </ion-card>
+  <ion-card *ngIf="order">
 
-    <ion-card *ngIf="order">
+    <ion-card-header>
+      RESUMEN
+    </ion-card-header>
 
-        <ion-card-header>
-            RESUMEN
-        </ion-card-header>
+    <ion-list>
+      <ion-item>
+        #{{order.usuario_id}} {{order.datos.facturacion.nombre}} {{order.datos.facturacion.apellidos}}
+        <ion-note item-end>
+          Cliente
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.datos.metodo_envio.nombre}}
+        <ion-note item-end>
+          Tarifa
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.datos.metodo_envio.peso}} Kgs.
+        <ion-note item-end>
+          Peso total
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        {{order.distancia}} Kms.
+        <ion-note item-end>
+          Distancia
+        </ion-note>
+      </ion-item>
+    </ion-list>
 
-        <ion-list>
-            <ion-item>
-                #{{order.usuario_id}} {{order.datos.facturacion.nombre}} {{order.datos.facturacion.apellidos}}
-                <ion-note item-end>
-                    Cliente
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                {{order.datos.metodo_envio.nombre}}
-                <ion-note item-end>
-                    Tarifa
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                {{order.datos.metodo_envio.peso}} Kgs.
-                <ion-note item-end>
-                    Peso total
-                </ion-note>
-            </ion-item>
-            <ion-item>
-                {{order.distancia}} Kms.
-                <ion-note item-end>
-                    Distancia
-                </ion-note>
-            </ion-item>
-        </ion-list>
-
-    </ion-card>
+  </ion-card>
 
 </ion-content>

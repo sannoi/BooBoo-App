@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ customTitle | translate }}</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+                <span ion-text color="primary">Cerrar</span>
+            </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+
+    <ion-item>
+      <ion-label stacked>Nota</ion-label>
+      <ion-textarea rows="6" [(ngModel)]="text" type="textarea" value=""></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>URL Documento</ion-label>
+      <ion-input [(ngModel)]="documentUrl" type="text" value=""></ion-input>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      <button block ion-button (click)="saveDocument()" color="primary">
+        Guardar
+      </button>
+  </ion-toolbar>
+</ion-footer>

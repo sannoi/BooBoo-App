@@ -43,6 +43,10 @@ export class MessageNewPage extends ProtectedPage {
   ionViewDidLoad() {
   }
 
+  userInfo(user: any) {
+    this.navCtrl.push('UserInfoPage', {user: user});
+  }
+
   sendResponse() {
       let data = { token: null, padre: '0', categorias: [1], contenido: this.content, titulo: this.customTitle, estado: 1, destinatarios: ['-'+this.destinatario.id], alias: this.makeid() };
       if (this.message){
