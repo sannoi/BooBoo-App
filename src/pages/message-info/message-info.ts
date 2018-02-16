@@ -91,7 +91,8 @@ export class MessageInfoPage extends ProtectedPage {
                 this.message = updatedMsg;
                 let toast = this.toastCtrl.create({
                   message: 'Mensaje enviado',
-                  duration: 3000
+                  duration: 3000,
+                  position: 'top'
                 });
                 toast.present();
                 this.loading.dismiss();

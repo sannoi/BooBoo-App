@@ -68,7 +68,8 @@ export class OrderAddDocumentPage extends ProtectedPage {
         this.signature = data.signature;
         let toast = this.toastCtrl.create({
           message: 'Firma añadida',
-          duration: 3000
+          duration: 3000,
+          position: 'top'
         });
         toast.present();
       }
@@ -138,7 +139,8 @@ export class OrderAddDocumentPage extends ProtectedPage {
           } else {
             let toast = this.toastCtrl.create({
               message: 'Se ha producido un error al subir la imagen',
-              duration: 3000
+              duration: 3000,
+              position: 'top'
             });
             toast.present();
             loading.dismiss();

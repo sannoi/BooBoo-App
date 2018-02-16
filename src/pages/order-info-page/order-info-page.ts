@@ -229,7 +229,8 @@ export class OrderInfoPage extends ProtectedPage {
                       this.order = updatedOrder;
                       let toast = this.toastCtrl.create({
                         message: 'Nota añadida al pedido',
-                        duration: 3000
+                        duration: 3000,
+                        position: 'top'
                       });
                       toast.present();
                       this.loading.dismiss();
@@ -253,7 +254,8 @@ export class OrderInfoPage extends ProtectedPage {
                     this.order = updatedOrder;
                     let toast = this.toastCtrl.create({
                       message: 'Nota añadida al pedido',
-                      duration: 3000
+                      duration: 3000,
+                      position: 'top'
                     });
                     toast.present();
                     this.loading.dismiss();
@@ -358,7 +360,8 @@ export class OrderInfoPage extends ProtectedPage {
               this.order = updatedOrder;
               let toast = this.toastCtrl.create({
                 message: 'Pedido recogido correctamente',
-                duration: 3000
+                duration: 3000,
+                position: 'top'
               });
               toast.present();
               this.loading.dismiss();
@@ -388,7 +391,8 @@ export class OrderInfoPage extends ProtectedPage {
               this.order = updatedOrder;
               let toast = this.toastCtrl.create({
                 message: 'Pedido almacenado correctamente',
-                duration: 3000
+                duration: 3000,
+                position: 'top'
               });
               toast.present();
               this.loading.dismiss();
@@ -418,7 +422,8 @@ export class OrderInfoPage extends ProtectedPage {
               this.order = updatedOrder;
               let toast = this.toastCtrl.create({
                 message: 'Pedido finalizado',
-                duration: 3000
+                duration: 3000,
+                position: 'top'
               });
               toast.present();
               this.loading.dismiss();
@@ -453,7 +458,8 @@ export class OrderInfoPage extends ProtectedPage {
                   this.order = updatedOrder;
                   let toast = this.toastCtrl.create({
                     message: 'Pedido asignado correctamente',
-                    duration: 3000
+                    duration: 3000,
+                    position: 'top'
                   });
                   toast.present();
                   this.loading.dismiss();
