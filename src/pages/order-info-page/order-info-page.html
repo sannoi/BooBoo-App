@@ -10,16 +10,6 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<<<<<<< HEAD
-<!-- ACCIONES -->
-<ion-fab bottom right  *ngIf="order" text-center	>
-  <button padding ion-fab color="primary" (click)="viewNotes(order)"><ion-icon name="ios-attach"></ion-icon></button>{{ 'button.notes' | translate }}<br><br>
-  <button padding *ngIf="canDoActions(order) == true" ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon></button> <span *ngIf="canDoActions(order) == true">{{ 'button.actions' | translate }}</span>
-</ion-fab>
-
-
-=======
->>>>>>> 5658ace894ea9b80b774e02a364896eeb0287476
 
 <ion-content no-padding>
   <!-- ACCIONES -->
@@ -27,7 +17,7 @@
     <button padding ion-fab color="primary" (click)="viewNotes(order)"><ion-icon name="ios-attach"></ion-icon></button>{{ 'button.notes' | translate }}<br><br>
     <button padding *ngIf="canDoActions(order) == true" ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon></button> <span *ngIf="canDoActions(order) == true">{{ 'button.actions' | translate }}</span>
   </ion-fab>
-  
+
   <!--ion-fab top right edge>
       <button ion-fab mini><ion-icon name="add"></ion-icon></button>
       <ion-fab-list>
