@@ -95,6 +95,14 @@ export class OrderInfoPage extends ProtectedPage {
     }
   }
 
+  canDoActions(order: OrderModel) {
+    if (this.canPickupOrder(order) == true || this.canStoreOrder(order) == true || this.canCompleteOrder(order) == true || this.canAddDocumentOrder(order) == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   canPickupOrder(order: OrderModel) {
     let cfg = this.authService.config;
 

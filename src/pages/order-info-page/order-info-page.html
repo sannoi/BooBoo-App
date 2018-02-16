@@ -21,8 +21,8 @@
 </ion-header>
 <!-- ACCIONES -->
 <ion-fab bottom right  *ngIf="order" text-center	>
-  <button padding *ngIf="(isUserProvider() && order.proveedor_id === '0') || (isUserDriver() && isOrderDriver(order))" ion-fab color="primary" (click)="viewNotes(order)"><ion-icon name="ios-attach"></ion-icon></button>{{ 'button.notes' | translate }}<br><br>
-  <button padding ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon></button> {{ 'button.actions' | translate }}
+  <button padding ion-fab color="primary" (click)="viewNotes(order)"><ion-icon name="ios-attach"></ion-icon></button>{{ 'button.notes' | translate }}<br><br>
+  <button padding *ngIf="canDoActions(order) == true" ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon></button> <span *ngIf="canDoActions(order) == true">{{ 'button.actions' | translate }}</span>
 </ion-fab>
 
 

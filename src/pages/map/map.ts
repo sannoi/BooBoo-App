@@ -15,8 +15,10 @@ import 'leaflet-realtime';
 })
 export class MapPage extends ProtectedPage {
   map: any;
+  marker: any;
   center: any;
   realtime: any;
+  gps: any;
 
   constructor(
     public navCtrl: NavController,
@@ -27,8 +29,6 @@ export class MapPage extends ProtectedPage {
     public locationService: LocationServiceProvider) {
 
     super(navCtrl, navParams, storage, authService);
-
-    this.controlDef();
   }
 
   ionViewDidLoad() {
@@ -83,13 +83,8 @@ export class MapPage extends ProtectedPage {
     }
 
     this.locationService.GPSStatus().then(result => {
+      this.gps = result;
       if (result == true) {
-        var _control = function(opts) {
-            return new leaflet.Control.CenterUser(opts);
-        }
-
-        _control({ position: 'bottomleft' }).addTo(this.map);
-
         var redIcon = leaflet.icon({
           iconUrl: 'assets/img/marker-icon2.png',
           shadowUrl: 'assets/img/marker-shadow.png',
@@ -98,40 +93,27 @@ export class MapPage extends ProtectedPage {
           popupAnchor: [0, -38]
         });
 
-        var marker = new leaflet.Marker(this.center, { icon: redIcon });
-        this.map.addLayer(marker);
+        this.marker = new leaflet.Marker(this.center, { icon: redIcon });
+        this.map.addLayer(this.marker);
 
-        marker.bindPopup("<p>Tu localización</p>");
+        this.marker.bindPopup("<p>Tu localización</p>");
 
         if (this.locationService.position && this.locationService.position.latitude) {
           this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude), 15);
-          marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
+          this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
         }
 
         this.locationService.geolocation.watchPosition()
           .subscribe(position => {
-            this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
-            marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
+            //this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
+            this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
             console.log("View setted: " + this.locationService.position);
           });
       }
     });
   }
 
-  controlDef() {
-    leaflet.Control.CenterUser = leaflet.Control.extend({
-      onAdd: function(map) {
-        var img = leaflet.DomUtil.create('img');
-
-        img.src = '../../docs/images/logo.png';
-        img.style.width = '200px';
-
-        return img;
-      },
-
-      onRemove: function(map) {
-        // Nothing to do here
-      }
-    });
+  centerMapUserLocation() {
+    this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
   }
 }

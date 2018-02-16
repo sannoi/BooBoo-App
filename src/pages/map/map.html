@@ -12,4 +12,15 @@
 
 <ion-content no-padding>
 <div id="map" style="width:100%; height:100%;"></div>
+
+<ion-fab left bottom *ngIf="gps && gps == true">
+    <button ion-fab color="primary" (click)="centerMapUserLocation()"><ion-icon name="locate"></ion-icon></button>
+    <!--<ion-fab-list side="right">
+      <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+      <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+      <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+      <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+    </ion-fab-list>-->
+  </ion-fab>
+
 </ion-content>

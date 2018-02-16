@@ -7,7 +7,9 @@ import 'rxjs/add/operator/toPromise';
 import { UserModel } from '../models/user.model';
 import { CredentialsModel } from '../models/credentials.model';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
-//import {Observable} from 'rxjs/Rx';
+import { LocationServiceProvider } from './location-service';
+import { UsersService } from './users-service';
+import {Observable} from 'rxjs/Rx';
 import *  as AppConfig from '../app/config';
 import { AlertController } from 'ionic-angular';
 
@@ -22,9 +24,12 @@ export class AuthService {
   userType: string;
   refreshSubscription: any;
   lastError: any;
+  lastSavedPos: any;
 
   constructor(
     public alertCtrl: AlertController,
+    public locationService: LocationServiceProvider,
+    public usersService: UsersService,
     private storage: Storage,
     private http: Http,
     private jwtHelper: JwtHelper,
@@ -190,6 +195,51 @@ export class AuthService {
 
     });
 
+  }
+
+  public startupCheckGeolocation() {
+        let pos = this.locationService.position;
+
+        //if (pos) {
+          let source = Observable.of(pos).flatMap(
+            position => {
+              let delay: number = 10000;
+
+              if(delay <= 0) {
+                delay=1;
+              }
+               // Use the delay in a timer to
+              // run the refresh at the proper time
+              return Observable.interval(delay);
+            });
+
+           // Once the delay time from above is
+           // reached, get a new JWT and schedule
+           // additional refreshes
+           source.subscribe(() => {
+             //this.getNewJwt();
+             //this.scheduleRefresh();
+             this.storage.get("gps").then((gps)=>{
+               if (gps && gps == 'on') {
+                 console.log("Check location loop: on");
+                 if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.usr) {
+                  let categorias = JSON.parse(this.usr.categorias);
+                  if (categorias[0] == '7'){
+                     this.usersService.saveGeolocation().then(res => {
+                       console.log(res);
+                       //alert("Location changed and saved!");
+                       this.lastSavedPos = this.locationService.position;
+                     });
+                   }
+                 }
+               } else {
+                 console.log("Check location loop: off");
+               }
+             });
+
+
+           });
+        //}
   }
 
   public scheduleRefresh() {
