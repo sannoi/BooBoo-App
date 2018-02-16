@@ -61,3 +61,11 @@ typings/
 www
 platforms
 plugins
+plugins/cordova-plugin-touch-id/LICENSE
+plugins/cordova-plugin-touch-id/LICENSE
+plugins/cordova-plugin-touch-id/package.json
+plugins/cordova-plugin-touch-id/plugin.xml
+plugins/cordova-plugin-touch-id/README.md
+plugins/cordova-plugin-touch-id/src/ios/TouchID.h
+plugins/cordova-plugin-touch-id/src/ios/TouchID.m
+plugins/fetch.json
