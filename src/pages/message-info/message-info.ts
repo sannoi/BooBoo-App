@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { MessagesServiceProvider } from '../../providers/messages-service/messages-service';
 import { MessageModel } from '../../models/message.model';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Platform } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -36,7 +38,9 @@ export class MessageInfoPage extends ProtectedPage {
     public loadingCtr: LoadingController,
     public authService: AuthService,
     public formBuilder: FormBuilder,
-    public messagesService: MessagesServiceProvider) {
+    public messagesService: MessagesServiceProvider,
+    public localNotifications: LocalNotifications,
+    public plt: Platform) {
     super(navCtrl, navParams, storage, authService);
 
     this.message = navParams.get('message');
@@ -58,11 +62,22 @@ export class MessageInfoPage extends ProtectedPage {
         this.message = updatedMessage;
         this.loading.dismiss();
         this.scrollToBottom();
+        this.testNotification();
       });
     });
   }
 
   ionViewDidLoad() {
+  }
+
+  testNotification() {
+    // Schedule a single notification
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Local ILocalNotification Example',
+      text: 'Single ILocalNotification',
+      sound: this.plt.is('android')? 'file://sound.mp3': 'file://beep.caf'
+    });
   }
 
   userInfo(user: any) {

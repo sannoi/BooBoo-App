@@ -15,6 +15,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { SharedModule } from '../modules/shared-module';
 import { TouchID } from '@ionic-native/touch-id';
@@ -90,7 +91,8 @@ export function createTranslateLoader(http: Http) {
     MessagesServiceProvider,
     CameraService,
     Camera,
-    FileTransfer
+    FileTransfer,
+    LocalNotifications
   ]
 })
 export class AppModule { }
