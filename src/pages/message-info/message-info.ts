@@ -58,6 +58,7 @@ export class MessageInfoPage extends ProtectedPage {
         this.message = updatedMessage;
         this.loading.dismiss();
         this.scrollToBottom();
+        this.markAsReaded();
       });
     });
   }
@@ -67,6 +68,36 @@ export class MessageInfoPage extends ProtectedPage {
 
   userInfo(user: any) {
     this.navCtrl.push('UserInfoPage', {user: user});
+  }
+
+  markAsReaded() {
+    let data = { token: null, id_item: this.message.id };
+
+    this.authService.getFormToken().then(newFormToken => {
+      data.token = newFormToken;
+      this.messagesService.markAsReaded(data).then(result => {
+        if (result.response == 'error') {
+          let alert = this.alertCtrl.create({
+            title: 'Error',
+            subTitle: result.response_text,
+            buttons: ['OK']
+          });
+          //this.loading.dismiss();
+          alert.present();
+        } else {
+          this.messagesService.getOne(this.message.id).then(updatedMsg => {
+            this.message = updatedMsg;
+            /*let toast = this.toastCtrl.create({
+              message: 'Mensaje enviado',
+              duration: 3000,
+              position: 'top'
+            });
+            toast.present();
+            this.loading.dismiss();*/
+          });
+        }
+      });
+    });
   }
 
   sendResponse() {

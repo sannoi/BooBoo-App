@@ -24,9 +24,11 @@
 				<!--<ion-avatar item-start>
 				<img [src]="item.imagenes.md" />
 				</ion-avatar>-->
+        <ion-badge float-right style="margin-left: 10px;" *ngIf="hasResponsesNotReaded(item)">{{countResponsesNotReaded(item)}}</ion-badge>
         <ion-note float-right>
           <small>{{parseTwitterDate(item.fecha)}}</small>
         </ion-note>
+
                 <!--<h3>{{item.from_text}}</h3>-->
 				<h2>{{item.from_text}}</h2>
 				<p>{{removeHTMLTags(item.preview_text)}}<p>

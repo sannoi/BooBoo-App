@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "580112437383",
+    "firebase_url": "https://mideas-1090.firebaseio.com",
+    "project_id": "mideas-1090",
+    "storage_bucket": "mideas-1090.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580112437383:android:7fe8ee3ac3063b79",
+        "android_client_info": {
+          "package_name": "es.mideas.booboo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580112437383-c14t1tlen7288861kp5cn0f206alh1ro.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "580112437383-85e1nfa3bcku6f6jhuhsj15pstjga7h5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAP0xDL3Bg9Z7dPDBE2nfWJh1zlR9Bc-o4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

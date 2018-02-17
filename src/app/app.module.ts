@@ -15,6 +15,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer';
+import { FCM } from '@ionic-native/fcm';
 
 import { SharedModule } from '../modules/shared-module';
 import { TouchID } from '@ionic-native/touch-id';
@@ -24,10 +25,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
 
-let storage = new Storage({});
+let storage = new Storage({
+  name: '__boobooApp'
+});
 
 
 export function getAuthHttp(http) {
+  console.log("Pasa por autenticacion");
   return new AuthHttp(new AuthConfig({
     noJwtError: true,
     globalHeaders: [{ 'Accept': 'application/json' }],
@@ -90,7 +94,8 @@ export function createTranslateLoader(http: Http) {
     MessagesServiceProvider,
     CameraService,
     Camera,
-    FileTransfer
+    FileTransfer,
+    FCM
   ]
 })
 export class AppModule { }

@@ -5,7 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../providers/auth-service';
 import { TranslateService } from '@ngx-translate/core';
+import { UsersService } from '../providers/users-service';
 import { LocationServiceProvider } from '../providers/location-service';
+import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
+import { FCM } from '@ionic-native/fcm';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,8 +26,11 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public authService: AuthService,
     public storage: Storage,
+    public messagesService: MessagesServiceProvider,
     translate: TranslateService,
-    locationService: LocationServiceProvider) {
+    locationService: LocationServiceProvider,
+    public usersService: UsersService,
+    private fcm: FCM) {
 
     this.initializeApp();
 
@@ -42,7 +48,30 @@ export class MyApp {
       //this.authService.startupTokenRefresh();
       this.authService.startupCheckGeolocation();
 
+      this.checkNotifications();
       this.configPages();
+    });
+  }
+
+  private checkNotifications() {
+    this.fcm.subscribeToTopic('all');
+    this.fcm.getToken().then(token => {
+      this.usersService.saveFirebaseDeviceToken(token).then(result => {
+        //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+      });
+      // backend.registerToken(token);
+    });
+    this.fcm.onNotification().subscribe(data => {
+      if (data.msg_parent_id) {
+        let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
+        this.openPage(msgPage);
+      }
+    });
+    this.fcm.onTokenRefresh().subscribe(token => {
+      this.usersService.saveFirebaseDeviceToken(token).then(result => {
+        //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+      });
+      // backend.registerToken(token);
     });
   }
 
@@ -79,7 +108,11 @@ export class MyApp {
     if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
       this.nav.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
     } else if (page.component === 'MessagesPage' && page.method) {
-      this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
+      if (page.auto_item_id){
+        this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method, autoOpenItem: page.auto_item_id });
+      } else {
+        this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
+      }
     } else {
       this.nav.setRoot(page.component, { pageTitle: page.title });
     }

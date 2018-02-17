@@ -75,6 +75,22 @@ export class UsersService {
       });
   }
 
+  saveFirebaseDeviceToken(token: string) {
+    let headers = new Headers({
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
+    });
+    let options = new RequestOptions({
+      headers: headers
+    });
+    let data = { fb_token: token };
+
+    return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.save_firebase_token, this.serializeObj(data), options)
+      .toPromise()
+      .then(rs => {
+        return rs.json();
+      });
+  }
+
   public serializeObj(obj) {
     var result = [];
 
