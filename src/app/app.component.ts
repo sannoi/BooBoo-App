@@ -54,25 +54,49 @@ export class MyApp {
   }
 
   private checkNotifications() {
-    this.fcm.subscribeToTopic('all');
-    this.fcm.getToken().then(token => {
-      this.usersService.saveFirebaseDeviceToken(token).then(result => {
-        //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+    if (/*this.platform.is('ios') || */this.platform.is('android')) {
+
+      this.fcm.subscribeToTopic('all');
+      this.fcm.getToken().then(token => {
+        this.usersService.saveFirebaseDeviceToken(token).then(result => {
+          //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+        });
+        // backend.registerToken(token);
       });
-      // backend.registerToken(token);
-    });
-    this.fcm.onNotification().subscribe(data => {
-      if (data.msg_parent_id) {
-        let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
-        this.openPage(msgPage);
-      }
-    });
-    this.fcm.onTokenRefresh().subscribe(token => {
-      this.usersService.saveFirebaseDeviceToken(token).then(result => {
-        //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+      this.fcm.onNotification().subscribe(data => {
+        //alert(JSON.stringify(data));
+        if (data.msg_parent_id) {
+          if (data.wasTapped) {
+            let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
+            this.openPage(msgPage);
+          } else {
+            this.redirectPush(data);
+          }
+        }
       });
-      // backend.registerToken(token);
-    });
+      this.fcm.onTokenRefresh().subscribe(token => {
+        this.usersService.saveFirebaseDeviceToken(token).then(result => {
+          //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
+        });
+        // backend.registerToken(token);
+      });
+    }
+  }
+
+  redirectPush(data: any) {
+    let view = this.nav.getActive();
+    if (view.component.name == "MessageInfoPage" && view.data.message.id == data.msg_parent_id) {
+      this.nav.push("MessageInfoPage", view.data).then(()=>{
+        this.nav.remove(1);
+      });
+    } else if (view.component.name == "MessagesPage") {
+      let msgs = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' };
+      this.openPage(msgs);
+    } else {
+      alert("Notificacion local de mensaje: " + data.msg_parent_id);
+      let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
+      this.openPage(msgPage);
+    }
   }
 
   public configPages() {
