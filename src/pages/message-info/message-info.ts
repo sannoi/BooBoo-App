@@ -49,18 +49,19 @@ export class MessageInfoPage extends ProtectedPage {
   }
 
   ionViewWillEnter() {
+    this.contenido.scrollToBottom();
 
-    this.loading = this.loadingCtr.create({ content: "Cargando mensaje..." });
+    /*this.loading = this.loadingCtr.create({ content: "Cargando mensaje..." });
 
-    this.loading.present().then(() => {
+    this.loading.present().then(() => {*/
       this.messagesService.getOne(this.message.id).then(updatedMessage => {
         //console.log(updatedOrder);
         this.message = updatedMessage;
-        this.loading.dismiss();
+        //this.loading.dismiss();
         this.scrollToBottom();
         this.markAsReaded();
       });
-    });
+    //});
   }
 
   ionViewDidLoad() {

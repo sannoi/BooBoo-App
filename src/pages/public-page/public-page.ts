@@ -4,8 +4,8 @@ import {Storage} from '@ionic/storage';
 export class PublicPage {
 
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
     public storage: Storage) {
   }
 
@@ -15,9 +15,9 @@ export class PublicPage {
       if (id_token !== null) {
         this.navCtrl.setRoot('ProfilePage');
         return false;
+      } else {
+        return true;
       }
     });
-
-    return true;
   }
 }

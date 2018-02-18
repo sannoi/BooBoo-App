@@ -17,7 +17,7 @@
 
     <ion-content>
 
-      <ion-list *ngIf="orders && orders.length > 0">
+      <ion-list *ngIf="dataLoaded && orders && orders.length > 0">
         <ion-item-sliding *ngFor="let item of orders">
             <button ion-item (click)="orderInfo(item)">
                 <ion-icon name="cube" item-start large></ion-icon>
@@ -37,7 +37,7 @@
 
         </ion-list>
 
-        <ion-list *ngIf="!orders || orders.length <= 0">
+        <ion-list *ngIf="dataLoaded && (!orders || orders.length <= 0)">
           <ion-item>
         		<ion-card>
           		<ion-card-content>

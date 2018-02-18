@@ -5,8 +5,8 @@ import {AuthService} from '../../providers/auth-service';
 export class ProtectedPage {
 
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
     public storage: Storage,
 	public authService: AuthService) {
   }
@@ -17,12 +17,12 @@ export class ProtectedPage {
       if (id_token === null) {
         this.navCtrl.setRoot('WelcomePage');
         return false;
+      } else {
+        return true;
       }
     });
-
-    return true;
   }
-  
+
   isUserProvider() {
 	  if (this.authService.userType == 'proveedor'){
 		  return true;
@@ -30,7 +30,7 @@ export class ProtectedPage {
 		  return false;
 	  }
   }
-  
+
   isUserDriver() {
 	  if (this.authService.userType == 'conductor'){
 		  return true;
@@ -38,7 +38,7 @@ export class ProtectedPage {
 		  return false;
 	  }
   }
-  
+
   isUserCustomer() {
 	  if (this.authService.userType == 'cliente'){
 		  return true;

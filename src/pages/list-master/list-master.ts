@@ -12,14 +12,16 @@ import {OrderModel} from '../../models/order.model';
   templateUrl: 'list-master.html'
 })
 export class ListMasterPage extends ProtectedPage {
-  
+
     public orders: any;
 
     private onlyNotAssigned: boolean;
 
     public customTitle: string;
-	
+
 	public loading: any;
+
+  public dataLoaded: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -32,22 +34,29 @@ export class ListMasterPage extends ProtectedPage {
 
       super(navCtrl, navParams, storage, authService);
 
+      this.dataLoaded = false;
+
       this.onlyNotAssigned = navParams.get('onlyNotAssigned');
 
       this.customTitle = navParams.get('pageTitle');
 
+      this.loadOrders();
   }
-	
-  ionViewWillEnter() {
-	  this.loading = this.loadingCtr.create({content: "Cargando pedidos..."});
-	  
-	  this.loading.present().then(() => {
-		  this.ordersService.getAll(this.onlyNotAssigned).then((orders) => { 
+
+  loadOrders() {
+    /*this.loading = this.loadingCtr.create({content: "Cargando pedidos..."});
+
+	  this.loading.present().then(() => {*/
+		  this.ordersService.getAll(this.onlyNotAssigned).then((orders) => {
 			this.orders = orders;
-			console.log(this.loading);
 			this.loading.dismiss();
+      this.dataLoaded = true;
 		  });
-	  });
+	  //});
+  }
+
+  ionViewWillEnter() {
+
   }
 
   /**
@@ -55,7 +64,7 @@ export class ListMasterPage extends ProtectedPage {
    */
   ionViewDidLoad() {
   }
-  
+
   numOrders() {
 	  return this.orders.length;
   }

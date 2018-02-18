@@ -23,6 +23,8 @@ export class MessagesPage extends ProtectedPage {
 
   public loading: any;
 
+  public dataLoaded: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -34,6 +36,8 @@ export class MessagesPage extends ProtectedPage {
     public messagesService: MessagesServiceProvider) {
     super(navCtrl, navParams, storage, authService);
 
+    this.dataLoaded = false;
+
     this.customTitle = navParams.get('pageTitle');
 
     this.autoOpenItem = navParams.get('autoOpenItem');
@@ -42,10 +46,30 @@ export class MessagesPage extends ProtectedPage {
     if (!this.pageType || this.pageType == '') {
       this.pageType = 'entrada';
     }
+
+    this.loadMessages();
+  }
+
+  loadMessages() {
+    this.messagesService.getAll(this.pageType).then((messages) => {
+      this.messages = messages;
+
+      this.dataLoaded = true;
+
+      if (this.autoOpenItem){
+        this.messagesService.getOne(parseInt(this.autoOpenItem)).then(msg => {
+          this.autoOpenItem = null;
+          //this.loading.dismiss();
+          this.messageInfo(msg);
+        });
+      } else {
+        //this.loading.dismiss();
+      }
+    });
   }
 
   ionViewWillEnter() {
-    this.loading = this.loadingCtr.create({ content: "Cargando mensajes..." });
+    /*this.loading = this.loadingCtr.create({ content: "Cargando mensajes..." });
 
     this.loading.present().then(() => {
       this.messagesService.getAll(this.pageType).then((messages) => {
@@ -61,7 +85,7 @@ export class MessagesPage extends ProtectedPage {
           this.loading.dismiss();
         }
       });
-    });
+    });*/
   }
 
   ionViewDidLoad() {

@@ -17,7 +17,7 @@
 
     <ion-content>
 
-      <ion-list>
+      <ion-list *ngIf="dataLoaded">
         <ion-item-sliding *ngFor="let item of messages">
             <button ion-item (click)="messageInfo(item)">
 				<text-avatar [text]="item.from_text" item-left></text-avatar>
