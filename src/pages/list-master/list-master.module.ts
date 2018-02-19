@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 
+import { SharedModule } from '../../modules/shared-module';
+
 import { ListMasterPage } from './list-master';
 
 @NgModule({
@@ -10,7 +12,8 @@ import { ListMasterPage } from './list-master';
   ],
   imports: [
     IonicPageModule.forChild(ListMasterPage),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    SharedModule
   ],
   exports: [
     ListMasterPage

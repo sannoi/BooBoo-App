@@ -49,14 +49,14 @@ export class ListMasterPage extends ProtectedPage {
 	  this.loading.present().then(() => {*/
 		  this.ordersService.getAll(this.onlyNotAssigned).then((orders) => {
 			this.orders = orders;
-			this.loading.dismiss();
+			//this.loading.dismiss();
       this.dataLoaded = true;
 		  });
 	  //});
   }
 
   ionViewWillEnter() {
-
+    this.loadOrders();
   }
 
   /**

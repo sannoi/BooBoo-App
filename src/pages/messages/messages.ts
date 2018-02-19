@@ -69,23 +69,7 @@ export class MessagesPage extends ProtectedPage {
   }
 
   ionViewWillEnter() {
-    /*this.loading = this.loadingCtr.create({ content: "Cargando mensajes..." });
-
-    this.loading.present().then(() => {
-      this.messagesService.getAll(this.pageType).then((messages) => {
-        this.messages = messages;
-
-        if (this.autoOpenItem){
-          this.messagesService.getOne(parseInt(this.autoOpenItem)).then(msg => {
-            this.autoOpenItem = null;
-            this.loading.dismiss();
-            this.messageInfo(msg);
-          });
-        } else {
-          this.loading.dismiss();
-        }
-      });
-    });*/
+    this.loadMessages();
   }
 
   ionViewDidLoad() {

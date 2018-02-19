@@ -18,15 +18,15 @@
     <ion-content>
 
       <ion-list *ngIf="dataLoaded">
-        <ion-item-sliding *ngFor="let item of messages">
+        <ion-item-sliding *ngFor="let item of messages | sortDescBy : 'fecha_ultima_respuesta'">
             <button ion-item (click)="messageInfo(item)">
 				<text-avatar [text]="item.from_text" item-left></text-avatar>
 				<!--<ion-avatar item-start>
 				<img [src]="item.imagenes.md" />
 				</ion-avatar>-->
-        <ion-badge float-right style="margin-left: 10px;" *ngIf="hasResponsesNotReaded(item)">{{countResponsesNotReaded(item)}}</ion-badge>
+        <ion-badge float-right style="right: 15px; bottom: 15px; position: absolute;" *ngIf="hasResponsesNotReaded(item)">{{countResponsesNotReaded(item)}}</ion-badge>
         <ion-note float-right>
-          <small>{{parseTwitterDate(item.fecha)}}</small>
+          <small>{{parseTwitterDate(item.fecha_ultima_respuesta)}}</small>
         </ion-note>
 
                 <!--<h3>{{item.from_text}}</h3>-->
