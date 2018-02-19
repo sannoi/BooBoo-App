@@ -38,6 +38,10 @@ export class MapPage extends ProtectedPage {
 
   ionViewCanLeave() {
     document.getElementById("map").outerHTML = "";
+
+    if (this.realtime) {
+      this.realtime.stop();
+    }
   }
 
   loadmap() {
@@ -80,6 +84,8 @@ export class MapPage extends ProtectedPage {
           }
         });
       });
+    } else {
+      this.realtime.start();
     }
 
     this.locationService.GPSStatus().then(result => {
