@@ -59,6 +59,7 @@ export class MyApp {
       this.fcm.subscribeToTopic('all');
       this.fcm.getToken().then(token => {
         this.usersService.saveFirebaseDeviceToken(token).then(result => {
+          this.authService.firebaseToken = token;
           //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
         });
         // backend.registerToken(token);
@@ -76,6 +77,7 @@ export class MyApp {
       });
       this.fcm.onTokenRefresh().subscribe(token => {
         this.usersService.saveFirebaseDeviceToken(token).then(result => {
+          this.authService.firebaseToken = token;
           //alert('Token de dispositivo guardado: ' + result.response_text + ' ' + token);
         });
         // backend.registerToken(token);
@@ -86,7 +88,7 @@ export class MyApp {
   redirectPush(data: any) {
     let view = this.nav.getActive();
     if (view.component.name == "MessageInfoPage" && view.data.message.id == data.msg_parent_id) {
-      this.nav.push("MessageInfoPage", view.data).then(()=>{
+      this.nav.push("MessageInfoPage", view.data).then(() => {
         this.nav.remove(1);
       });
     } else if (view.component.name == "MessagesPage") {
@@ -127,18 +129,21 @@ export class MyApp {
   openPage(page) {
 
     if (page.method && page.method === 'logout') {
-      this.authService.logout();
-    }
-    if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
-      this.nav.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
-    } else if (page.component === 'MessagesPage' && page.method) {
-      if (page.auto_item_id){
-        this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method, autoOpenItem: page.auto_item_id });
-      } else {
-        this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
-      }
+      this.authService.logout().then(result => {
+        this.nav.setRoot(page.component, { pageTitle: page.title });
+      });
     } else {
-      this.nav.setRoot(page.component, { pageTitle: page.title });
+      if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
+        this.nav.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
+      } else if (page.component === 'MessagesPage' && page.method) {
+        if (page.auto_item_id) {
+          this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method, autoOpenItem: page.auto_item_id });
+        } else {
+          this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
+        }
+      } else {
+        this.nav.setRoot(page.component, { pageTitle: page.title });
+      }
     }
   }
 

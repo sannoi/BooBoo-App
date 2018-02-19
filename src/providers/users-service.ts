@@ -91,6 +91,15 @@ export class UsersService {
       });
   }
 
+  clearFirebaseDeviceToken() {
+    return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.clear_firebase_token)
+      .toPromise()
+      .then(rs => {
+        console.log(rs, rs.json());
+        return rs.json();
+      });
+  }
+
   public serializeObj(obj) {
     var result = [];
 

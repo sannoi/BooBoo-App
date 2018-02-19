@@ -9,7 +9,7 @@ import { CredentialsModel } from '../models/credentials.model';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { LocationServiceProvider } from './location-service';
 import { UsersService } from './users-service';
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import *  as AppConfig from '../app/config';
 import { AlertController } from 'ionic-angular';
 
@@ -17,6 +17,7 @@ import { AlertController } from 'ionic-angular';
 export class AuthService {
 
   private cfg: any;
+  firebaseToken: any;
   idToken: string;
   formToken: string;
   config: any;
@@ -97,11 +98,14 @@ export class AuthService {
           this.lastError = rs.response_text;
           return false;
         } else {
-          this.saveData(data);
-          this.idToken = rs.data.jwt;
-          this.usr = rs.data.usr;
-          this.getFormToken();
-          return true;
+          return this.usersService.saveFirebaseDeviceToken(this.firebaseToken).then(result => {
+            console.log('Token de Firebase guardado: ' + this.firebaseToken);
+            this.saveData(data);
+            this.idToken = rs.data.jwt;
+            this.usr = rs.data.usr;
+            this.getFormToken();
+            return true;
+          });
           //this.scheduleRefresh();
         }
       })
@@ -126,18 +130,22 @@ export class AuthService {
   }
 
   logout() {
-    // stop function of auto refesh
-    //this.unscheduleRefresh();
-    this.storage.remove('user');
-    this.storage.remove('id_token');
-    this.storage.remove('userType');
-    this.storage.remove('formToken');
+    return this.usersService.clearFirebaseDeviceToken().then(result => {
+      // stop function of auto refesh
+      //this.unscheduleRefresh();
+      this.storage.remove('user');
+      this.storage.remove('id_token');
+      this.storage.remove('userType');
+      this.storage.remove('formToken');
 
-    this.idToken = null;
-    this.usr = null;
-    this.userType = null;
+      this.idToken = null;
+      this.usr = null;
+      this.userType = null;
 
-    this.getFormToken();
+      this.getFormToken();
+
+      return result;
+    });
   }
 
   isValid() {
@@ -198,48 +206,48 @@ export class AuthService {
   }
 
   public startupCheckGeolocation() {
-        let pos = this.locationService.position;
+    let pos = this.locationService.position;
 
-        //if (pos) {
-          let source = Observable.of(pos).flatMap(
-            position => {
-              let delay: number = 10000;
+    //if (pos) {
+    let source = Observable.of(pos).flatMap(
+      position => {
+        let delay: number = 10000;
 
-              if(delay <= 0) {
-                delay=1;
-              }
-               // Use the delay in a timer to
-              // run the refresh at the proper time
-              return Observable.interval(delay);
-            });
+        if (delay <= 0) {
+          delay = 1;
+        }
+        // Use the delay in a timer to
+        // run the refresh at the proper time
+        return Observable.interval(delay);
+      });
 
-           // Once the delay time from above is
-           // reached, get a new JWT and schedule
-           // additional refreshes
-           source.subscribe(() => {
-             //this.getNewJwt();
-             //this.scheduleRefresh();
-             this.storage.get("gps").then((gps)=>{
-               if (gps && gps == 'on') {
-                 console.log("Check location loop: on");
-                 if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.usr) {
-                  let categorias = JSON.parse(this.usr.categorias);
-                  if (categorias[0] == '7'){
-                     this.usersService.saveGeolocation().then(res => {
-                       console.log(res);
-                       //alert("Location changed and saved!");
-                       this.lastSavedPos = this.locationService.position;
-                     });
-                   }
-                 }
-               } else {
-                 console.log("Check location loop: off");
-               }
-             });
+    // Once the delay time from above is
+    // reached, get a new JWT and schedule
+    // additional refreshes
+    source.subscribe(() => {
+      //this.getNewJwt();
+      //this.scheduleRefresh();
+      this.storage.get("gps").then((gps) => {
+        if (gps && gps == 'on') {
+          console.log("Check location loop: on");
+          if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.usr) {
+            let categorias = JSON.parse(this.usr.categorias);
+            if (categorias[0] == '7') {
+              this.usersService.saveGeolocation().then(res => {
+                console.log(res);
+                //alert("Location changed and saved!");
+                this.lastSavedPos = this.locationService.position;
+              });
+            }
+          }
+        } else {
+          console.log("Check location loop: off");
+        }
+      });
 
 
-           });
-        //}
+    });
+    //}
   }
 
   public scheduleRefresh() {

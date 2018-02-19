@@ -14,7 +14,8 @@ export let cfg = {
 	  list:'/usuarios/usuario/buscar.json',
     info: '/usuarios/usuario/##ID##/info.json',
     geolocation: '/usuarios/usuario/saveGeolocation.json',
-    save_firebase_token: '/usuarios/usuario/saveFirebaseToken.json'
+    save_firebase_token: '/usuarios/usuario/saveFirebaseToken.json',
+    clear_firebase_token: '/usuarios/usuario/clearFirebaseToken.json'
   },
   orders: {
 	  list: '/shop/pedido/buscar.json',
