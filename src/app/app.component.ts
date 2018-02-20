@@ -3,6 +3,7 @@ import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
+import { ConfigServiceProvider } from '../providers/config-service/config-service';
 import { AuthService } from '../providers/auth-service';
 import { TranslateService } from '@ngx-translate/core';
 import { UsersService } from '../providers/users-service';
@@ -30,16 +31,17 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public authService: AuthService,
     public storage: Storage,
+    public configService: ConfigServiceProvider,
     public messagesService: MessagesServiceProvider,
     translate: TranslateService,
     public locationService: LocationServiceProvider,
     public usersService: UsersService,
     private fcm: FCM) {
-      this.cfg = AppConfig.cfg;
+    this.cfg = AppConfig.cfg;
 
-      this.initializeApp();
+    this.initializeApp();
 
-      translate.setDefaultLang('es');
+    translate.setDefaultLang('es');
   }
 
   initializeApp() {
@@ -49,39 +51,43 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      if (this.cfg.extensions_active.geolocation){
-        this.locationService.refreshGeolocation();
-        this.authService.startupCheckGeolocation();
-        this.locationService.checkEnableGeolocation().then(res => {
-          if (res == true){
-            let alert = this.alertCtrl.create({
-              title: 'Geolocalización desactivada',
-              message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
-              buttons: [
-                {
-                  text: 'No, gracias',
-                  role: 'cancel',
-                  handler: () => {
-                    //console.log('Cancel clicked');
-                  }
-                },
-                {
-                  text: 'Ir a Configuración',
-                  handler: () => {
-                    this.nav.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
-                    //console.log('Buy clicked');
-                  }
-                }
-              ]
+      this.configService.initialize().then(res => {
+        if (res) {
+          if (this.cfg.extensions_active.geolocation) {
+            this.locationService.refreshGeolocation();
+            this.authService.startupCheckGeolocation();
+            this.locationService.checkEnableGeolocation().then(res => {
+              if (res == true) {
+                let alert = this.alertCtrl.create({
+                  title: 'Geolocalización desactivada',
+                  message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
+                  buttons: [
+                    {
+                      text: 'No, gracias',
+                      role: 'cancel',
+                      handler: () => {
+                        //console.log('Cancel clicked');
+                      }
+                    },
+                    {
+                      text: 'Ir a Configuración',
+                      handler: () => {
+                        this.nav.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
+                        //console.log('Buy clicked');
+                      }
+                    }
+                  ]
+                });
+                alert.present();
+              }
             });
-            alert.present();
           }
-        });
-      }
-      if (this.cfg.extensions_active.notifications){
-        this.checkNotifications();
-      }
-      this.configPages();
+          if (this.cfg.extensions_active.notifications) {
+            this.checkNotifications();
+          }
+          this.configPages();
+        }
+      });
     });
   }
 

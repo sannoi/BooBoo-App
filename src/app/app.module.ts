@@ -24,6 +24,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
+import { ConfigServiceProvider } from '../providers/config-service/config-service';
 
 let storage = new Storage({
   name: '__boobooApp'
@@ -95,7 +96,8 @@ export function createTranslateLoader(http: Http) {
     CameraService,
     Camera,
     FileTransfer,
-    FCM
+    FCM,
+    ConfigServiceProvider
   ]
 })
 export class AppModule { }

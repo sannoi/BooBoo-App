@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Elige una plataforma</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+                <span ion-text color="primary">Cerrar</span>
+            </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="cards-bg">
+
+  <ion-card *ngFor="let site of availableSites()" [style.background-color]="site.color" (click)="selectSite(site)">
+      <img src="{{site.logo}}"/>
+      <ion-card-content>
+
+      <div class="card-title">{{site.name}}</div>
+      <!--<div class="card-subtitle">41 Listings</div>-->
+    </ion-card-content>
+    </ion-card>
+
+</ion-content>

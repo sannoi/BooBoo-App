@@ -12,6 +12,7 @@ import { UsersService } from './users-service';
 import { Observable } from 'rxjs/Rx';
 import *  as AppConfig from '../app/config';
 import { AlertController } from 'ionic-angular';
+import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,8 @@ export class AuthService {
     private storage: Storage,
     private http: Http,
     private jwtHelper: JwtHelper,
-    private authHttp: AuthHttp) {
+    private authHttp: AuthHttp,
+    private configService: ConfigServiceProvider) {
     this.cfg = AppConfig.cfg;
 
     this.storage.get('id_token').then(token => {
@@ -63,7 +65,7 @@ export class AuthService {
   }
 
   loadConfig() {
-    return this.http.get(this.cfg.apiUrl + this.cfg.configUrl)
+    return this.http.get(this.configService.apiUrl() + this.cfg.configUrl)
       .toPromise()
       .then(data => {
         this.config = data.json().data;
@@ -73,7 +75,7 @@ export class AuthService {
   }
 
   register(userData: UserModel) {
-    return this.http.post(this.cfg.apiUrl + this.cfg.user.register, userData)
+    return this.http.post(this.configService.apiUrl() + this.cfg.user.register, userData)
       .toPromise()
       .then(data => {
         this.saveData(data)
@@ -91,7 +93,7 @@ export class AuthService {
     let options = new RequestOptions({
       headers: headers
     });
-    return this.http.post(this.cfg.apiUrl + this.cfg.user.login, this.serializeObj(credentials), options)
+    return this.http.post(this.configService.apiUrl() + this.cfg.user.login, this.serializeObj(credentials), options)
       .toPromise().then(data => {
         let rs = data.json();
         if (rs.response == "error") {
@@ -178,7 +180,7 @@ export class AuthService {
       /*let senddata: { Token:string} = {
            Token : thetoken
         };*/
-      this.authHttp.get(this.cfg.apiUrl + this.cfg.user.formToken)
+      this.authHttp.get(this.configService.apiUrl() + this.cfg.user.formToken)
         .map(res => res.json())
         .subscribe(res => {
           console.log(JSON.stringify(res));
@@ -325,7 +327,7 @@ export class AuthService {
   }
 
   public getFormToken() {
-    return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.formToken, '')
+    return this.authHttp.post(this.configService.apiUrl() + this.cfg.user.formToken, '')
       .toPromise()
       .then(data => {
         let rs = data.json();

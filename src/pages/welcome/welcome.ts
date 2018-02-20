@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, MenuController} from 'ionic-angular';
-import {PublicPage} from '../public-page/public-page';
-import {Storage} from '@ionic/storage';
+import { IonicPage, NavController, NavParams, MenuController, ModalController } from 'ionic-angular';
+import { PublicPage } from '../public-page/public-page';
+import { Storage } from '@ionic/storage';
+import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 
-/**
- * The Welcome Page is a splash page that quickly describes the app,
- * and then directs the user to create an account or log in.
- * If you'd like to immediately put the user onto a login/signup page,
- * we recommend not using the Welcome page.
-*/
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -19,17 +14,34 @@ export class WelcomePage extends PublicPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
-    public storage: Storage) {
-		super(navCtrl, navParams, storage);
-	}
-	
+    public storage: Storage,
+    public modalCtrl: ModalController,
+    public configService: ConfigServiceProvider) {
+    super(navCtrl, navParams, storage);
+  }
+
   ionViewDidLoad() {
     //hide menu when on the login page, regardless of the screen resolution
     this.menuCtrl.enable(false);
   }
 
   login() {
-    this.navCtrl.push('LoginPage');
+    let modal = this.modalCtrl.create('SelectSitePage');
+    modal.present();
+
+    modal.onDidDismiss(data => {
+      console.log(data);
+      if (data && data.site) {
+        this.configService.changeSite(data.site).then(result => {
+          if (result == true){
+            this.navCtrl.push('LoginPage');
+          } else {
+            console.log("No se ha cambiado el sitio");
+            this.navCtrl.push('LoginPage');
+          }
+        });
+      }
+    });
   }
 
   signup() {

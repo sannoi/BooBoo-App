@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import *  as AppConfig from '../app/config';
 import { LocationServiceProvider } from './location-service';
+import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
 export class UsersService {
@@ -14,14 +15,15 @@ export class UsersService {
 
   constructor(
     private authHttp: AuthHttp,
-    public locationService: LocationServiceProvider) {
+    public locationService: LocationServiceProvider,
+    private configService: ConfigServiceProvider) {
 
     this.cfg = AppConfig.cfg;
   }
 
   getAll() {
     var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=';
-    return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
+    return this.authHttp.get(this.configService.apiUrl() + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
         console.log(rs, rs.json().resultados);
@@ -31,7 +33,7 @@ export class UsersService {
 
   getDrivers() {
     var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=&categoria=7';
-    return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
+    return this.authHttp.get(this.configService.apiUrl() + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
         console.log(rs, rs.json().resultados);
@@ -41,7 +43,7 @@ export class UsersService {
 
   getAllByOwner() {
     var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=&solo_usuario_actual=1&incluir_padre=1';
-    return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.list + '/?' + _def)
+    return this.authHttp.get(this.configService.apiUrl() + this.cfg.user.list + '/?' + _def)
       .toPromise()
       .then(rs => {
         console.log(rs, rs.json().resultados);
@@ -52,7 +54,7 @@ export class UsersService {
   getOne(id: any) {
     var infoUrl = this.cfg.user.info;
     var parsedUrl = infoUrl.replace('##ID##', id);
-    return this.authHttp.get(this.cfg.apiUrl + parsedUrl)
+    return this.authHttp.get(this.configService.apiUrl() + parsedUrl)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -68,7 +70,7 @@ export class UsersService {
     });
     let data = { latitud: this.locationService.position.latitude, longitud: this.locationService.position.longitude };
 
-    return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.geolocation, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.cfg.user.geolocation, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -84,7 +86,7 @@ export class UsersService {
     });
     let data = { fb_token: token };
 
-    return this.authHttp.post(this.cfg.apiUrl + this.cfg.user.save_firebase_token, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.cfg.user.save_firebase_token, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -92,7 +94,7 @@ export class UsersService {
   }
 
   clearFirebaseDeviceToken() {
-    return this.authHttp.get(this.cfg.apiUrl + this.cfg.user.clear_firebase_token)
+    return this.authHttp.get(this.configService.apiUrl() + this.cfg.user.clear_firebase_token)
       .toPromise()
       .then(rs => {
         console.log(rs, rs.json());
