@@ -8,14 +8,14 @@ export let cfg = {
       name: 'Last Mile',
       baseUrl: 'https://lastmile.mideas.es',
       apiUrl: 'https://lastmile.mideas.es/api',
-      color: 'blue',
+      color: 'rgb(67, 167, 255)',
       logo: 'assets/img/booboo_ico.png'
     },
     {
       name: 'Red de Optimización',
       baseUrl: 'https://www.booboo.eu',
       apiUrl: 'https://www.booboo.eu/api',
-      color: 'pink',
+      color: 'rgb(255, 139, 187)',
       logo: 'assets/img/booboo_ico.png'
     }
   ],

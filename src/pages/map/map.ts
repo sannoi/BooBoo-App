@@ -6,7 +6,7 @@ import { AuthService } from '../../providers/auth-service';
 import { LocationServiceProvider } from '../../providers/location-service';
 import * as leaflet from 'leaflet';
 import 'leaflet-realtime';
-import *  as AppConfig from '../../app/config';
+import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 
 @IonicPage()
 @Component({
@@ -14,7 +14,6 @@ import *  as AppConfig from '../../app/config';
   templateUrl: 'map.html',
 })
 export class MapPage extends ProtectedPage {
-  private cfg: any;
   map: any;
   marker: any;
   center: any;
@@ -27,9 +26,9 @@ export class MapPage extends ProtectedPage {
     public menuCtrl: MenuController,
     public storage: Storage,
     public authService: AuthService,
+    public configService: ConfigServiceProvider,
     public locationService: LocationServiceProvider) {
     super(navCtrl, navParams, storage, authService);
-    this.cfg = AppConfig.cfg;
   }
 
   ionViewDidLoad() {
@@ -57,7 +56,7 @@ export class MapPage extends ProtectedPage {
 
     if (!this.realtime) {
       this.realtime = leaflet.realtime({
-        url: 'https://lastmile.mideas.es/api/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=1',
+        url: this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.usr.id,
         crossOrigin: true,
         type: 'json'
       }, {
@@ -74,14 +73,14 @@ export class MapPage extends ProtectedPage {
       var map1 = this.map;
       var rt = this.realtime;
       var loc = this.locationService;
-      var geo_ext_opt = this.cfg.extensions_active.geolocation;
+      var geo_ext_opt = this.configService.cfg.extensions_active.geolocation;
 
       this.realtime.on('update', function() {
         if (geo_ext_opt) {
           loc.GPSStatus().then(result => {
             if (result == true) {
               console.log("Realtime geolocation true");
-            } else {
+            } else if (rt.features && rt.features.length > 0) {
               //console.log(map1);
               map1.fitBounds(rt.getBounds());
             }
@@ -94,7 +93,7 @@ export class MapPage extends ProtectedPage {
       this.realtime.start();
     }
 
-    if (this.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions_active.geolocation) {
       this.locationService.GPSStatus().then(result => {
         this.gps = result;
         if (result == true) {
