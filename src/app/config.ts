@@ -3,6 +3,11 @@ export let cfg = {
   apiUrl: 'https://lastmile.mideas.es/api',
   configUrl: '/sistema/general/config.json',
   tokenName: 'token',
+  extensions_active: {
+    users: true,
+    geolocation: true,
+    notifications: true
+  },
   system: {
     upload: '/sistema/archivo/upload.json'
   },

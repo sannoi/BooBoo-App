@@ -244,8 +244,6 @@ export class AuthService {
           console.log("Check location loop: off");
         }
       });
-
-
     });
     //}
   }

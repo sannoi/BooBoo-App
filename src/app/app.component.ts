@@ -9,6 +9,7 @@ import { UsersService } from '../providers/users-service';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
 import { FCM } from '@ionic-native/fcm';
+import *  as AppConfig from './config';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,6 +21,8 @@ export class MyApp {
 
   pages: Array<{ title: string, icon?: string, component: any, method?: any }>;
 
+  private cfg: any;
+
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
@@ -28,15 +31,14 @@ export class MyApp {
     public storage: Storage,
     public messagesService: MessagesServiceProvider,
     translate: TranslateService,
-    locationService: LocationServiceProvider,
+    public locationService: LocationServiceProvider,
     public usersService: UsersService,
     private fcm: FCM) {
+      this.cfg = AppConfig.cfg;
 
-    this.initializeApp();
+      this.initializeApp();
 
-    translate.setDefaultLang('es');
-
-    locationService.refreshGeolocation();
+      translate.setDefaultLang('es');
   }
 
   initializeApp() {
@@ -45,10 +47,14 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      //this.authService.startupTokenRefresh();
-      this.authService.startupCheckGeolocation();
 
-      this.checkNotifications();
+      if (this.cfg.extensions_active.geolocation){
+        this.locationService.refreshGeolocation();
+        this.authService.startupCheckGeolocation();
+      }
+      if (this.cfg.extensions_active.notifications){
+        this.checkNotifications();
+      }
       this.configPages();
     });
   }
