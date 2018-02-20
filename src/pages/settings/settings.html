@@ -11,7 +11,7 @@
     <ion-list-header>
       Aplicación
     </ion-list-header>
-    <ion-item>
+    <ion-item *ngIf="canToggleGeolocation()">
       <ion-icon name="navigate" item-start color="danger"></ion-icon>
       <ion-label>Geolocalización</ion-label>
       <ion-toggle color="secondary" [ngModel]="gps" (ionChange)="toggleGPS()"></ion-toggle>

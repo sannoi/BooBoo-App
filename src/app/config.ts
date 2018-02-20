@@ -3,6 +3,22 @@ export let cfg = {
   apiUrl: 'https://lastmile.mideas.es/api',
   configUrl: '/sistema/general/config.json',
   tokenName: 'token',
+  sites: [
+    {
+      name: 'Last Mile',
+      baseUrl: 'https://lastmile.mideas.es',
+      apiUrl: 'https://lastmile.mideas.es/api',
+      color: 'blue',
+      logo: 'assets/img/logo_lastmile.png'
+    },
+    {
+      name: 'Red de Optimización',
+      baseUrl: 'https://www.booboo.eu',
+      apiUrl: 'https://www.booboo.eu/api',
+      color: 'pink',
+      logo: 'assets/img/logo_booboo.png'
+    }
+  ],
   extensions_active: {
     users: true,
     geolocation: true,

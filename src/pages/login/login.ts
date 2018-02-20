@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams, MenuController, LoadingController, 
 import {Storage} from '@ionic/storage';
 import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../providers/auth-service';
+import {LocationServiceProvider} from '../../providers/location-service';
 import { TouchID } from '@ionic-native/touch-id';
 import {UserModel} from '../../models/user.model';
 
@@ -28,7 +29,8 @@ export class LoginPage {
     public loadingCtr: LoadingController,
     public alertCtrl: AlertController,
     public formBuilder: FormBuilder,
-    public authService: AuthService) {
+    public authService: AuthService,
+    public locationService: LocationServiceProvider) {
 
     this.touchId.isAvailable()
       .then(
@@ -64,6 +66,31 @@ export class LoginPage {
           if (resp === true) {
   				  this.loading.dismiss();
   				  this.redirectToHome();
+            this.locationService.checkEnableGeolocation().then(res => {
+              if (res == true){
+                let alert = this.alertCtrl.create({
+                  title: 'Geolocalización desactivada',
+                  message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
+                  buttons: [
+                    {
+                      text: 'No, gracias',
+                      role: 'cancel',
+                      handler: () => {
+                        //console.log('Cancel clicked');
+                      }
+                    },
+                    {
+                      text: 'Ir a Configuración',
+                      handler: () => {
+                        this.navCtrl.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
+                        //console.log('Buy clicked');
+                      }
+                    }
+                  ]
+                });
+                alert.present();
+              }
+            });
           } else {
             let alert = this.alertCtrl.create({
               title: 'Error',

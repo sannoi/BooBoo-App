@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -26,6 +26,7 @@ export class MyApp {
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
+    public alertCtrl: AlertController,
     public splashScreen: SplashScreen,
     public authService: AuthService,
     public storage: Storage,
@@ -51,6 +52,31 @@ export class MyApp {
       if (this.cfg.extensions_active.geolocation){
         this.locationService.refreshGeolocation();
         this.authService.startupCheckGeolocation();
+        this.locationService.checkEnableGeolocation().then(res => {
+          if (res == true){
+            let alert = this.alertCtrl.create({
+              title: 'Geolocalización desactivada',
+              message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
+              buttons: [
+                {
+                  text: 'No, gracias',
+                  role: 'cancel',
+                  handler: () => {
+                    //console.log('Cancel clicked');
+                  }
+                },
+                {
+                  text: 'Ir a Configuración',
+                  handler: () => {
+                    this.nav.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
+                    //console.log('Buy clicked');
+                  }
+                }
+              ]
+            });
+            alert.present();
+          }
+        });
       }
       if (this.cfg.extensions_active.notifications){
         this.checkNotifications();

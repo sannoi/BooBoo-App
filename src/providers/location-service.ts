@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
+import { AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import 'rxjs/add/operator/map';
 import *  as AppConfig from '../app/config';
@@ -16,46 +17,78 @@ export class LocationServiceProvider {
   constructor(
     public geolocation: Geolocation,
     private storage: Storage,
-    public http: Http) {
+    public http: Http,
+    public alertCtrl: AlertController) {
     this.cfg = AppConfig.cfg;
 
-    this.storage.get('gps').then(gps => {
-      this.gps = gps;
+    if (this.cfg.extensions_active.geolocation) {
+      this.storage.get('gps').then(gps => {
+        this.gps = gps;
 
-      if (this.gps == 'on') {
-        this.enableGeolocation();
+        if (this.gps == 'on') {
+          this.enableGeolocation();
+        } else {
+          this.disableGeolocation();
+        }
+      });
+    }
+  }
+
+  public checkEnableGeolocation() {
+    return this.storage.get('user').then(usr => {
+      if (this.cfg.extensions_active.geolocation) {
+        if (usr && usr.categorias) {
+          let categorias = JSON.parse(usr.categorias);
+          if (categorias[0] == '7') {
+            return this.storage.get('gps').then(gps => {
+              if (this.gps != 'on') {
+                return true;
+              } else {
+                return false;
+              }
+            });
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
       } else {
-        this.disableGeolocation();
+        return false;
       }
     });
   }
 
   refreshGeolocation() {
-    this.storage.get('gps').then(gps => {
-      this.gps = gps;
+    if (this.cfg.extensions_active.geolocation) {
+      this.storage.get('gps').then(gps => {
+        this.gps = gps;
 
-      if (this.gps == 'on') {
-        this.enableGeolocation();
-      } else {
-        this.disableGeolocation();
-      }
-    });
+        if (this.gps == 'on') {
+          this.enableGeolocation();
+        } else {
+          this.disableGeolocation();
+        }
+      });
+    }
   }
 
   enableGeolocation() {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.position = resp.coords;
-      //alert("geolocation activated!");
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    this.watcher = this.geolocation.watchPosition()
-      .subscribe(position => {
-        this.position = position.coords;
-        //alert("geolocation updated!");
-        console.log("enableLocation: " + position.coords.longitude + ' ' + position.coords.latitude);
+    if (this.cfg.extensions_active.geolocation) {
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.position = resp.coords;
+        //alert("geolocation activated!");
+      }).catch((error) => {
+        console.log('Error getting location', error);
       });
+
+      this.watcher = this.geolocation.watchPosition()
+        .subscribe(position => {
+          this.position = position.coords;
+          //alert("geolocation updated!");
+          console.log("enableLocation: " + position.coords.longitude + ' ' + position.coords.latitude);
+        });
+    }
   }
 
   disableGeolocation() {
@@ -66,12 +99,21 @@ export class LocationServiceProvider {
     }
   }
 
+  globalGeolocationIsActive() {
+    return this.cfg.extensions_active.geolocation;
+  }
+
   GPSStatus() {
     return this.storage.get('gps')
       .then(gps => {
-        if (gps == 'on') {
-          return true;
+        if (this.cfg.extensions_active.geolocation) {
+          if (gps == 'on') {
+            return true;
+          } else {
+            return false;
+          }
         } else {
+          this.storage.set('gps', 'off');
           return false;
         }
       });
@@ -80,14 +122,18 @@ export class LocationServiceProvider {
   toggleGPS() {
     return this.storage.get('gps')
       .then(gps => {
-        if (!gps || gps == 'off') {
-          this.gps = 'on';
-          this.enableGeolocation();
+        if (this.cfg.extensions_active.geolocation) {
+          if (!gps || gps == 'off') {
+            this.gps = 'on';
+            this.enableGeolocation();
+          } else {
+            this.gps = 'off';
+            this.disableGeolocation();
+          }
+          this.storage.set('gps', this.gps);
         } else {
           this.gps = 'off';
-          this.disableGeolocation();
         }
-        this.storage.set('gps', this.gps);
 
         return this.gps;
       });

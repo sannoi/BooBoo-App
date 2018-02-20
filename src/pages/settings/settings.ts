@@ -12,7 +12,7 @@ import {LocationServiceProvider} from '../../providers/location-service';
 })
 export class SettingsListPage extends ProtectedPage {
 	gps: any;
-	
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
@@ -21,19 +21,27 @@ export class SettingsListPage extends ProtectedPage {
 	public locationService: LocationServiceProvider) {
 	  super(navCtrl, navParams, storage, authService);
   }
-  
+
   ionViewDidLoad() {
 	  this.locationService.GPSStatus().then(ret => {
 		  this.gps = ret;
 		  console.log(this.gps);
 	  });
-	  
+
   }
-  
+
+  canToggleGeolocation() {
+    return this.locationService.globalGeolocationIsActive();
+  }
+
   toggleGPS() {
 	  this.locationService.toggleGPS().then(result => {
-		  this.gps = result;
-		  console.log(this.gps);
+      if (result == 'on'){
+        this.gps = true;
+      } else {
+        this.gps = false;
+      }
+		  return this.gps;
 	  });
   }
 
