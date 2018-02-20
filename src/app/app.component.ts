@@ -22,6 +22,8 @@ export class MyApp {
 
   pages: Array<{ title: string, icon?: string, component: any, method?: any }>;
 
+  selectedTheme: string;
+
   private cfg: any;
 
   constructor(
@@ -38,6 +40,8 @@ export class MyApp {
     public usersService: UsersService,
     private fcm: FCM) {
     this.cfg = AppConfig.cfg;
+
+    this.configService.getActiveTheme().subscribe(val => this.selectedTheme = val);
 
     this.initializeApp();
 
