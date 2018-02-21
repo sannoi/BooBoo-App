@@ -105,12 +105,15 @@ export class OrderInfoPage extends ProtectedPage {
 
   RouteMap(origen, destino){
     // The example snippet is now working
-     leaflet.Routing.control({
+    var control = leaflet.Routing.control({
        waypoints: [
          leaflet.latLng(origen),
          leaflet.latLng(destino)
-       ]
+       ],
+      language: 'es',
+      collapsible: true
      }).addTo(this.map);
+    control.hide();
   }
 
   isOrderDriver(order: OrderModel) {

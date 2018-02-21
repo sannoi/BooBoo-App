@@ -80,10 +80,11 @@
       <ion-col col-xs-12 col-lg-6>
         <ion-card>
           <ion-list>
-                        <ion-list-header no-margin>RECOGIDA<ion-badge item-end (click)="gotoExternalGps(order.datos.recogida.recogida)"><ion-icon name="navigate"></ion-icon></ion-badge>
-</ion-list-header>
-
-
+            <ion-list-header no-margin>RECOGIDA
+              <ion-badge item-end (click)="gotoExternalGps(order.datos.recogida.recogida)">
+                <ion-icon name="navigate"></ion-icon>
+              </ion-badge>
+            </ion-list-header>
             <ion-item>
               <ion-note item-start>
                 {{order.datos.recogida.recogida}}
@@ -100,8 +101,11 @@
       <ion-col col-xs-12 col-lg-6>
         <ion-card>
           <ion-list>
-            <ion-list-header no-margin>ENTREGA<ion-badge item-end (click)="gotoExternalGps(order.datos.envio.envio)"><ion-icon name="navigate"></ion-icon></ion-badge>
-</ion-list-header>
+            <ion-list-header no-margin>ENTREGA
+              <ion-badge item-end (click)="gotoExternalGps(order.datos.envio.envio)">
+                <ion-icon name="navigate"></ion-icon>
+              </ion-badge>
+            </ion-list-header>
             <ion-item>
               <ion-note item-start>
                 {{order.datos.envio.envio}}
@@ -143,29 +147,25 @@
             <ion-item no-margin>
               <ion-note>
                 Cliente
-              </ion-note><br>
-              #{{order.usuario_id}} {{order.datos.facturacion.nombre}} {{order.datos.facturacion.apellidos}}
+              </ion-note><br> #{{order.usuario_id}} {{order.datos.facturacion.nombre}} {{order.datos.facturacion.apellidos}}
 
             </ion-item>
             <ion-item no-margin>
               <ion-note>
                 Tarifa
-              </ion-note><br>
-              {{order.datos.metodo_envio.nombre}}
+              </ion-note><br> {{order.datos.metodo_envio.nombre}}
 
             </ion-item>
             <ion-item no-margin>
               <ion-note>
                 Peso total
-              </ion-note><br>
-              {{order.datos.metodo_envio.peso}} Kgs.
+              </ion-note><br> {{order.datos.metodo_envio.peso}} Kgs.
 
             </ion-item>
             <ion-item no-margin>
-            <ion-note>
-              Distancia
-            </ion-note><br>
-              {{order.distancia}} Kms.
+              <ion-note>
+                Distancia
+              </ion-note><br> {{order.distancia}} Kms.
             </ion-item>
           </ion-list>
         </ion-card>
