@@ -47,6 +47,8 @@ export class MyApp {
 
     this.configService.getActiveTheme().subscribe(val => this.selectedTheme = val);
 
+    this.notificationsService.getActiveNotification().subscribe(val => this.redirectPush(val));
+
     this.initializeApp();
 
     translate.setDefaultLang('es');
@@ -63,7 +65,6 @@ export class MyApp {
         if (res) {
           if (this.configService.cfg.extensions_active.notifications) {
             this.notificationsService.startupNotifications();
-            this.notificationsService.getActiveNotification().subscribe(val => this.redirectPush(val));
           }
           if (this.configService.cfg.extensions_active.geolocation) {
             this.locationService.refreshGeolocation();
@@ -98,22 +99,24 @@ export class MyApp {
   }
 
   redirectPush(data: any) {
-    if (data.wasTapped) {
-      let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
-      this.openPage(msgPage);
-    } else {
-      let view = this.nav.getActive();
-      if (view.component.name == "MessageInfoPage" && view.data.message.id == data.msg_parent_id) {
-        this.nav.push("MessageInfoPage", view.data).then(() => {
-          this.nav.remove(1);
-        });
-      } else if (view.component.name == "MessagesPage") {
-        let msgs = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' };
-        this.openPage(msgs);
-      } else {
-        alert("Notificacion local de mensaje: " + data.msg_parent_id);
+    if (this.configService.cfg.extensions_active.notifications && data){
+      if (data.wasTapped) {
         let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
         this.openPage(msgPage);
+      } else {
+        let view = this.nav.getActive();
+        if (view.component.name == "MessageInfoPage" && view.data.message.id == data.msg_parent_id) {
+          this.nav.push("MessageInfoPage", view.data).then(() => {
+            this.nav.remove(1);
+          });
+        } else if (view.component.name == "MessagesPage") {
+          let msgs = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' };
+          this.openPage(msgs);
+        } else {
+          alert("Notificacion local de mensaje: " + data.msg_parent_id);
+          let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
+          this.openPage(msgPage);
+        }
       }
     }
   }

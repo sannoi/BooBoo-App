@@ -71,8 +71,6 @@ export class ConfigServiceProvider {
       return x.name == site.name;
     });
 
-    console.log(idx_selected);
-
     return this.storage.get("site_id").then(site_idx => {
       let idx = site_idx;
       if (idx_selected != -1 && idx != idx_selected) {
@@ -85,10 +83,7 @@ export class ConfigServiceProvider {
       if (this.currentSite) {
         this.setActiveTheme(this.currentSite.theme);
         return this.storage.get("config").then(config => {
-          /*this.remoteCfg = config;
-          if (!this.remoteCfg) {*/
           this.loadConfig();
-          //}
           return true;
         });
       } else {
@@ -112,10 +107,6 @@ export class ConfigServiceProvider {
   public setAppSetting(setting: any, value: any) {
     this.appSettings[setting] = value;
     return this.saveSettings();
-  }
-
-  public toggleAppSetting(setting: any) {
-
   }
 
   private saveSettings() {
