@@ -1,3 +1,19 @@
 page-order-info-page {
+  .leaflet-routing-alt {
+      padding: 0px;
+      background-color: #fff9;
+      padding: 11px;
+  }
 
+  .leaflet-routing-alt h2 {
+      margin-top:  0px;
+      color: black;
+      font-size: 16px;
+  }
+
+  .leaflet-routing-alt h3 {
+      /* float: right; */
+      font-size: 15px;
+      /* margin-top: -30px; */
+  }
 }

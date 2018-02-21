@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, MenuController, ModalController, AlertController, ToastController, LoadingController, ActionSheetController } from 'ionic-angular';
 import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
@@ -6,7 +7,10 @@ import { AuthService } from '../../providers/auth-service';
 import { OrdersService } from '../../providers/orders-service';
 import { UsersService } from '../../providers/users-service';
 import { OrderModel } from '../../models/order.model';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
+
 import leaflet from 'leaflet';
+import 'leaflet-routing-machine';
 
 @IonicPage()
 @Component({
@@ -28,6 +32,8 @@ export class OrderInfoPage extends ProtectedPage {
     public menuCtrl: MenuController,
     public modalCtrl: ModalController,
     public storage: Storage,
+    public platform: Platform,
+    private launchNavigator: LaunchNavigator,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public loadingCtr: LoadingController,
@@ -35,11 +41,8 @@ export class OrderInfoPage extends ProtectedPage {
     public authService: AuthService,
     public ordersService: OrdersService,
     public usersService: UsersService) {
-
     super(navCtrl, navParams, storage, authService);
-
     this.order = navParams.get('order');
-
   }
 
   ionViewWillEnter() {
@@ -52,6 +55,13 @@ export class OrderInfoPage extends ProtectedPage {
       this.ordersService.getOne(this.order.id).then(updatedOrder => {
         //console.log(updatedOrder);
         this.order = updatedOrder;
+        //console.log(updatedOrder);
+
+        var newLatLng_recogida = new leaflet.LatLng(updatedOrder.datos.recogida.recogida_latitud.toString().replace(',', '.'), updatedOrder.datos.recogida.recogida_longitud.toString().replace(',', '.'));
+        var newLatLng_envio = new leaflet.LatLng(updatedOrder.datos.envio.envio_latitud.toString().replace(',', '.'), updatedOrder.datos.envio.envio_longitud.toString().replace(',', '.'));
+
+        this.RouteMap(newLatLng_recogida, newLatLng_envio);
+
         if (updatedOrder.conductor_id != '0') {
           this.usersService.getOne(updatedOrder.conductor_id).then(driver => {
             this.driver = driver;
@@ -83,6 +93,24 @@ export class OrderInfoPage extends ProtectedPage {
   updateMapMarkerPosition() {
     var newLatLng = new leaflet.LatLng(this.order.latitud.replace(',', '.'), this.order.longitud.replace(',', '.'));
     this.marker.setLatLng(newLatLng);
+  }
+
+  gotoExternalGps(destination){
+    this.launchNavigator.navigate(destination)
+      .then(
+        success => console.log('Launched navigator'),
+        error => console.log('Error launching navigator', error)
+      );
+  }
+
+  RouteMap(origen, destino){
+    // The example snippet is now working
+     leaflet.Routing.control({
+       waypoints: [
+         leaflet.latLng(origen),
+         leaflet.latLng(destino)
+       ]
+     }).addTo(this.map);
   }
 
   isOrderDriver(order: OrderModel) {
