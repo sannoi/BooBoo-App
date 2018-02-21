@@ -16,6 +16,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { FCM } from '@ionic-native/fcm';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 
 import { SharedModule } from '../modules/shared-module';
 import { TouchID } from '@ionic-native/touch-id';
@@ -92,6 +93,7 @@ export function createTranslateLoader(http: Http) {
     UsersService,
     LocationServiceProvider,
     Geolocation,
+    LaunchNavigator,
     MessagesServiceProvider,
     CameraService,
     Camera,
