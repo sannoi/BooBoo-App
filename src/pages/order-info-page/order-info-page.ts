@@ -8,6 +8,7 @@ import { OrdersService } from '../../providers/orders-service';
 import { UsersService } from '../../providers/users-service';
 import { OrderModel } from '../../models/order.model';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
+import { ConfigServiceProvider } from '../../providers/config-service/config-service';
 
 import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
@@ -40,7 +41,8 @@ export class OrderInfoPage extends ProtectedPage {
     public actionSheetCtrl: ActionSheetController,
     public authService: AuthService,
     public ordersService: OrdersService,
-    public usersService: UsersService) {
+    public usersService: UsersService,
+    public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage, authService);
     this.order = navParams.get('order');
   }
@@ -137,7 +139,7 @@ export class OrderInfoPage extends ProtectedPage {
   }
 
   canPickupOrder(order: OrderModel) {
-    let cfg = this.authService.config;
+    let cfg = this.configService.remoteCfg;
 
     if (this.isOrderDriver(order) && order.tipo == 'estandar' && (order.estado == cfg.opciones.ext_shop.venta.estado_asociado || order.estado == cfg.opciones.ext_shop.venta.estado_en_espera)) {
       return true;
@@ -147,7 +149,7 @@ export class OrderInfoPage extends ProtectedPage {
   }
 
   canStoreOrder(order: OrderModel) {
-    let cfg = this.authService.config;
+    let cfg = this.configService.remoteCfg;
 
     if (this.isOrderDriver(order) && order.tipo == 'estandar' && order.estado == cfg.opciones.ext_shop.venta.estado_enviado) {
       return true;
@@ -161,7 +163,7 @@ export class OrderInfoPage extends ProtectedPage {
   }
 
   canAddDocumentOrder(order: OrderModel) {
-    let cfg = this.authService.config;
+    let cfg = this.configService.remoteCfg;
 
     if (this.isOrderDriver(order) && order.tipo == 'estandar' && (order.estado == cfg.opciones.ext_shop.venta.estado_enviado || order.estado == cfg.opciones.ext_shop.venta.estado_asociado || order.estado == cfg.opciones.ext_shop.venta.estado_en_espera)) {
       return true;

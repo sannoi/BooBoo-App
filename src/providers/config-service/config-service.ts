@@ -33,7 +33,7 @@ export class ConfigServiceProvider {
         this.remoteCfg = data.json().data;
         this.storage.set("config", data.json().data);
       })
-      .catch(e => console.log("reg error", e));
+      .catch(e => alert(JSON.stringify(e)));
   }
 
   public initialize() {

@@ -20,7 +20,6 @@ export class AuthService {
   firebaseToken: any;
   idToken: string;
   formToken: string;
-  config: any;
   private usr: BehaviorSubject<any>;
   userType: string;
   refreshSubscription: any;
@@ -55,23 +54,6 @@ export class AuthService {
       this.setUsr(user);
     });
 
-    this.storage.get("config").then(config => {
-      this.config = config;
-      if (!this.config) {
-        this.loadConfig();
-      }
-    });
-
-  }
-
-  loadConfig() {
-    return this.http.get(this.configService.apiUrl() + this.configService.cfg.configUrl)
-      .toPromise()
-      .then(data => {
-        this.config = data.json().data;
-        this.storage.set("config", data.json().data);
-      })
-      .catch(e => console.log("reg error", e));
   }
 
   register(userData: UserModel) {
@@ -135,18 +117,22 @@ export class AuthService {
     return this.usersService.clearFirebaseDeviceToken().then(result => {
       // stop function of auto refesh
       //this.unscheduleRefresh();
-      this.storage.remove('user');
+      return this.storage.clear().then(() => {
+        this.formToken = null;
+        this.idToken = null;
+        this.setUsr(null);
+        this.userType = null;
+
+        //this.getFormToken();
+
+        return result;
+      });
+      /*this.storage.remove('user');
       this.storage.remove('id_token');
       this.storage.remove('userType');
-      this.storage.remove('formToken');
+      this.storage.remove('formToken');*/
 
-      this.idToken = null;
-      this.setUsr(null);
-      this.userType = null;
 
-      this.getFormToken();
-
-      return result;
     });
   }
 

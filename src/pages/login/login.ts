@@ -76,14 +76,12 @@ export class LoginPage {
                       text: 'No, gracias',
                       role: 'cancel',
                       handler: () => {
-                        //console.log('Cancel clicked');
                       }
                     },
                     {
                       text: 'Ir a Configuración',
                       handler: () => {
                         this.navCtrl.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
-                        //console.log('Buy clicked');
                       }
                     }
                   ]
