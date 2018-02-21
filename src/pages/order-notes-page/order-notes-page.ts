@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { OrdersService } from '../../providers/orders-service';
 import { OrderModel } from '../../models/order.model';
-import *  as AppConfig from '../../app/config';
+import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 
 @IonicPage()
 @Component({
@@ -13,8 +13,6 @@ import *  as AppConfig from '../../app/config';
   templateUrl: 'order-notes-page.html',
 })
 export class OrderNotesPage extends ProtectedPage {
-
-  private cfg: any;
 
   private order: OrderModel;
 
@@ -27,13 +25,12 @@ export class OrderNotesPage extends ProtectedPage {
     public viewCtrl: ViewController,
     public storage: Storage,
     public authService: AuthService,
-    public ordersService: OrdersService) {
+    public ordersService: OrdersService,
+    public configService: ConfigServiceProvider) {
 
     super(navCtrl, navParams, storage, authService);
 
     this.order = navParams.get('order');
-
-    this.cfg = AppConfig.cfg;
 
   }
 
@@ -49,7 +46,7 @@ export class OrderNotesPage extends ProtectedPage {
     if (append.substring(0,7) == 'http://' || append.substring(0,8) == 'https://'){
       return append;
     } else {
-      return this.cfg.baseUrl + '/' + append;
+      return this.configService.baseUrl() + '/' + append;
     }
   }
 

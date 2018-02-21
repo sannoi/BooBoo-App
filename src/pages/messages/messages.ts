@@ -110,10 +110,10 @@ export class MessagesPage extends ProtectedPage {
 
   countResponsesNotReaded(message: MessageModel) {
     var count = 0;
-    if (message.leido == '0' && this.authService && this.authService.usr && this.authService.usr.id && message.propietario != '-' + this.authService.usr.id) {
+    if (message.leido == '0' && this.authService && this.authService.getUsr() && this.authService.getUsr().id && message.propietario != '-' + this.authService.getUsr().id) {
       count = 1;
     }
-    if (message.respuestas && message.respuestas.length > 0 && this.authService && this.authService.usr && this.authService.usr.id) {
+    if (message.respuestas && message.respuestas.length > 0 && this.authService && this.authService.getUsr() && this.authService.getUsr().id) {
       var respuestasSinLeer = message.respuestas.filter(function(x) {
         return (x.leido == '0');
       });

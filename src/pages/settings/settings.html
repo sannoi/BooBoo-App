@@ -16,10 +16,10 @@
       <ion-label>Geolocalización</ion-label>
       <ion-toggle color="secondary" [ngModel]="gps" (ionChange)="toggleGPS()"></ion-toggle>
     </ion-item>
-	<ion-item>
+	<ion-item *ngIf="canToggleNotifications()">
       <ion-icon name="notifications" item-start color="primary"></ion-icon>
       <ion-label>Notificaciones Push</ion-label>
-      <ion-toggle color="secondary"></ion-toggle>
+      <ion-toggle color="secondary" [ngModel]="notifications" (ionChange)="toggleNotifications()"></ion-toggle>
     </ion-item>
     <!--<button ion-item>
       <ion-icon name="wifi" item-start color="primary"></ion-icon>

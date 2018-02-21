@@ -52,7 +52,7 @@ export class MessageNewPage extends ProtectedPage {
       if (this.message){
         data.padre = this.message.id;
         data.destinatarios = JSON.parse(this.message.destinatarios);
-        if (this.message.propietario != '-' + this.authService.usr.id){
+        if (this.message.propietario != '-' + this.authService.getUsr().id){
           data.destinatarios.push(this.message.propietario);
         }
         data.titulo = "Re: " + this.message.titulo_formateado;

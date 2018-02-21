@@ -56,7 +56,7 @@ export class MapPage extends ProtectedPage {
 
     if (!this.realtime) {
       this.realtime = leaflet.realtime({
-        url: this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.usr.id,
+        url: this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.getUsr().id,
         crossOrigin: true,
         type: 'json'
       }, {
@@ -77,14 +77,12 @@ export class MapPage extends ProtectedPage {
 
       this.realtime.on('update', function() {
         if (geo_ext_opt) {
-          loc.GPSStatus().then(result => {
-            if (result == true) {
-              console.log("Realtime geolocation true");
-            } else if (rt.features && rt.features.length > 0) {
-              //console.log(map1);
-              map1.fitBounds(rt.getBounds());
-            }
-          });
+          let result = loc.GPSStatus();
+          if (result == true) {
+            console.log("Realtime geolocation true");
+          } else if (rt.features && rt.features.length > 0) {
+            map1.fitBounds(rt.getBounds());
+          }
         } else {
           map1.fitBounds(rt.getBounds());
         }
@@ -94,35 +92,34 @@ export class MapPage extends ProtectedPage {
     }
 
     if (this.configService.cfg.extensions_active.geolocation) {
-      this.locationService.GPSStatus().then(result => {
-        this.gps = result;
-        if (result == true) {
-          var redIcon = leaflet.icon({
-            iconUrl: 'assets/img/marker-icon2.png',
-            shadowUrl: 'assets/img/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 40],
-            popupAnchor: [0, -38]
-          });
+      let result = loc.GPSStatus();
+      this.gps = result;
+      if (result == true) {
+        var redIcon = leaflet.icon({
+          iconUrl: 'assets/img/marker-icon2.png',
+          shadowUrl: 'assets/img/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 40],
+          popupAnchor: [0, -38]
+        });
 
-          this.marker = new leaflet.Marker(this.center, { icon: redIcon });
-          this.map.addLayer(this.marker);
+        this.marker = new leaflet.Marker(this.center, { icon: redIcon });
+        this.map.addLayer(this.marker);
 
-          this.marker.bindPopup("<p>Tu localización</p>");
+        this.marker.bindPopup("<p>Tu localización</p>");
 
-          if (this.locationService.position && this.locationService.position.latitude) {
-            this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude), 15);
-            this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
-          }
-
-          this.locationService.geolocation.watchPosition()
-            .subscribe(position => {
-              //this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
-              this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
-              console.log("View setted: " + this.locationService.position);
-            });
+        if (this.locationService.position && this.locationService.position.latitude) {
+          this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude), 15);
+          this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
         }
-      });
+
+        this.locationService.geolocation.watchPosition()
+          .subscribe(position => {
+            //this.map.setView(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
+            this.marker.setLatLng(new leaflet.LatLng(this.locationService.position.latitude, this.locationService.position.longitude));
+            console.log("View setted: " + this.locationService.position);
+          });
+      }
     }
   }
 

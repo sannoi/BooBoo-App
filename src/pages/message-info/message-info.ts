@@ -41,7 +41,7 @@ export class MessageInfoPage extends ProtectedPage {
 
     this.message = navParams.get('message');
 
-    this.usr = this.authService.usr;
+    this.usr = this.authService.getUsr();
 
     this.messageForm = formBuilder.group({
       message: new FormControl('')

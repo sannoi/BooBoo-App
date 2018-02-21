@@ -26,6 +26,12 @@ export let cfg = {
     geolocation: true,
     notifications: true
   },
+  config_settings: {
+    app: {
+      geolocation: 'off',
+      notifications: 'off'
+    }
+  },
   system: {
     upload: '/sistema/archivo/upload.json'
   },

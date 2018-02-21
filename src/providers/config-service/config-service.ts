@@ -13,6 +13,8 @@ export class ConfigServiceProvider {
   public remoteCfg: any;
   public currentSite: any;
 
+  public appSettings: any;
+
   private theme: BehaviorSubject<string>;
 
   constructor(
@@ -20,6 +22,7 @@ export class ConfigServiceProvider {
     private http: Http,
     private authHttp: AuthHttp) {
     this.cfg = AppConfig.cfg;
+    this.appSettings = this.cfg.config_settings;
     this.theme = new BehaviorSubject('blue-theme');
   }
 
@@ -47,7 +50,15 @@ export class ConfigServiceProvider {
           if (!this.remoteCfg) {
             this.loadConfig();
           }
-          return true;
+          return this.storage.get("config_settings").then(settings => {
+            if (!settings){
+              this.appSettings = this.cfg.config_settings;
+              this.storage.set("config_settings", this.cfg.config_settings);
+            } else {
+              this.appSettings = settings.app;
+            }
+            return true;
+          });
         });
       } else {
         return false;
@@ -92,6 +103,26 @@ export class ConfigServiceProvider {
 
   public getActiveTheme() {
     return this.theme.asObservable();
+  }
+
+  public getAppSetting(setting: any) {
+    return this.appSettings[setting];
+  }
+
+  public setAppSetting(setting: any, value: any) {
+    this.appSettings[setting] = value;
+    return this.saveSettings();
+  }
+
+  public toggleAppSetting(setting: any) {
+
+  }
+
+  private saveSettings() {
+    let settings = { app: this.appSettings };
+    return this.storage.set("config_settings", settings).then(options => {
+      return options;
+    });
   }
 
   public baseUrl() {

@@ -4,7 +4,7 @@ import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { CameraService } from '../../providers/camera-service';
-import *  as AppConfig from '../../app/config';
+import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 @IonicPage()
@@ -13,8 +13,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
   templateUrl: 'order-add-document.html',
 })
 export class OrderAddDocumentPage extends ProtectedPage {
-
-  private cfg: any;
 
   signature: any;
 
@@ -39,10 +37,9 @@ export class OrderAddDocumentPage extends ProtectedPage {
     public toastCtrl: ToastController,
     public authService: AuthService,
     public cameraService: CameraService,
-    public transfer: FileTransfer) {
+    public transfer: FileTransfer,
+    public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage, authService);
-
-    this.cfg = AppConfig.cfg;
 
     this.order = navParams.get('order');
 
@@ -128,7 +125,7 @@ export class OrderAddDocumentPage extends ProtectedPage {
         headers: {}
       }
 
-      fileTransfer.upload(this.signature, this.cfg.apiUrl + this.cfg.system.upload, options1)
+      fileTransfer.upload(this.signature, this.configService.apiUrl() + this.configService.cfg.system.upload, options1)
         .then((data) => {
           let resp = JSON.parse(data.response);
 

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
+import { SharedModule } from '../../modules/shared-module';
 import { DriversPage } from './drivers-page';
 
 @NgModule({
@@ -9,7 +10,8 @@ import { DriversPage } from './drivers-page';
   ],
   imports: [
     IonicPageModule.forChild(DriversPage),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    SharedModule
   ],
   exports: [
     DriversPage

@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { UsersService } from '../../providers/users-service';
 import { UserModel } from '../../models/user.model';
-import *  as AppConfig from '../../app/config';
+import { ConfigServiceProvider } from '../../providers/config-service/config-service';
 
 @IonicPage()
 @Component({
@@ -14,9 +14,11 @@ import *  as AppConfig from '../../app/config';
 })
 export class DriversPage extends ProtectedPage {
 
-  private cfg: any;
-
   public drivers: any;
+
+  private _drivers: any;
+
+  public dataLoaded: boolean = false;
 
   public customTitle: string;
 
@@ -32,11 +34,12 @@ export class DriversPage extends ProtectedPage {
     public viewCtrl: ViewController,
     public storage: Storage,
     public authService: AuthService,
-    public usersService: UsersService) {
+    public usersService: UsersService,
+    public configService: ConfigServiceProvider) {
 
     super(navCtrl, navParams, storage, authService);
 
-    this.cfg = AppConfig.cfg;
+    this.dataLoaded = false;
 
     this.customTitle = navParams.get('pageTitle');
 
@@ -51,6 +54,8 @@ export class DriversPage extends ProtectedPage {
       this.loading.present().then(() => {
         this.usersService.getDrivers().then((drivers) => {
           this.drivers = drivers;
+          this._drivers = drivers;
+          this.dataLoaded = true;
           this.loading.dismiss();
         });
       });
@@ -60,14 +65,28 @@ export class DriversPage extends ProtectedPage {
       this.loading.present().then(() => {
         this.usersService.getAll().then((drivers) => {
           this.drivers = drivers;
+          this._drivers = drivers;
+          this.dataLoaded = true;
           this.loading.dismiss();
         });
       });
     }
   }
 
+  filterItems(ev: any) {
+    let val = ev.target.value;
+
+    if (val && val.trim() != '') {
+      this.drivers = this._drivers.filter((item) => {
+        return (item.nombre.toLowerCase().indexOf(val.toLowerCase()) > -1 || item.email.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    } else if (val.trim() == '') {
+      this.drivers = this._drivers;
+    }
+  }
+
   getBaseUrl() {
-    return this.cfg.baseUrl + '/';
+    return this.configService.baseUrl() + '/';
   }
 
   dismiss() {

@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { Headers } from '@angular/http';
 import { RequestOptions } from '@angular/http';
+import { BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { UserModel } from '../models/user.model';
 import { CredentialsModel } from '../models/credentials.model';
@@ -10,19 +11,17 @@ import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { LocationServiceProvider } from './location-service';
 import { UsersService } from './users-service';
 import { Observable } from 'rxjs/Rx';
-import *  as AppConfig from '../app/config';
 import { AlertController } from 'ionic-angular';
 import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
 export class AuthService {
 
-  private cfg: any;
   firebaseToken: any;
   idToken: string;
   formToken: string;
   config: any;
-  usr: any;
+  private usr: BehaviorSubject<any>;
   userType: string;
   refreshSubscription: any;
   lastError: any;
@@ -37,7 +36,8 @@ export class AuthService {
     private jwtHelper: JwtHelper,
     private authHttp: AuthHttp,
     private configService: ConfigServiceProvider) {
-    this.cfg = AppConfig.cfg;
+
+    this.usr = new BehaviorSubject(null);
 
     this.storage.get('id_token').then(token => {
       this.idToken = token;
@@ -52,7 +52,7 @@ export class AuthService {
     });
 
     this.storage.get("user").then(user => {
-      this.usr = user;
+      this.setUsr(user);
     });
 
     this.storage.get("config").then(config => {
@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   loadConfig() {
-    return this.http.get(this.configService.apiUrl() + this.cfg.configUrl)
+    return this.http.get(this.configService.apiUrl() + this.configService.cfg.configUrl)
       .toPromise()
       .then(data => {
         this.config = data.json().data;
@@ -75,7 +75,7 @@ export class AuthService {
   }
 
   register(userData: UserModel) {
-    return this.http.post(this.configService.apiUrl() + this.cfg.user.register, userData)
+    return this.http.post(this.configService.apiUrl() + this.configService.cfg.user.register, userData)
       .toPromise()
       .then(data => {
         this.saveData(data)
@@ -93,7 +93,7 @@ export class AuthService {
     let options = new RequestOptions({
       headers: headers
     });
-    return this.http.post(this.configService.apiUrl() + this.cfg.user.login, this.serializeObj(credentials), options)
+    return this.http.post(this.configService.apiUrl() + this.configService.cfg.user.login, this.serializeObj(credentials), options)
       .toPromise().then(data => {
         let rs = data.json();
         if (rs.response == "error") {
@@ -104,7 +104,7 @@ export class AuthService {
             console.log('Token de Firebase guardado: ' + this.firebaseToken);
             this.saveData(data);
             this.idToken = rs.data.jwt;
-            this.usr = rs.data.usr;
+            this.setUsr(rs.data.usr);
             this.getFormToken();
             return true;
           });
@@ -141,13 +141,25 @@ export class AuthService {
       this.storage.remove('formToken');
 
       this.idToken = null;
-      this.usr = null;
+      this.setUsr(null);
       this.userType = null;
 
       this.getFormToken();
 
       return result;
     });
+  }
+
+  public getUsr() {
+    return this.usr.value;
+  }
+
+  public getUsrAsObservable() {
+    return this.usr.asObservable();
+  }
+
+  public setUsr(val) {
+    this.usr.next(val);
   }
 
   isValid() {
@@ -180,7 +192,7 @@ export class AuthService {
       /*let senddata: { Token:string} = {
            Token : thetoken
         };*/
-      this.authHttp.get(this.configService.apiUrl() + this.cfg.user.formToken)
+      this.authHttp.get(this.configService.apiUrl() + this.configService.cfg.user.formToken)
         .map(res => res.json())
         .subscribe(res => {
           console.log(JSON.stringify(res));
@@ -232,8 +244,8 @@ export class AuthService {
       this.storage.get("gps").then((gps) => {
         if (gps && gps == 'on') {
           console.log("Check location loop: on");
-          if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.usr) {
-            let categorias = JSON.parse(this.usr.categorias);
+          if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.getUsr()) {
+            let categorias = JSON.parse(this.getUsr().categorias);
             if (categorias[0] == '7') {
               this.usersService.saveGeolocation().then(res => {
                 console.log(res);
@@ -327,7 +339,7 @@ export class AuthService {
   }
 
   public getFormToken() {
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.user.formToken, '')
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.user.formToken, '')
       .toPromise()
       .then(data => {
         let rs = data.json();

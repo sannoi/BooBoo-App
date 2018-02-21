@@ -6,27 +6,21 @@ import { OrderModel } from '../models/order.model';
 import { UserModel } from '../models/user.model';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import *  as AppConfig from '../app/config';
 import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
 export class OrdersService {
 
-  private cfg: any;
-
   constructor(
     private authHttp: AuthHttp,
-    private configService: ConfigServiceProvider) {
-
-    this.cfg = AppConfig.cfg;
-  }
+    private configService: ConfigServiceProvider) { }
 
   getAll(onlyNotAssigned: boolean) {
     var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=14&lat=&lon=';
     if (onlyNotAssigned == true) {
       _def = _def + '&solo_disponibles=1';
     }
-    return this.authHttp.get(this.configService.apiUrl() + this.cfg.orders.list + '/?' + _def)
+    return this.authHttp.get(this.configService.apiUrl() + this.configService.cfg.orders.list + '/?' + _def)
       .toPromise()
       .then(rs => {
         console.log(rs, rs.json().resultados);
@@ -40,7 +34,7 @@ export class OrdersService {
   }
 
   getOne(id: number) {
-    var infoUrl = this.cfg.orders.info;
+    var infoUrl = this.configService.cfg.orders.info;
     var parsedUrl = infoUrl.replace('##ID##', id);
     return this.authHttp.get(this.configService.apiUrl() + parsedUrl)
       .toPromise()
@@ -59,7 +53,7 @@ export class OrdersService {
     });
     let data = { pedido_id: order.id, proveedor_id: provider.id, conductor_id: driver.id, token: token };
 
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.orders.assign, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.orders.assign, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -75,7 +69,7 @@ export class OrdersService {
     });
     let data = { pedido_id: order.id, conductor_id: driver.id, token: token };
 
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.orders.pickup, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.orders.pickup, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -91,7 +85,7 @@ export class OrdersService {
     });
     let data = { pedido_id: order.id, conductor_id: driver.id, token: token };
 
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.orders.store, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.orders.store, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -107,7 +101,7 @@ export class OrdersService {
     });
     let data = { pedido_id: order.id, conductor_id: driver.id, token: token };
 
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.orders.complete, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.orders.complete, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();
@@ -129,7 +123,7 @@ export class OrdersService {
       data.archivo_adjunto_pedido = "";
     }
 
-    return this.authHttp.post(this.configService.apiUrl() + this.cfg.orders.add_document, this.serializeObj(data), options)
+    return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.orders.add_document, this.serializeObj(data), options)
       .toPromise()
       .then(rs => {
         return rs.json();

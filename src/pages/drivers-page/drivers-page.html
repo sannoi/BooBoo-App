@@ -12,10 +12,11 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-    <ion-item-sliding *ngFor="let item of drivers">
+  <ion-searchbar (ionInput)="filterItems($event)" placeholder="Buscar"></ion-searchbar>
+  <ion-list *ngIf="dataLoaded">
+    <ion-item-sliding *ngFor="let item of drivers | sortBy: 'nombre'">
       <button ion-item (click)="selectDriver(item)">
+          <ion-note float-right>{{item.categorias_formateadas}}</ion-note>
                 <ion-avatar item-start>
 					<img [src]="item.imagenes.md">
 				</ion-avatar>

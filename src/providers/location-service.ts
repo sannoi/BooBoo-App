@@ -4,12 +4,11 @@ import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import 'rxjs/add/operator/map';
-import *  as AppConfig from '../app/config';
+import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
 export class LocationServiceProvider {
 
-  private cfg: any;
   gps: any;
   watcher: any;
   position: any;
@@ -18,35 +17,30 @@ export class LocationServiceProvider {
     public geolocation: Geolocation,
     private storage: Storage,
     public http: Http,
+    public configService: ConfigServiceProvider,
     public alertCtrl: AlertController) {
-    this.cfg = AppConfig.cfg;
-
-    if (this.cfg.extensions_active.geolocation) {
-      this.storage.get('gps').then(gps => {
-        this.gps = gps;
-
-        if (this.gps == 'on') {
-          this.enableGeolocation();
-        } else {
-          this.disableGeolocation();
-        }
-      });
+    if (this.configService.cfg.extensions_active.geolocation) {
+      this.gps = this.configService.getAppSetting("geolocation");
+      if (this.gps == 'on'){
+        this.enableGeolocation();
+      } else {
+        this.disableGeolocation();
+      }
     }
   }
 
   public checkEnableGeolocation() {
     return this.storage.get('user').then(usr => {
-      if (this.cfg.extensions_active.geolocation) {
+      if (this.configService.cfg.extensions_active.geolocation) {
         if (usr && usr.categorias) {
           let categorias = JSON.parse(usr.categorias);
           if (categorias[0] == '7') {
-            return this.storage.get('gps').then(gps => {
-              if (this.gps != 'on') {
-                return true;
-              } else {
-                return false;
-              }
-            });
+            this.gps = this.configService.getAppSetting("geolocation");
+            if (this.gps != 'on') {
+              return true;
+            } else {
+              return false;
+            }
           } else {
             return false;
           }
@@ -60,21 +54,18 @@ export class LocationServiceProvider {
   }
 
   refreshGeolocation() {
-    if (this.cfg.extensions_active.geolocation) {
-      this.storage.get('gps').then(gps => {
-        this.gps = gps;
-
-        if (this.gps == 'on') {
-          this.enableGeolocation();
-        } else {
-          this.disableGeolocation();
-        }
-      });
+    if (this.configService.cfg.extensions_active.geolocation) {
+      this.gps = this.configService.getAppSetting("geolocation");
+      if (this.gps == 'on') {
+        this.enableGeolocation();
+      } else {
+        this.disableGeolocation();
+      }
     }
   }
 
   enableGeolocation() {
-    if (this.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions_active.geolocation) {
       this.geolocation.getCurrentPosition().then((resp) => {
         this.position = resp.coords;
         //alert("geolocation activated!");
@@ -100,43 +91,21 @@ export class LocationServiceProvider {
   }
 
   globalGeolocationIsActive() {
-    return this.cfg.extensions_active.geolocation;
+    return this.configService.cfg.extensions_active.geolocation;
   }
 
   GPSStatus() {
-    return this.storage.get('gps')
-      .then(gps => {
-        if (this.cfg.extensions_active.geolocation) {
-          if (gps == 'on') {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          this.storage.set('gps', 'off');
-          return false;
-        }
-      });
-  }
-
-  toggleGPS() {
-    return this.storage.get('gps')
-      .then(gps => {
-        if (this.cfg.extensions_active.geolocation) {
-          if (!gps || gps == 'off') {
-            this.gps = 'on';
-            this.enableGeolocation();
-          } else {
-            this.gps = 'off';
-            this.disableGeolocation();
-          }
-          this.storage.set('gps', this.gps);
-        } else {
-          this.gps = 'off';
-        }
-
-        return this.gps;
-      });
+    this.gps = this.configService.getAppSetting("geolocation");
+    if (this.configService.cfg.extensions_active.geolocation) {
+      if (this.gps == 'on') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      this.configService.setAppSetting("geolocation", "off");
+      return false;
+    }
   }
 
 }

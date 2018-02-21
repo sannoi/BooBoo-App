@@ -25,28 +25,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocationServiceProvider } from '../providers/location-service';
 import { MessagesServiceProvider } from '../providers/messages-service/messages-service';
 import { ConfigServiceProvider } from '../providers/config-service/config-service';
+import { NotificationsServiceProvider } from '../providers/notifications-service/notifications-service';
 
 let storage = new Storage({
   name: '__boobooApp'
 });
-
-
 export function getAuthHttp(http) {
-  console.log("Pasa por autenticacion");
   return new AuthHttp(new AuthConfig({
     noJwtError: true,
     globalHeaders: [{ 'Accept': 'application/json' }],
     tokenGetter: (() => storage.get('id_token')),
   }), http);
 }
-
-//export function getAuthHttp(http) {
-//  return new AuthHttp(new AuthConfig({
-//    noJwtError: true,
-//    globalHeaders: [{'Accept': 'application/json'}],
-//    tokenGetter: (() => storage.get('id_token')),
-//  }), http);
-//}
 
 export function createTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -97,7 +87,8 @@ export function createTranslateLoader(http: Http) {
     Camera,
     FileTransfer,
     FCM,
-    ConfigServiceProvider
+    ConfigServiceProvider,
+    NotificationsServiceProvider
   ]
 })
 export class AppModule { }

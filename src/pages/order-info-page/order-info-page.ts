@@ -86,7 +86,7 @@ export class OrderInfoPage extends ProtectedPage {
   }
 
   isOrderDriver(order: OrderModel) {
-    let usr = this.authService.usr;
+    let usr = this.authService.getUsr();
 
     if (usr.id == order.conductor_id) {
       return true;
@@ -215,7 +215,7 @@ export class OrderInfoPage extends ProtectedPage {
           this.authService.getFormToken().then(newFormToken => {
             if (this.usersService.locationService.gps == 'on') {
               this.usersService.saveGeolocation().then(result_geo => {
-                this.ordersService.addDocumentOrder(order, this.authService.usr, data.text, data.documentUrl, newFormToken).then(result => {
+                this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, newFormToken).then(result => {
                   if (result.response == 'error') {
                     let alert = this.alertCtrl.create({
                       title: 'Error',
@@ -240,7 +240,7 @@ export class OrderInfoPage extends ProtectedPage {
                 });
               });
             } else {
-              this.ordersService.addDocumentOrder(order, this.authService.usr, data.text, data.documentUrl, newFormToken).then(result => {
+              this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, newFormToken).then(result => {
                 if (result.response == 'error') {
                   let alert = this.alertCtrl.create({
                     title: 'Error',
@@ -346,7 +346,7 @@ export class OrderInfoPage extends ProtectedPage {
     this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
     this.loading.present().then(() => {
       this.authService.getFormToken().then(newFormToken => {
-        this.ordersService.pickupOrder(order, this.authService.usr, newFormToken).then(result => {
+        this.ordersService.pickupOrder(order, this.authService.getUsr(), newFormToken).then(result => {
           if (result.response == 'error') {
             let alert = this.alertCtrl.create({
               title: 'Error',
@@ -377,7 +377,7 @@ export class OrderInfoPage extends ProtectedPage {
     this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
     this.loading.present().then(() => {
       this.authService.getFormToken().then(newFormToken => {
-        this.ordersService.storeOrder(order, this.authService.usr, newFormToken).then(result => {
+        this.ordersService.storeOrder(order, this.authService.getUsr(), newFormToken).then(result => {
           if (result.response == 'error') {
             let alert = this.alertCtrl.create({
               title: 'Error',
@@ -408,7 +408,7 @@ export class OrderInfoPage extends ProtectedPage {
     this.loading = this.loadingCtr.create({ content: "Finalizando pedido..." });
     this.loading.present().then(() => {
       this.authService.getFormToken().then(newFormToken => {
-        this.ordersService.completeOrder(order, this.authService.usr, newFormToken).then(result => {
+        this.ordersService.completeOrder(order, this.authService.getUsr(), newFormToken).then(result => {
           if (result.response == 'error') {
             let alert = this.alertCtrl.create({
               title: 'Error',
@@ -444,7 +444,7 @@ export class OrderInfoPage extends ProtectedPage {
         this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
         this.loading.present().then(() => {
           this.authService.getFormToken().then(newFormToken => {
-            this.ordersService.assignOrder(order, data.driver, this.authService.usr, newFormToken).then(result => {
+            this.ordersService.assignOrder(order, data.driver, this.authService.getUsr(), newFormToken).then(result => {
               if (result.response == 'error') {
                 let alert = this.alertCtrl.create({
                   title: 'Error',
