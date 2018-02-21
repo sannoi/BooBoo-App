@@ -38,6 +38,7 @@ export let cfg = {
   user: {
     register: '/apps/Mideas/register.json',
     login: '/apps/Mideas/login.json',
+    logout: '/apps/Mideas/logout.json',
 	  formToken:'/apps/Mideas/formToken.json',
     refresh:'/apps/Mideas/login.json',
 	  list:'/usuarios/usuario/buscar.json',

@@ -103,7 +103,8 @@
       },
       "cordova-plugin-statusbar": {},
       "cordova-plugin-touch-id": {},
-      "cordova-plugin-fcm": {}
+      "cordova-plugin-fcm": {},
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {}
     },
     "platforms": [
       "android"

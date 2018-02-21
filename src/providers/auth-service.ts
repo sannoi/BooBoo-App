@@ -70,7 +70,10 @@ export class AuthService {
 
   login(credentials: CredentialsModel) {
     let headers = new Headers({
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'If-Modified-Since': 'Mon, 26 Jul 1997 05:00:00 GMT'
     });
     let options = new RequestOptions({
       headers: headers
@@ -114,26 +117,21 @@ export class AuthService {
   }
 
   logout() {
-    return this.usersService.clearFirebaseDeviceToken().then(result => {
-      // stop function of auto refesh
-      //this.unscheduleRefresh();
-      return this.storage.clear().then(() => {
-        this.formToken = null;
-        this.idToken = null;
-        this.setUsr(null);
-        this.userType = null;
+    return this.authHttp.get(this.configService.apiUrl() + this.configService.cfg.user.logout).toPromise().then(res => {
+      return this.usersService.clearFirebaseDeviceToken().then(result => {
+        return this.storage.clear().then(() => {
+          this.formToken = null;
+          this.idToken = null;
+          this.setUsr(null);
+          this.userType = null;
 
-        //this.getFormToken();
+          //this.getFormToken();
 
-        return result;
+          return result;
+        });
       });
-      /*this.storage.remove('user');
-      this.storage.remove('id_token');
-      this.storage.remove('userType');
-      this.storage.remove('formToken');*/
-
-
     });
+
   }
 
   public getUsr() {

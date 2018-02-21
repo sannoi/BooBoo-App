@@ -45,6 +45,7 @@ export class ConfigServiceProvider {
       }
       this.currentSite = this.cfg.sites[idx];
       if (this.currentSite) {
+        this.setActiveTheme(this.currentSite.theme);
         return this.storage.get("config").then(config => {
           this.remoteCfg = config;
           if (!this.remoteCfg) {

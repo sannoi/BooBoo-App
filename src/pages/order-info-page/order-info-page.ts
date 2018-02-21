@@ -103,7 +103,7 @@ export class OrderInfoPage extends ProtectedPage {
     this.launchNavigator.navigate(destination)
       .then(
         success => console.log('Launched navigator'),
-        error => console.log('Error launching navigator', error)
+        error => alert('Error launching navigator: ' + JSON.stringify(error))
       );
   }
 

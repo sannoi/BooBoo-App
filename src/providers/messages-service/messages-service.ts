@@ -56,6 +56,7 @@ export class MessagesServiceProvider {
     return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.messages.response, datos, options)
       .toPromise()
       .then(rs => {
+        console.log(rs.json());
         return rs.json();
       });
   }

@@ -119,7 +119,7 @@
   "uk.co.workingedge.phonegap.plugin.launchnavigator": {
     "source": {
       "type": "registry",
-      "id": "uk.co.workingedge.phonegap.plugin.launchnavigator@3"
+      "id": "uk.co.workingedge.phonegap.plugin.launchnavigator@^3.2.2"
     },
     "is_top_level": true,
     "variables": {}
@@ -127,7 +127,7 @@
   "cordova-plugin-actionsheet": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-actionsheet@2"
+      "id": "cordova-plugin-actionsheet@^2.2.2"
     },
     "is_top_level": false,
     "variables": {}

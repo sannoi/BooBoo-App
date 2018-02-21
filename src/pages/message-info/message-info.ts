@@ -174,9 +174,10 @@ export class MessageInfoPage extends ProtectedPage {
   }
 
   scrollToBottom() {
-    setTimeout(() => {
+    this.contenido.scrollToBottom();
+    /*setTimeout(() => {
       this.contenido.scrollToBottom();
-    }, 100);
+    }, 100);*/
   }
 
 }
