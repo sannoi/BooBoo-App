@@ -107,24 +107,40 @@ export class MessageNewPage extends ProtectedPage {
     return text;
   }
 
-  parseTwitterDate(time: string){
-		var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
-			diff = (((new Date()).getTime() - date.getTime()) / 1000),
-			day_diff = Math.floor(diff / 86400);
+  parseTwitterDate(time: string) {
+    var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " ")),
+      diff = (((new Date()).getTime() - date.getTime()) / 1000),
+      day_diff = Math.floor(diff / 86400);
 
-		if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
-			return;
+    if (isNaN(day_diff) || day_diff < 0/* || day_diff >= 31*/)
+      return;
 
-		return day_diff == 0 && (
-				diff < 60 && "ahora mismo" ||
-				diff < 120 && "hace 1 minuto" ||
-				diff < 3600 && "hace " + Math.floor( diff / 60 ) + " minutos" ||
-				diff < 7200 && "hace 1 hora" ||
-				diff < 86400 && "hace " + Math.floor( diff / 3600 ) + " horas") ||
-			day_diff == 1 && "ayer" ||
-			day_diff < 7 && "hace " + day_diff + " días" ||
-			day_diff < 31 && "hace " + Math.ceil( day_diff / 7 ) + " semanas";
-	}
+    if (day_diff >= 31) {
+      var monthNames = [
+        "ene", "feb", "mar",
+        "abr", "may", "jun", "jul",
+        "ago", "sep", "oct",
+        "nov", "dic"
+      ];
+
+      var day = date.getDate();
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
+
+
+    return day_diff == 0 && (
+      diff < 60 && "ahora mismo" ||
+      diff < 120 && "hace 1 minuto" ||
+      diff < 3600 && "hace " + Math.floor(diff / 60) + " minutos" ||
+      diff < 7200 && "hace 1 hora" ||
+      diff < 86400 && "hace " + Math.floor(diff / 3600) + " horas") ||
+      day_diff == 1 && "ayer" ||
+      day_diff < 7 && "hace " + day_diff + " días" ||
+      day_diff < 31 && "hace " + Math.ceil(day_diff / 7) + " semanas";
+  }
 
   scrollToBottom() {
     setTimeout(() => {

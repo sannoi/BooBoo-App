@@ -57,10 +57,12 @@ export class OrderInfoPage extends ProtectedPage {
         this.order = updatedOrder;
         //console.log(updatedOrder);
 
-        var newLatLng_recogida = new leaflet.LatLng(updatedOrder.datos.recogida.recogida_latitud.toString().replace(',', '.'), updatedOrder.datos.recogida.recogida_longitud.toString().replace(',', '.'));
-        var newLatLng_envio = new leaflet.LatLng(updatedOrder.datos.envio.envio_latitud.toString().replace(',', '.'), updatedOrder.datos.envio.envio_longitud.toString().replace(',', '.'));
+        if (updatedOrder.datos.recogida.recogida_latitud && updatedOrder.datos.recogida.recogida_longitud && updatedOrder.datos.envio.envio_latitud && updatedOrder.datos.envio.envio_longitud){
+          var newLatLng_recogida = new leaflet.LatLng(updatedOrder.datos.recogida.recogida_latitud.toString().replace(',', '.'), updatedOrder.datos.recogida.recogida_longitud.toString().replace(',', '.'));
+          var newLatLng_envio = new leaflet.LatLng(updatedOrder.datos.envio.envio_latitud.toString().replace(',', '.'), updatedOrder.datos.envio.envio_longitud.toString().replace(',', '.'));
 
-        this.RouteMap(newLatLng_recogida, newLatLng_envio);
+          this.RouteMap(newLatLng_recogida, newLatLng_envio);
+        }
 
         if (updatedOrder.conductor_id != '0') {
           this.usersService.getOne(updatedOrder.conductor_id).then(driver => {

@@ -35,8 +35,24 @@ export class UserInfoPage extends ProtectedPage {
       diff = (((new Date()).getTime() - date.getTime()) / 1000),
       day_diff = Math.floor(diff / 86400);
 
-    if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31)
+    if (isNaN(day_diff) || day_diff < 0/* || day_diff >= 31*/)
       return;
+
+    if (day_diff >= 31) {
+      var monthNames = [
+        "ene", "feb", "mar",
+        "abr", "may", "jun", "jul",
+        "ago", "sep", "oct",
+        "nov", "dic"
+      ];
+
+      var day = date.getDate();
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
+
 
     return day_diff == 0 && (
       diff < 60 && "ahora mismo" ||
