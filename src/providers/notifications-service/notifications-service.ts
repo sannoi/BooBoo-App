@@ -29,10 +29,8 @@ export class NotificationsServiceProvider {
     private checkNotifications() {
       if (this.configService.getAppSetting("notifications") == "on") {
         this.enableNotifications();
-
       } else {
         this.disableNotifications();
-
       }
     }
 
