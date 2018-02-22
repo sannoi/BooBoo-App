@@ -13,6 +13,13 @@ export class MessagesServiceProvider {
     private authHttp: AuthHttp,
     private configService: ConfigServiceProvider) { }
 
+    initialize() {
+      console.log("messages service initialized!");
+      return new Promise<boolean>((resolve, reject) => {
+        resolve(false);
+      });
+    }
+
   getAll(tipo: string) {
     var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=14&lat=&lon=&incluir_respuestas=0&tipo_resultados=' + tipo;
     return this.authHttp.get(this.configService.apiUrl() + this.configService.cfg.messages.list + '/?' + _def)

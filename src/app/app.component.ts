@@ -39,7 +39,7 @@ export class MyApp {
     public storage: Storage,
     public configService: ConfigServiceProvider,
     public messagesService: MessagesServiceProvider,
-    translate: TranslateService,
+    public translate: TranslateService,
     public locationService: LocationServiceProvider,
     public usersService: UsersService,
     public notificationsService: NotificationsServiceProvider) {
@@ -75,63 +75,56 @@ export class MyApp {
       this.configService.initialize().then(res => {
         if (res) {
           if (this.configService.cfg.extensions.users.active) {
-            this.authService.initializeUser().then(usr => {
-              if (usr && usr.nivel_acceso && this.configService.cfg.min_level_access_user) {
-                if (parseInt(usr.nivel_acceso) < parseInt(this.configService.cfg.min_level_access_user)) {
-                  this.alert = this.alertCtrl.create({
-                    enableBackdropDismiss: false,
-                    title: 'Cuenta pendiente de validar',
-                    message: 'Tu cuenta está pendiente de validar. Si necesitas más información puedes escribirnos a operaciones@booboo.eu',
-                    buttons: [
-                      {
-                        text: 'Salir',
-                        handler: () => {
-                          let logoutPage = { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' };
-                          //this.openPage(logoutPage);
-                          this.configService.setActivePage(logoutPage);
-                        }
-                      }
-                    ]
-                  });
-                  this.alert.present();
-                }
-              }
+            this.authService.initializeUser().then(dataUsr => {
+              this.initializeExtensions();
             });
+          } else {
+            this.initializeExtensions();
           }
-          if (this.configService.cfg.extensions.notifications.active) {
-            this.notificationsService.startupNotifications();
-          }
-          if (this.configService.cfg.extensions.geolocation.active) {
-            this.locationService.refreshGeolocation();
-            this.authService.startupCheckGeolocation();
-            this.locationService.checkEnableGeolocation().then(res => {
-              if (res == true) {
-                this.alert = this.alertCtrl.create({
-                  enableBackdropDismiss: false,
-                  title: 'Geolocalización desactivada',
-                  message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
-                  buttons: [
-                    {
-                      text: 'No, gracias',
-                      role: 'cancel',
-                      handler: () => { }
-                    },
-                    {
-                      text: 'Ir a Configuración',
-                      handler: () => {
-                        this.nav.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
-                      }
-                    }
-                  ]
-                });
-                this.alert.present();
-              }
-            });
-          }
+
           this.configPages();
         }
       });
     });
+  }
+
+  initializeExtensions() {
+    let extensions = this.configService.cfg.extensions;
+    let extensionsKeys = Object.keys(extensions);
+    for (var i = 0; i < extensionsKeys.length; i++){
+      var eKey = extensionsKeys[i];
+      var extension = extensions[eKey];
+      if (extension && extension.active) {
+        var provider = extension.provider;
+        if (provider && this[provider]) {
+          this[provider].initialize().then(data => {
+            this.responseInitExtension(data);
+          });
+        }
+      }
+    }
+  }
+
+  responseInitExtension(data: any) {
+    if (data) {
+      if (data.modal && data.modal_buttons) {
+        let dataSettings = data.modal;
+        dataSettings.buttons = [];
+        for (var i = 0; i < data.modal_buttons.length; i++) {
+          if (data.modal_buttons[i].role && data.modal_buttons[i].role == 'cancel') {
+            let btn = { text: data.modal_buttons[i].text, role: 'cancel', handler: () => {} };
+            dataSettings.buttons.push(btn);
+          } else if (data.modal_buttons[i].navToMenuLink) {
+            let link = this.configService.menu.pages[data.modal_buttons[i].navToMenuLink];
+            let btn = { text: data.modal_buttons[i].text, handler: () => { this.openPage(link) } };
+            dataSettings.buttons.push(btn);
+          }
+        }
+        console.log(dataSettings);
+        this.alert = this.alertCtrl.create(dataSettings);
+        this.alert.present();
+      }
+    }
   }
 
   redirectPush(data: any) {

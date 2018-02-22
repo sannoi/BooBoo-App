@@ -41,7 +41,7 @@ export class MessageInfoPage extends ProtectedPage {
 
     this.message = navParams.get('message');
 
-    this.usr = this.authService.getUsr();
+    this.usr = this.storage.get('user');
 
     this.messageForm = formBuilder.group({
       message: new FormControl('')
@@ -50,17 +50,18 @@ export class MessageInfoPage extends ProtectedPage {
 
   ionViewWillEnter() {
     this.contenido.scrollToBottom();
+    this.markAsReaded();
 
     /*this.loading = this.loadingCtr.create({ content: "Cargando mensaje..." });
 
     this.loading.present().then(() => {*/
-      this.messagesService.getOne(this.message.id).then(updatedMessage => {
+      /*this.messagesService.getOne(this.message.id).then(updatedMessage => {
         //console.log(updatedOrder);
         this.message = updatedMessage;
         //this.loading.dismiss();
         this.scrollToBottom();
         this.markAsReaded();
-      });
+      });*/
     //});
   }
 
@@ -88,13 +89,6 @@ export class MessageInfoPage extends ProtectedPage {
         } else {
           this.messagesService.getOne(this.message.id).then(updatedMsg => {
             this.message = updatedMsg;
-            /*let toast = this.toastCtrl.create({
-              message: 'Mensaje enviado',
-              duration: 3000,
-              position: 'top'
-            });
-            toast.present();
-            this.loading.dismiss();*/
           });
         }
       });
@@ -174,10 +168,10 @@ export class MessageInfoPage extends ProtectedPage {
   }
 
   scrollToBottom() {
-    this.contenido.scrollToBottom();
-    /*setTimeout(() => {
+    //this.contenido.scrollToBottom();
+    setTimeout(() => {
       this.contenido.scrollToBottom();
-    }, 100);*/
+    }, 100);
   }
 
 }

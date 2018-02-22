@@ -15,6 +15,13 @@ export class OrdersService {
     private authHttp: AuthHttp,
     private configService: ConfigServiceProvider) { }
 
+    initialize() {
+      console.log("Orders initialized!");
+      return new Promise<boolean>((resolve, reject) => {
+        resolve(false);
+      });
+    }
+
   getAll(onlyNotAssigned: boolean) {
     var _def = 'q=&orden=fecha&ordenDir=DESC&page=1&resultados=14&lat=&lon=';
     if (onlyNotAssigned == true) {

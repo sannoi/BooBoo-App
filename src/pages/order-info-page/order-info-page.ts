@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { OrdersService } from '../../providers/orders-service';
 import { UsersService } from '../../providers/users-service';
+import { LocationServiceProvider } from '../../providers/location-service';
 import { OrderModel } from '../../models/order.model';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 import { ConfigServiceProvider } from '../../providers/config-service/config-service';
@@ -42,6 +43,7 @@ export class OrderInfoPage extends ProtectedPage {
     public authService: AuthService,
     public ordersService: OrdersService,
     public usersService: UsersService,
+    public locationService: LocationServiceProvider,
     public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage, authService);
     this.order = navParams.get('order');
@@ -248,8 +250,8 @@ export class OrderInfoPage extends ProtectedPage {
         this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
         this.loading.present().then(() => {
           this.authService.getFormToken().then(newFormToken => {
-            if (this.usersService.locationService.gps == 'on') {
-              this.usersService.saveGeolocation().then(result_geo => {
+            if (this.locationService.gps == 'on') {
+              this.usersService.saveGeolocation(this.locationService.position.latitude, this.locationService.position.longitude).then(result_geo => {
                 this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, newFormToken).then(result => {
                   if (result.response == 'error') {
                     let alert = this.alertCtrl.create({
@@ -313,7 +315,7 @@ export class OrderInfoPage extends ProtectedPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.usersService.saveGeolocation().then(result_geo => {
+            this.usersService.saveGeolocation(this.locationService.position.latitude, this.locationService.position.longitude).then(result_geo => {
               this.pickupOrderProcess(order);
             });
           }
@@ -337,7 +339,7 @@ export class OrderInfoPage extends ProtectedPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.usersService.saveGeolocation().then(result_geo => {
+            this.usersService.saveGeolocation(this.locationService.position.latitude, this.locationService.position.longitude).then(result_geo => {
               this.storeOrderProcess(order);
             });
           }
@@ -361,7 +363,7 @@ export class OrderInfoPage extends ProtectedPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.usersService.saveGeolocation().then(result_geo => {
+            this.usersService.saveGeolocation(this.locationService.position.latitude, this.locationService.position.longitude).then(result_geo => {
               this.completeOrderProcess(order);
             });
           }

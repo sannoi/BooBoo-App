@@ -20,10 +20,12 @@ export class NotificationsServiceProvider {
       this.notification = new BehaviorSubject(null);
     }
 
-    public startupNotifications() {
-      if (this.configService.cfg.extensions.notifications.active) {
-        this.checkNotifications();
-      }
+    public initialize() {
+      this.checkNotifications();
+
+      return new Promise<boolean>((resolve, reject) => {
+        resolve(false);
+      });
     }
 
     private checkNotifications() {

@@ -24,7 +24,6 @@ export class AuthService {
   userType: string;
   refreshSubscription: any;
   lastError: any;
-  lastSavedPos: any;
 
   constructor(
     public alertCtrl: AlertController,
@@ -36,6 +35,10 @@ export class AuthService {
     private authHttp: AuthHttp,
     private configService: ConfigServiceProvider) {
       this.usr = new BehaviorSubject(null);
+    }
+
+    initialize() {
+      return this.initializeUser();
     }
 
   public initializeUser() {
@@ -61,7 +64,6 @@ export class AuthService {
         this.saveData(data)
         let rs = data.json();
         this.idToken = rs.token;
-        this.scheduleRefresh();
       })
       .catch(e => console.log("reg error", e));
   }
@@ -93,7 +95,6 @@ export class AuthService {
             });
 
           });
-          //this.scheduleRefresh();
         }
       })
       .catch(e => console.log('login error', e));
@@ -205,151 +206,15 @@ export class AuthService {
 
   }
 
-  public startupCheckGeolocation() {
-    let pos = this.locationService.position;
-
-    //if (pos) {
-    let source = Observable.of(pos).flatMap(
-      position => {
-        let delay: number = 10000;
-
-        if (delay <= 0) {
-          delay = 1;
-        }
-        // Use the delay in a timer to
-        // run the refresh at the proper time
-        return Observable.interval(delay);
-      });
-
-    // Once the delay time from above is
-    // reached, get a new JWT and schedule
-    // additional refreshes
-    source.subscribe(() => {
-      //this.getNewJwt();
-      //this.scheduleRefresh();
-      this.storage.get("gps").then((gps) => {
-        if (gps && gps == 'on') {
-          console.log("Check location loop: on");
-          if (this.locationService.position && this.locationService.position != this.lastSavedPos && this.getUsr()) {
-            let categorias = JSON.parse(this.getUsr().categorias);
-            if (categorias[0] == '7') {
-              this.usersService.saveGeolocation().then(res => {
-                console.log(res);
-                //alert("Location changed and saved!");
-                this.lastSavedPos = this.locationService.position;
-              });
-            }
-          }
-        } else {
-          console.log("Check location loop: off");
-        }
-      });
-    });
-    //}
-  }
-
-  public scheduleRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-    /*console.log(this.idToken);
-    let source = Observable.of(this.idToken).flatMap(
-      token => {
-        // The delay to generate in this case is the difference
-        // between the expiry time and the issued at time
-        let jwtIat = this.jwtHelper.decodeToken(token).iat;
-        let jwtExp = this.jwtHelper.decodeToken(token).exp;
-
-      console.log(jwtIat);
-      console.log(jwtExp);
-
-        let iat = new Date(0);
-        let exp = new Date(0);
-
-      console.log(iat);
-      console.log(exp);
-      let delay = 10000;
-       //let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
-        console.log("will start refresh after :",(delay/1000)/60);
-       // if(delay-1000<=0)
-       // delay = 1;
-        return Observable.interval(delay);
-      });
-
-    this.refreshSubscription = source.subscribe(() => {
-      this.getNewJwt();
-    });*/
-  }
-
-  public startupTokenRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-
-    /*this.storage.get("id_token").then((thetoken)=>{
-
-      if(thetoken){
-
-        let source = Observable.of(thetoken).flatMap(
-          token => {
-            // Get the expiry time to generate
-            // a delay in milliseconds
-            let now: number = new Date().valueOf();
-            let jwtExp: number = this.jwtHelper.decodeToken(token).exp;
-            let exp: Date = new Date(0);
-            exp.setUTCSeconds(jwtExp);
-            let delay: number = exp.valueOf() - now;
-
-            if(delay <= 0) {
-              delay=1;
-            }
-             // Use the delay in a timer to
-            // run the refresh at the proper time
-            return Observable.timer(delay);
-          });
-
-         // Once the delay time from above is
-         // reached, get a new JWT and schedule
-         // additional refreshes
-         source.subscribe(() => {
-           this.getNewJwt();
-           this.scheduleRefresh();
-         });
-
-      }else{
-        //there is no user logined
-        console.info("there is no user logined ");
-      }
-
-    });*/
-
-
-  }
-
   public getFormToken() {
     return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.user.formToken, '')
       .toPromise()
       .then(data => {
         let rs = data.json();
-        //this.saveData(data);
-        //console.log(rs);
-        //console.log(rs.response_text);
         this.storage.set("formToken", rs.response_text);
         this.formToken = rs.response_text;
         return rs.response_text;
-
-        //this.idToken = rs.token;
-        //this.scheduleRefresh();
       })
       .catch(e => console.log('login error', e));
   }
-
-
-
-
-  public unscheduleRefresh() {
-    // Unsubscribe fromt the refresh
-    /*if (this.refreshSubscription) {
-    this.refreshSubscription.unsubscribe();
-    }*/
-  }
-
 }

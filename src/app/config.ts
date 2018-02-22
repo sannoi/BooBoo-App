@@ -24,7 +24,7 @@ export let cfg = {
   extensions: {
     users: {
       active: true,
-      provider: 'UsersService',
+      provider: 'usersService',
       list: {
         use: true,
         component: 'DriversPage'
@@ -35,7 +35,7 @@ export let cfg = {
     },
     messages: {
       active: true,
-      provider: 'MessagesServiceProvider',
+      provider: 'messagesService',
       list: {
         use: true,
         component: 'MessagesPage'
@@ -47,7 +47,7 @@ export let cfg = {
     },
     geolocation: {
       active: true,
-      provider: 'LocationService',
+      provider: 'locationService',
       list: {
         use: false
       },
@@ -57,7 +57,7 @@ export let cfg = {
     },
     notifications: {
       active: true,
-      provider: 'NotificationsServiceProvider',
+      provider: 'notificationsService',
       list: {
         use: false
       },

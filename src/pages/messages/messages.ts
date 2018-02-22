@@ -54,17 +54,25 @@ export class MessagesPage extends ProtectedPage {
   }
 
   loadMessages() {
+    let aoi = this.autoOpenItem;
+    if (aoi) {
+      this.autoOpenItem = null;
+    }
     this.messagesService.getAll(this.pageType).then((messages) => {
       this.messages = messages;
 
       this.dataLoaded = true;
 
-      if (this.autoOpenItem){
-        this.messagesService.getOne(parseInt(this.autoOpenItem)).then(msg => {
-          this.autoOpenItem = null;
-          //this.loading.dismiss();
-          this.messageInfo(msg);
+      if (aoi) {
+        let msg = this.messages.find(function(x) {
+          return x.id == aoi;
         });
+
+        if (msg) {
+          this.messageInfo(msg);
+        } else {
+          alert(JSON.stringify(msg));
+        }
       } else {
         //this.loading.dismiss();
       }

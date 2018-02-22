@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { AuthHttp } from 'angular2-jwt';
 import { Headers } from '@angular/http';
 import { RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { LocationServiceProvider } from './location-service';
 import {ConfigServiceProvider} from './config-service/config-service';
 
 @Injectable()
@@ -12,8 +12,30 @@ export class UsersService {
 
   constructor(
     private authHttp: AuthHttp,
-    public locationService: LocationServiceProvider,
+    private storage: Storage,
     private configService: ConfigServiceProvider) { }
+
+    initialize() {
+      console.log("Users initialized!");
+
+      return this.storage.get("user").then(usr => {
+        if (usr && usr.nivel_acceso && this.configService.cfg.min_level_access_user) {
+          if (parseInt(usr.nivel_acceso) < parseInt(this.configService.cfg.min_level_access_user)) {
+            return {
+              modal: {
+                enableBackdropDismiss: false,
+                title: 'Cuenta pendiente de validar',
+                message: 'Tu cuenta está pendiente de validar. Si necesitas más información puedes escribirnos a operaciones@booboo.eu'
+              },
+              modal_buttons: [
+                { text: "Salir", navToMenuLink: 6 }
+              ]
+            };
+          }
+        }
+        return false;
+      });
+    }
 
   getAll() {
     var _def = 'q=&orden=nombre&ordenDir=ASC&page=1&resultados=500&lat=&lon=';
@@ -55,14 +77,14 @@ export class UsersService {
       });
   }
 
-  saveGeolocation() {
+  saveGeolocation(lat: any, lng: any) {
     let headers = new Headers({
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
     });
     let options = new RequestOptions({
       headers: headers
     });
-    let data = { latitud: this.locationService.position.latitude, longitud: this.locationService.position.longitude };
+    let data = { latitud: lat, longitud: lng };
 
     return this.authHttp.post(this.configService.apiUrl() + this.configService.cfg.user.geolocation, this.serializeObj(data), options)
       .toPromise()
