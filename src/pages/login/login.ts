@@ -6,6 +6,7 @@ import {AuthService} from '../../providers/auth-service';
 import {LocationServiceProvider} from '../../providers/location-service';
 import { TouchID } from '@ionic-native/touch-id';
 import {UserModel} from '../../models/user.model';
+import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 
 @IonicPage()
 @Component({
@@ -19,6 +20,7 @@ export class LoginPage {
   private loginData: FormGroup;
   public user: UserModel;
   loading: any;
+  alert: any;
 
   constructor(
     private touchId: TouchID,
@@ -30,7 +32,8 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public formBuilder: FormBuilder,
     public authService: AuthService,
-    public locationService: LocationServiceProvider) {
+    public locationService: LocationServiceProvider,
+    private configService: ConfigServiceProvider) {
 
     this.touchId.isAvailable()
       .then(
@@ -66,29 +69,48 @@ export class LoginPage {
           if (resp === true) {
   				  this.loading.dismiss();
   				  this.redirectToHome();
-            this.locationService.checkEnableGeolocation().then(res => {
-              if (res == true){
-                let alert = this.alertCtrl.create({
-                  title: 'Geolocalización desactivada',
-                  message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
-                  buttons: [
-                    {
-                      text: 'No, gracias',
-                      role: 'cancel',
-                      handler: () => {
-                      }
-                    },
-                    {
-                      text: 'Ir a Configuración',
-                      handler: () => {
-                        this.navCtrl.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
-                      }
+            if (parseInt(this.authService.getUsr().nivel_acceso) < parseInt(this.configService.cfg.min_level_access_user)) {
+              this.alert = this.alertCtrl.create({
+                title: 'Cuenta pendiente de validar',
+                message: 'Tu cuenta está pendiente de validar. Si necesitas más información puedes escribirnos a operaciones@booboo.eu',
+                buttons: [
+                  {
+                    text: 'Salir',
+                    handler: () => {
+                      let logoutPage = { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' };
+                      this.openPageObj(logoutPage);
                     }
-                  ]
-                });
-                alert.present();
-              }
-            });
+                  }
+                ]
+              });
+              this.alert.present();
+            }
+            if (this.configService.cfg.extensions_active.geolocation){
+              this.locationService.checkEnableGeolocation().then(res => {
+                if (res == true){
+                  this.alert = this.alertCtrl.create({
+                    enableBackdropDismiss: false,
+                    title: 'Geolocalización desactivada',
+                    message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
+                    buttons: [
+                      {
+                        text: 'No, gracias',
+                        role: 'cancel',
+                        handler: () => {
+                        }
+                      },
+                      {
+                        text: 'Ir a Configuración',
+                        handler: () => {
+                          this.navCtrl.setRoot('SettingsListPage', { pageTitle: 'page.settings' });
+                        }
+                      }
+                    ]
+                  });
+                  this.alert.present();
+                }
+              });
+            }
           } else {
             let alert = this.alertCtrl.create({
               title: 'Error',
@@ -119,5 +141,31 @@ export class LoginPage {
    */
   openPage(page: string) {
     this.navCtrl.push(page);
+  }
+
+  openPageObj(page) {
+
+    if (page.method && page.method === 'logout') {
+      this.loading = this.loadingCtr.create({
+        content: 'Cerrando sesión...'
+      });
+      this.loading.present();
+      this.authService.logout().then(result => {
+        this.loading.dismiss();
+        this.navCtrl.setRoot(page.component, { pageTitle: page.title });
+      });
+    } else {
+      if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
+        this.navCtrl.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
+      } else if (page.component === 'MessagesPage' && page.method) {
+        if (page.auto_item_id) {
+          this.navCtrl.setRoot(page.component, { pageTitle: page.title, pageType: page.method, autoOpenItem: page.auto_item_id });
+        } else {
+          this.navCtrl.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
+        }
+      } else {
+        this.navCtrl.setRoot(page.component, { pageTitle: page.title });
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, ModalController, LoadingController } from 'ionic-angular';
 import { PublicPage } from '../public-page/public-page';
 import { Storage } from '@ionic/storage';
 import {ConfigServiceProvider} from '../../providers/config-service/config-service';
@@ -11,11 +11,14 @@ import {ConfigServiceProvider} from '../../providers/config-service/config-servi
 })
 export class WelcomePage extends PublicPage {
 
+  loading: any;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
     public storage: Storage,
     public modalCtrl: ModalController,
+    public loadingCtrl: LoadingController,
     public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage);
   }
@@ -30,9 +33,13 @@ export class WelcomePage extends PublicPage {
     modal.present();
 
     modal.onDidDismiss(data => {
-      console.log(data);
+      this.loading = this.loadingCtrl.create({
+        content: 'Cargando entorno...'
+      });
+      this.loading.present();
       if (data && data.site) {
         this.configService.changeSite(data.site).then(result => {
+          this.loading.dismiss();
           if (result == true){
             this.navCtrl.push('LoginPage');
           } else {
@@ -40,6 +47,9 @@ export class WelcomePage extends PublicPage {
             this.navCtrl.push('LoginPage');
           }
         });
+      } else {
+        this.loading.dismiss();
+        alert("No se han encontrado datos");
       }
     });
   }

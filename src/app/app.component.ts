@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, AlertController } from 'ionic-angular';
+import { Nav, Platform, AlertController, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -25,10 +25,15 @@ export class MyApp {
 
   selectedUser: any;
 
+  loading: any;
+
+  alert: any;
+
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public splashScreen: SplashScreen,
     public authService: AuthService,
     public storage: Storage,
@@ -63,6 +68,29 @@ export class MyApp {
 
       this.configService.initialize().then(res => {
         if (res) {
+          if (this.configService.cfg.extensions_active.users) {
+            this.authService.initializeUser().then(usr => {
+              if (usr && usr.nivel_acceso && this.configService.cfg.min_level_access_user) {
+                if (parseInt(usr.nivel_acceso) < parseInt(this.configService.cfg.min_level_access_user)) {
+                  this.alert = this.alertCtrl.create({
+                    enableBackdropDismiss: false,
+                    title: 'Cuenta pendiente de validar',
+                    message: 'Tu cuenta está pendiente de validar. Si necesitas más información puedes escribirnos a operaciones@booboo.eu',
+                    buttons: [
+                      {
+                        text: 'Salir',
+                        handler: () => {
+                          let logoutPage = { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' };
+                          this.openPage(logoutPage);
+                        }
+                      }
+                    ]
+                  });
+                  this.alert.present();
+                }
+              }
+            });
+          }
           if (this.configService.cfg.extensions_active.notifications) {
             this.notificationsService.startupNotifications();
           }
@@ -71,7 +99,8 @@ export class MyApp {
             this.authService.startupCheckGeolocation();
             this.locationService.checkEnableGeolocation().then(res => {
               if (res == true) {
-                let alert = this.alertCtrl.create({
+                this.alert = this.alertCtrl.create({
+                  enableBackdropDismiss: false,
                   title: 'Geolocalización desactivada',
                   message: 'Es recomendable activar la geolocalización para que todas las características de BooBoo funcionen correctamente. Por favor, accede a Configuración y después activa la opción Geolocalización.',
                   buttons: [
@@ -88,7 +117,7 @@ export class MyApp {
                     }
                   ]
                 });
-                alert.present();
+                this.alert.present();
               }
             });
           }
@@ -149,7 +178,12 @@ export class MyApp {
   openPage(page) {
 
     if (page.method && page.method === 'logout') {
+      this.loading = this.loadingCtrl.create({
+        content: 'Cerrando sesión...'
+      });
+      this.loading.present();
       this.authService.logout().then(result => {
+        this.loading.dismiss();
         this.nav.setRoot(page.component, { pageTitle: page.title });
       });
     } else {

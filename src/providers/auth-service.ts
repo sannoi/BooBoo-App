@@ -35,25 +35,23 @@ export class AuthService {
     private jwtHelper: JwtHelper,
     private authHttp: AuthHttp,
     private configService: ConfigServiceProvider) {
+      this.usr = new BehaviorSubject(null);
+    }
 
-    this.usr = new BehaviorSubject(null);
-
-    this.storage.get('id_token').then(token => {
+  public initializeUser() {
+    return this.storage.get('id_token').then(token => {
       this.idToken = token;
+      return this.storage.get('formToken').then(token => {
+        this.formToken = token;
+        return this.storage.get("userType").then(userType => {
+          this.userType = userType;
+          return this.storage.get("user").then(user => {
+            this.setUsr(user);
+            return user;
+          });
+        });
+      });
     });
-
-    this.storage.get('formToken').then(token => {
-      this.formToken = token;
-    });
-
-    this.storage.get("userType").then(userType => {
-      this.userType = userType;
-    });
-
-    this.storage.get("user").then(user => {
-      this.setUsr(user);
-    });
-
   }
 
   register(userData: UserModel) {

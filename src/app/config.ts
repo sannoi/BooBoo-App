@@ -32,6 +32,7 @@ export let cfg = {
       notifications: 'off'
     }
   },
+  min_level_access_user: 2,
   system: {
     upload: '/sistema/archivo/upload.json'
   },

@@ -31,6 +31,10 @@
     background-color: transparent;
 }
 
+.leaflet-container .leaflet-marker-pane img, .leaflet-container .leaflet-shadow-pane img {
+  transition: all 1s;
+}
+
 /* Compatible with Leaflet 0.7 */
 .leaflet-control-locate {
   a {
