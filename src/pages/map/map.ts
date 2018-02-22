@@ -73,7 +73,7 @@ export class MapPage extends ProtectedPage {
       var map1 = this.map;
       var rt = this.realtime;
       var loc = this.locationService;
-      var geo_ext_opt = this.configService.cfg.extensions_active.geolocation;
+      var geo_ext_opt = this.configService.cfg.extensions.geolocation.active;
 
       this.realtime.on('update', function() {
         if (geo_ext_opt) {
@@ -91,7 +91,7 @@ export class MapPage extends ProtectedPage {
       this.realtime.start();
     }
 
-    if (this.configService.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions.geolocation.active) {
       let result = loc.GPSStatus();
       this.gps = result;
       if (result == true) {

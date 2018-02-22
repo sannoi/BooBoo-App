@@ -85,11 +85,13 @@ export class AuthService {
         } else {
           return this.usersService.saveFirebaseDeviceToken(this.firebaseToken).then(result => {
             console.log('Token de Firebase guardado: ' + this.firebaseToken);
-            this.saveData(data);
-            this.idToken = rs.data.jwt;
-            this.setUsr(rs.data.usr);
-            this.getFormToken();
-            return true;
+            return this.saveData(data).then(res => {
+              this.idToken = rs.data.jwt;
+              this.setUsr(rs.data.usr);
+              this.getFormToken();
+              return true;
+            });
+
           });
           //this.scheduleRefresh();
         }
@@ -111,7 +113,9 @@ export class AuthService {
       this.userType = "cliente";
     }
 
-    this.storage.set("userType", this.userType);
+    return this.storage.set("userType", this.userType).then(uType => {
+      return true
+    });
   }
 
   logout() {

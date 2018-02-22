@@ -21,10 +21,50 @@ export let cfg = {
       theme: 'pink-theme'
     }
   ],
-  extensions_active: {
-    users: true,
-    geolocation: true,
-    notifications: true
+  extensions: {
+    users: {
+      active: true,
+      provider: 'UsersService',
+      list: {
+        use: true,
+        component: 'DriversPage'
+      },
+      item_detail: {
+        use: false
+      }
+    },
+    messages: {
+      active: true,
+      provider: 'MessagesServiceProvider',
+      list: {
+        use: true,
+        component: 'MessagesPage'
+      },
+      item_detail: {
+        use: true,
+        component: 'MessagesInfoPage'
+      }
+    },
+    geolocation: {
+      active: true,
+      provider: 'LocationService',
+      list: {
+        use: false
+      },
+      item_detail: {
+        use: false
+      }
+    },
+    notifications: {
+      active: true,
+      provider: 'NotificationsServiceProvider',
+      list: {
+        use: false
+      },
+      item_detail: {
+        use: false
+      }
+    }
   },
   config_settings: {
     app: {
@@ -40,26 +80,26 @@ export let cfg = {
     register: '/apps/Mideas/register.json',
     login: '/apps/Mideas/login.json',
     logout: '/apps/Mideas/logout.json',
-	  formToken:'/apps/Mideas/formToken.json',
-    refresh:'/apps/Mideas/login.json',
-	  list:'/usuarios/usuario/buscar.json',
+    formToken: '/apps/Mideas/formToken.json',
+    refresh: '/apps/Mideas/login.json',
+    list: '/usuarios/usuario/buscar.json',
     info: '/usuarios/usuario/##ID##/info.json',
     geolocation: '/usuarios/usuario/saveGeolocation.json',
     save_firebase_token: '/usuarios/usuario/saveFirebaseToken.json',
     clear_firebase_token: '/usuarios/usuario/clearFirebaseToken.json'
   },
   orders: {
-	  list: '/shop/pedido/buscar.json',
-	  assign: '/shop/pedido/asociarProveedor.json',
+    list: '/shop/pedido/buscar.json',
+    assign: '/shop/pedido/asociarProveedor.json',
     pickup: '/shop/pedido/recogerPedidoConductor.json',
     store: '/shop/pedido/almacenarPedidoConductor.json',
     complete: '/shop/pedido/completarPedidoConductor.json',
     add_document: '/shop/pedido/addDocumentOrder.json',
-	  info: '/shop/pedido/##ID##/info.json'
+    info: '/shop/pedido/##ID##/info.json'
   },
   messages: {
-	  list: '/mensajes/mensaje/buscar.json',
-	  info: '/mensajes/mensaje/##ID##/info.json',
+    list: '/mensajes/mensaje/buscar.json',
+    info: '/mensajes/mensaje/##ID##/info.json',
     response: '/mensajes/mensaje/nuevo.json',
     readed: '/mensajes/mensaje/mensajeLeido.json',
     checkNews: '/mensajes/mensaje/nuevosMensajes.json'

@@ -38,6 +38,9 @@ export class MessagesPage extends ProtectedPage {
 
     this.dataLoaded = false;
 
+    let extension = navParams.get('extension');
+    console.log(extension);
+
     this.customTitle = navParams.get('pageTitle');
 
     this.autoOpenItem = navParams.get('autoOpenItem');

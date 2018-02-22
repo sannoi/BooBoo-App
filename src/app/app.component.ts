@@ -52,6 +52,12 @@ export class MyApp {
 
     this.configService.getActiveTheme().subscribe(val => this.selectedTheme = val);
 
+    this.configService.getActivePage().subscribe(val => {
+      if (val) {
+        this.openLink(val);
+      }
+    });
+
     this.notificationsService.getActiveNotification().subscribe(val => this.redirectPush(val));
 
     this.initializeApp();
@@ -68,7 +74,7 @@ export class MyApp {
 
       this.configService.initialize().then(res => {
         if (res) {
-          if (this.configService.cfg.extensions_active.users) {
+          if (this.configService.cfg.extensions.users.active) {
             this.authService.initializeUser().then(usr => {
               if (usr && usr.nivel_acceso && this.configService.cfg.min_level_access_user) {
                 if (parseInt(usr.nivel_acceso) < parseInt(this.configService.cfg.min_level_access_user)) {
@@ -81,7 +87,8 @@ export class MyApp {
                         text: 'Salir',
                         handler: () => {
                           let logoutPage = { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' };
-                          this.openPage(logoutPage);
+                          //this.openPage(logoutPage);
+                          this.configService.setActivePage(logoutPage);
                         }
                       }
                     ]
@@ -91,10 +98,10 @@ export class MyApp {
               }
             });
           }
-          if (this.configService.cfg.extensions_active.notifications) {
+          if (this.configService.cfg.extensions.notifications.active) {
             this.notificationsService.startupNotifications();
           }
-          if (this.configService.cfg.extensions_active.geolocation) {
+          if (this.configService.cfg.extensions.geolocation.active) {
             this.locationService.refreshGeolocation();
             this.authService.startupCheckGeolocation();
             this.locationService.checkEnableGeolocation().then(res => {
@@ -128,10 +135,11 @@ export class MyApp {
   }
 
   redirectPush(data: any) {
-    if (this.configService.cfg.extensions_active.notifications && data){
+    if (this.configService.cfg.extensions.notifications.active && data){
       if (data.wasTapped) {
-        let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
-        this.openPage(msgPage);
+        let msgPage = { title: 'page.messages', icon: 'chatboxes', extension: 'messages', type: 'list', nav_params: { pageTitle: 'page.messages', pageType: 'all', autoOpenItem: data.msg_parent_id }  };
+        this.configService.setActivePage(msgPage);
+        //this.openPage(msgPage);
       } else {
         let view = this.nav.getActive();
         if (view.component.name == "MessageInfoPage" && view.data.message.id == data.msg_parent_id) {
@@ -139,43 +147,52 @@ export class MyApp {
             this.nav.remove(1);
           });
         } else if (view.component.name == "MessagesPage") {
-          let msgs = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' };
-          this.openPage(msgs);
+          let msgs = { title: 'page.messages', icon: 'chatboxes', extension: 'messages', type: 'list', nav_params: { pageTitle: 'page.messages', pageType: 'all' }  };
+          this.configService.setActivePage(msgs);
+          //this.openPage(msgs);
         } else {
-          alert("Notificacion local de mensaje: " + data.msg_parent_id);
-          let msgPage = { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all', auto_item_id: data.msg_parent_id };
-          this.openPage(msgPage);
+          this.alert = this.alertCtrl.create({
+            enableBackdropDismiss: false,
+            title: 'Mensaje nuevo',
+            message: 'Has recibido un mensaje. ¿Quieres leerlo?',
+            buttons: [
+              {
+                text: 'No',
+                role: 'cancel',
+                handler: () => { }
+              },
+              {
+                text: 'Sí',
+                handler: () => {
+                  let msgPage = { title: 'page.messages', icon: 'chatboxes', extension: 'messages', type: 'list', nav_params: { pageTitle: 'page.messages', pageType: 'all', autoOpenItem: data.msg_parent_id }  };
+                  this.configService.setActivePage(msgPage);
+                  //this.openPage(msgPage);
+                }
+              }
+            ]
+          });
+          this.alert.present();
         }
       }
     }
   }
 
   public configPages() {
-    this.storage.get("userType").then((uType) => {
-      if (uType == 'proveedor') {
-        this.pages = [
-          { title: 'page.profile', icon: 'desktop', component: 'ProfilePage' },
-          { title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage' },
-          { title: 'page.orders.listNotAssigned', icon: 'share-alt', component: 'ListMasterPage', method: 'onlyNotAssigned' },
-          { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' },
-          { title: 'page.map', icon: 'map', component: 'MapPage' },
-          { title: 'page.settings', icon: 'cog', component: 'SettingsListPage' },
-          { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' }
-        ];
-      } else {
-        this.pages = [
-          { title: 'page.profile', icon: 'desktop', component: 'ProfilePage' },
-          { title: 'page.orders.list', icon: 'cube', component: 'ListMasterPage' },
-          { title: 'page.messages', icon: 'chatboxes', component: 'MessagesPage', method: 'all' },
-          { title: 'page.map', icon: 'map', component: 'MapPage' },
-          { title: 'page.settings', icon: 'cog', component: 'SettingsListPage' },
-          { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' }
-        ];
-      }
+    let uType = this.authService.userType;
+    let pages = this.configService.menu.pages;
+    pages = pages.filter(function(x){
+      return (!x.require_user_type || x.require_user_type == uType);
     });
+
+    this.pages = pages;
   }
 
   openPage(page) {
+    this.configService.setActivePage(page);
+  }
+
+  openLink(page) {
+    page = this.configExtensionPage(page);
 
     if (page.method && page.method === 'logout') {
       this.loading = this.loadingCtrl.create({
@@ -184,21 +201,23 @@ export class MyApp {
       this.loading.present();
       this.authService.logout().then(result => {
         this.loading.dismiss();
-        this.nav.setRoot(page.component, { pageTitle: page.title });
+        this.nav.setRoot(page.component, page.nav_params);
       });
     } else {
-      if (page.component === 'ListMasterPage' && page.method && page.method === 'onlyNotAssigned') {
-        this.nav.setRoot(page.component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
-      } else if (page.component === 'MessagesPage' && page.method) {
-        if (page.auto_item_id) {
-          this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method, autoOpenItem: page.auto_item_id });
-        } else {
-          this.nav.setRoot(page.component, { pageTitle: page.title, pageType: page.method });
-        }
-      } else {
-        this.nav.setRoot(page.component, { pageTitle: page.title });
-      }
+      this.nav.setRoot(page.component, page.nav_params);
     }
+  }
+
+  configExtensionPage(page: any) {
+    if (page.extension && page.type && !page.component) {
+      let extension = this.configService.cfg.extensions[page.extension];
+      if (extension && extension.active && extension[page.type] && extension[page.type]['use'] && extension[page.type]['component']){
+        page.component = extension[page.type]['component'];
+      }
+      page.nav_params.extension = extension;
+    }
+
+    return page;
   }
 
   isUserProvider() {

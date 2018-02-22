@@ -34,7 +34,7 @@
 	<hr/>-->
 	<ion-card>
 	<ion-list>
-		<button ion-item (click)="openPage('ListMasterPage', 'page.orders.list')">
+		<button ion-item (click)="openPage(1)">
 			<ion-avatar item-start>
 				<img src="assets/img/envios_disponibles.png">
 			</ion-avatar>
@@ -46,7 +46,7 @@
 
 	<ion-card *ngIf="isUserProvider()">
 	<ion-list>
-		<button ion-item (click)="openPage('ListMasterPage', 'page.orders.listNotAssigned', 'onlyNotAssigned')">
+		<button ion-item (click)="openPage(2)">
 			<ion-avatar item-start>
 				<img src="assets/img/mis_vehiculos.png">
 			</ion-avatar>
@@ -58,7 +58,7 @@
 
   <ion-card>
 	<ion-list>
-		<button ion-item (click)="openPage('MessagesPage', 'page.messages')">
+		<button ion-item (click)="openPage(3)">
       <ion-avatar item-start>
 				<img src="assets/img/mensajes.png">
 			</ion-avatar>
@@ -70,7 +70,7 @@
 
 	<ion-card>
 	<ion-list>
-		<button ion-item (click)="openPage('MapPage', 'page.map')">
+		<button ion-item (click)="openPage(4)">
 			<!--<ion-icon name="map" color="secondary" item-start></ion-icon>-->
       <ion-avatar item-start>
 				<img src="assets/img/appicon.png">
@@ -83,7 +83,7 @@
 
 	<ion-card>
 	<ion-list>
-		<button ion-item (click)="openPage('SettingsListPage', 'page.settings')">
+		<button ion-item (click)="openPage(5)">
 			<ion-avatar item-start>
 				<img src="assets/img/misdatos.png">
 			</ion-avatar>

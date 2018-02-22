@@ -21,7 +21,7 @@ export class NotificationsServiceProvider {
     }
 
     public startupNotifications() {
-      if (this.configService.cfg.extensions_active.notifications) {
+      if (this.configService.cfg.extensions.notifications.active) {
         this.checkNotifications();
       }
     }

@@ -6,16 +6,20 @@ import { BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import *  as AppConfig from '../../app/config';
+import *  as AppMenu from '../../app/menu';
 
 @Injectable()
 export class ConfigServiceProvider {
   public cfg: any;
   public remoteCfg: any;
+  public menu: any;
   public currentSite: any;
 
   public appSettings: any;
 
   private theme: BehaviorSubject<string>;
+
+  private currentPage: BehaviorSubject<any>;
 
   constructor(
     private storage: Storage,
@@ -23,7 +27,9 @@ export class ConfigServiceProvider {
     private authHttp: AuthHttp) {
     this.cfg = AppConfig.cfg;
     this.appSettings = this.cfg.config_settings;
+    this.menu = AppMenu.menu;
     this.theme = new BehaviorSubject('blue-theme');
+    this.currentPage = new BehaviorSubject(null);
   }
 
   loadConfig() {
@@ -99,6 +105,14 @@ export class ConfigServiceProvider {
 
   public getActiveTheme() {
     return this.theme.asObservable();
+  }
+
+  public setActivePage(val) {
+    this.currentPage.next(val);
+  }
+
+  public getActivePage() {
+    return this.currentPage.asObservable();
   }
 
   public getAppSetting(setting: any) {

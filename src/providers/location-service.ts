@@ -19,7 +19,7 @@ export class LocationServiceProvider {
     public http: Http,
     public configService: ConfigServiceProvider,
     public alertCtrl: AlertController) {
-    if (this.configService.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions.geolocation.active) {
       this.gps = this.configService.getAppSetting("geolocation");
       if (this.gps == 'on'){
         this.enableGeolocation();
@@ -31,7 +31,7 @@ export class LocationServiceProvider {
 
   public checkEnableGeolocation() {
     return this.storage.get('user').then(usr => {
-      if (this.configService.cfg.extensions_active.geolocation) {
+      if (this.configService.cfg.extensions.geolocation.active) {
         if (usr && usr.categorias) {
           let categorias = JSON.parse(usr.categorias);
           if (categorias[0] == '7') {
@@ -54,7 +54,7 @@ export class LocationServiceProvider {
   }
 
   refreshGeolocation() {
-    if (this.configService.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions.geolocation.active) {
       this.gps = this.configService.getAppSetting("geolocation");
       if (this.gps == 'on') {
         this.enableGeolocation();
@@ -65,7 +65,7 @@ export class LocationServiceProvider {
   }
 
   enableGeolocation() {
-    if (this.configService.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions.geolocation.active) {
       this.geolocation.getCurrentPosition().then((resp) => {
         this.position = resp.coords;
         //alert("geolocation activated!");
@@ -91,12 +91,12 @@ export class LocationServiceProvider {
   }
 
   globalGeolocationIsActive() {
-    return this.configService.cfg.extensions_active.geolocation;
+    return this.configService.cfg.extensions.geolocation.active;
   }
 
   GPSStatus() {
     this.gps = this.configService.getAppSetting("geolocation");
-    if (this.configService.cfg.extensions_active.geolocation) {
+    if (this.configService.cfg.extensions.geolocation.active) {
       if (this.gps == 'on') {
         return true;
       } else {

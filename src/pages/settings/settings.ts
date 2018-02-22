@@ -43,11 +43,11 @@ export class SettingsListPage extends ProtectedPage {
   }
 
   canToggleGeolocation() {
-    return this.configService.cfg.extensions_active.geolocation;
+    return this.configService.cfg.extensions.geolocation.active;
   }
 
   canToggleNotifications() {
-    return this.configService.cfg.extensions_active.notifications;
+    return this.configService.cfg.extensions.notifications.active;
   }
 
   toggleGPS() {

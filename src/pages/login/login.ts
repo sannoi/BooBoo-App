@@ -85,7 +85,7 @@ export class LoginPage {
               });
               this.alert.present();
             }
-            if (this.configService.cfg.extensions_active.geolocation){
+            if (this.configService.cfg.extensions.geolocation.active){
               this.locationService.checkEnableGeolocation().then(res => {
                 if (res == true){
                   this.alert = this.alertCtrl.create({

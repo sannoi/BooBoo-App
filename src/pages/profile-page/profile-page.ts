@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, MenuController, ModalController} from 'ionic-angular';
-import {ProtectedPage} from '../protected-page/protected-page';
-import {Storage} from '@ionic/storage';
-import {AuthService} from '../../providers/auth-service';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, MenuController, ModalController } from 'ionic-angular';
+import { ProtectedPage } from '../protected-page/protected-page';
+import { Storage } from '@ionic/storage';
+import { AuthService } from '../../providers/auth-service';
+import { ConfigServiceProvider } from '../../providers/config-service/config-service';
 
 @IonicPage()
 @Component({
@@ -12,7 +13,7 @@ import {AuthService} from '../../providers/auth-service';
 export class ProfilePage extends ProtectedPage {
 
   public following: boolean = false;
-    
+
   public user: any;
 
   constructor(public navCtrl: NavController,
@@ -20,22 +21,21 @@ export class ProfilePage extends ProtectedPage {
     public menuCtrl: MenuController,
     public modalCtrl: ModalController,
     public storage: Storage,
-	public authService: AuthService) {
-		super(navCtrl, navParams, storage, authService);
-	}
+    public authService: AuthService,
+    public configService: ConfigServiceProvider) {
+    super(navCtrl, navParams, storage, authService);
+  }
 
   ionViewDidLoad() {
-	this.menuCtrl.enable(true);
-	this.storage.get('user').then(usr => {
-        this.user = usr;
+    this.menuCtrl.enable(true);
+    this.storage.get('user').then(usr => {
+      this.user = usr;
     });
   }
-  
-  openPage(component, title, method) {
-	if (component === 'ListMasterPage' && method && method === 'onlyNotAssigned') {
-        this.navCtrl.setRoot(component, { onlyNotAssigned: true, pageTitle: "page.orders.listNotAssigned" });
-    } else {
-        this.navCtrl.setRoot(component, { pageTitle: title });
+
+  openPage(id_menu: number) {
+    if (this.configService.menu.pages[id_menu]) {
+      this.configService.setActivePage(this.configService.menu.pages[id_menu]);
     }
   }
 
