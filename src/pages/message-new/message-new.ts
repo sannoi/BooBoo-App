@@ -20,6 +20,8 @@ export class MessageNewPage extends ProtectedPage {
 
   content: any;
 
+  usr: any;
+
   loading: any;
 
   message: any;
@@ -34,6 +36,8 @@ export class MessageNewPage extends ProtectedPage {
 	  public authService: AuthService,
     public messagesService: MessagesServiceProvider) {
       super(navCtrl, navParams, storage, authService);
+
+      this.usr = this.authService.getUsr();
 
       this.customTitle = navParams.get('pageTitle');
 

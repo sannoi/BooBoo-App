@@ -27,16 +27,16 @@
     color: rgb(255, 139, 187);
   }
 
-  page-message-info .chat-bubble.right {
+  page-message-info .chat-bubble.right, page-message-new .chat-bubble.right {
     background-color: rgb(255, 139, 187);
     color: #fff;
   }
 
-  page-message-info .chat-bubble.right:before {
+  page-message-info .chat-bubble.right:before, page-message-new .chat-bubble.right:before {
     background-color: rgb(255, 139, 187);
     right: 10px;
     -webkit-transform: rotate(118deg) skew(-5deg);
-}
+  }
 
   .toolbar-title-md {
     color: #fff;
