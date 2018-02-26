@@ -39,6 +39,7 @@
     "angular2-jwt": "^0.2.3",
     "angular2-signaturepad": "^2.7.0",
     "cordova-android": "7.0.0",
+    "cordova-browser": "5.0.3",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-device": "^2.0.1",
@@ -107,7 +108,8 @@
       "uk.co.workingedge.phonegap.plugin.launchnavigator": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   }
 }
