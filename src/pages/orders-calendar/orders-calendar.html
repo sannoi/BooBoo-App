@@ -1,0 +1,7 @@
+<ion-label text-center>Selecciona un rango de fechas</ion-label>
+<ion-calendar [(ngModel)]="dateRange"
+            [options]="optionsRange"
+            (onChange)="onChange($event)"
+            [type]="type"
+            [format]="'YYYY-MM-DD'">
+</ion-calendar>

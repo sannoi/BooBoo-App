@@ -6,10 +6,13 @@
         </button>
     <ion-title>{{ customTitle | translate }}</ion-title>
 
-    <ion-buttons end>
+    <ion-buttons end *ngIf="!onlyNotAssigned">
       <button ion-button icon-only (click)="presentFilter($event)">
       <ion-icon name="more"></ion-icon>
     </button>
+    <button ion-button icon-only (click)="presentCalendar($event)">
+    <ion-icon name="calendar"></ion-icon>
+  </button>
     </ion-buttons>
   </ion-navbar>
 

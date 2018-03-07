@@ -4,6 +4,7 @@ import { SafeHtmlPipe } from "../pipes/safehtml.pipe";
 import { SortByPipe } from "../pipes/sort-by/sort-by";
 import { SortDescByPipe } from "../pipes/sort-desc-by/sort-desc-by";
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { CalendarModule } from "ion2-calendar";
 
 @NgModule({
   declarations: [
@@ -13,14 +14,16 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     SortDescByPipe
   ],
   imports: [
-    SignaturePadModule
+    SignaturePadModule,
+    CalendarModule
   ],
   exports: [
     TextAvatarDirective,
     SafeHtmlPipe,
     SortByPipe,
     SortDescByPipe,
-    SignaturePadModule
+    SignaturePadModule,
+    CalendarModule
   ]
 })
 export class SharedModule { }
