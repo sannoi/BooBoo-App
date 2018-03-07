@@ -20,9 +20,9 @@
 
 <ion-content>
 
-  <ion-card color="secondary" *ngIf="dataLoaded && filter && filter != 'all'">
+  <ion-card color="secondary" *ngIf="dataLoaded && ((filter && filter != 'all') || (dates_range && dates_range.from && dates_range.to))">
     <ion-card-content>
-      Estás viendo una lista filtrada por estado: <b>{{filtro()}}</b>
+      Estás viendo una lista filtrada:<br> <b *ngIf="filter && filter != 'all'">Estado: {{filtro()}}<br></b><b *ngIf="dates_range && dates_range.from && dates_range.to">{{rango()}}</b>
     </ion-card-content>
   </ion-card>
 
@@ -31,7 +31,7 @@
     <ion-item-sliding *ngFor="let item of orders | sortDescBy : 'id'">
       <button ion-item (click)="orderInfo(item)">
                 <ion-icon name="cube" item-start large></ion-icon>
-                <h2>Pedido #{{item.id}} <ion-badge [innerHtml]="item.estado_pedido_html"></ion-badge></h2>
+                <h2>Pedido #{{item.id}} <ion-badge [innerHtml]="item.estado_pedido_html"></ion-badge> <ion-badge *ngIf="ordersService.hasIncidences(item)"><span class="label label-danger"><ion-icon name="alert" style="font-size: 1em;"></ion-icon> INCIDENCIAS</span></ion-badge></h2>
                 <p>de {{item.datos.recogida.recogida_localidad}} a {{item.datos.envio.envio_localidad}}</p>
                 <p><b>Recogida:</b> {{item.datos.recogida.recogida_fecha}} de {{item.datos.recogida.recogida_horario_inicio}} a {{item.datos.recogida.recogida_horario_fin}}</p>
                 <p><b>Entrega:</b> {{item.datos.envio.envio_fecha}} de {{item.datos.envio.envio_horario_inicio}} a {{item.datos.envio.envio_horario_fin}}</p>

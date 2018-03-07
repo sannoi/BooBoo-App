@@ -20,6 +20,8 @@ export class OrderAddDocumentPage extends ProtectedPage {
 
   order: any;
 
+  incidencia: any;
+
   text: any;
 
   documentUrl: any;
@@ -74,7 +76,7 @@ export class OrderAddDocumentPage extends ProtectedPage {
   }
 
   saveDocument() {
-    let data = { text: this.text, documentUrl: this.documentUrl };
+    let data = { text: this.text, documentUrl: this.documentUrl, incidencia: this.incidencia };
     this.viewCtrl.dismiss(data);
   }
 

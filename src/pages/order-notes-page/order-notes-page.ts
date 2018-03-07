@@ -18,6 +18,8 @@ export class OrderNotesPage extends ProtectedPage {
 
   public notes: Array<{ nota: string, fecha: any, tipo: any, latitud: any, longitud: any, adjunto: any }>;
 
+  filter: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -32,14 +34,35 @@ export class OrderNotesPage extends ProtectedPage {
 
     this.order = navParams.get('order');
 
+    this.filter = 'all';
+
   }
 
   ionViewWillEnter() {
+    this.filter = 'all';
     this.notes = this.ordersService.getNotes(this.order);
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+  filterChanged($event) {
+    var val = $event._value;
+    if (!val || val === 'all') {
+      this.notes = this.ordersService.getNotes(this.order);
+    } else if (val === 'documents' || val === 'incidences') {
+      let notes = this.ordersService.getNotes(this.order);
+      if (val === 'documents') {
+        this.notes = notes.filter(function(x) {
+          return (x.tipo !== 'incidencia' && x.adjunto != '');
+        });
+      } else {
+        this.notes = notes.filter(function(x) {
+          return (x.tipo === 'incidencia');
+        });
+      }
+    }
   }
 
   baseUrl(append: string) {
@@ -51,7 +74,9 @@ export class OrderNotesPage extends ProtectedPage {
   }
 
   noteIcon(note: any) {
-    if (note.adjunto != "") {
+    if (note.tipo == 'incidencia') {
+      return "alert";
+    } else if (note.adjunto != "") {
       return "attach";
     } else if (note.pedido_id != "0") {
       return "cube";

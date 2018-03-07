@@ -10,6 +10,19 @@
             </button>
         </ion-buttons>
     </ion-toolbar>
+    <ion-toolbar>
+    <ion-segment [(ngModel)]="filter" color="primary" (ionChange)="filterChanged($event)">
+      <ion-segment-button value="all">
+        Todos
+      </ion-segment-button>
+      <ion-segment-button value="documents">
+        Documentos
+      </ion-segment-button>
+      <ion-segment-button value="incidences">
+        Incidencias
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
 </ion-header>
 

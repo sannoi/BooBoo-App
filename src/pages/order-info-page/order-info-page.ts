@@ -219,7 +219,7 @@ export class OrderInfoPage extends ProtectedPage {
 
     if (this.canAddDocumentOrder(order)) {
       buttons.push({
-        text: 'Añadir documento',
+        text: 'Añadir incidencia / documento',
         handler: () => {
           this.addDocumentOrder(order);
         }
@@ -247,12 +247,13 @@ export class OrderInfoPage extends ProtectedPage {
 
     modal.onDidDismiss(data => {
       if (data && (data.text || data.documentUrl)) {
+        let incidencia = (data.incidencia && data.incidencia === true) ? '1' : '0';
         this.loading = this.loadingCtr.create({ content: "Actualizando pedido..." });
         this.loading.present().then(() => {
           this.authService.getFormToken().then(newFormToken => {
             if (this.locationService.gps == 'on') {
               this.usersService.saveGeolocation(this.locationService.position.latitude, this.locationService.position.longitude).then(result_geo => {
-                this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, newFormToken).then(result => {
+                this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, incidencia, newFormToken).then(result => {
                   if (result.response == 'error') {
                     let alert = this.alertCtrl.create({
                       title: 'Error',
@@ -277,7 +278,7 @@ export class OrderInfoPage extends ProtectedPage {
                 });
               });
             } else {
-              this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, newFormToken).then(result => {
+              this.ordersService.addDocumentOrder(order, this.authService.getUsr(), data.text, data.documentUrl, incidencia, newFormToken).then(result => {
                 if (result.response == 'error') {
                   let alert = this.alertCtrl.create({
                     title: 'Error',

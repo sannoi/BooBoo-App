@@ -110,6 +110,17 @@ export class ListMasterPage extends ProtectedPage {
     }
   }
 
+  rango() {
+    if (this.dates_range && this.dates_range.from && this.dates_range.to) {
+      var from_exp = this.dates_range.from.split('-');
+      var to_exp = this.dates_range.to.split('-');
+
+      return 'De ' + from_exp[2] + '-' + from_exp[1] + '-' + from_exp[0] + ' a ' + to_exp[2] + '-' + to_exp[1] + '-' + to_exp[0];
+    } else {
+      return '';
+    }
+  }
+
   presentFilter(myEvent) {
     let popover = this.popoverCtrl.create('OrdersFilterPage', { filter: this.filter });
     popover.present({
@@ -117,7 +128,7 @@ export class ListMasterPage extends ProtectedPage {
     });
     popover.onDidDismiss(data => {
       if (data && data.filter) {
-        this.filterOrders(data.filter);
+        this.filterOrders(data.filter,this.dates_range);
         console.log("filtro cambiado", data.filter);
       }
     });
@@ -143,7 +154,13 @@ export class ListMasterPage extends ProtectedPage {
         let range = { from: date.from.string, to: date.to.string };
         this.filterOrders(this.filter, range);
         //this.dates_range = data.dates_range;
-        console.log("rango cambiado", range);
+        console.log("rango cambiado", range, type);
+      } else {
+        if (type == 'cancel') {
+          this.dates_range = null;
+          this.filterOrders(this.filter, null);
+          console.log("rango limpiado", type);
+        }
       }
     });
 

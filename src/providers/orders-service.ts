@@ -40,6 +40,10 @@ export class OrdersService {
     return order.datos.notas;
   }
 
+  hasIncidences(order: OrderModel) {
+    return order.datos.notas.some(x => x.tipo === 'incidencia');
+  }
+
   getOne(id: number) {
     var infoUrl = this.configService.cfg.orders.info;
     var parsedUrl = infoUrl.replace('##ID##', id);
@@ -115,14 +119,14 @@ export class OrdersService {
       });
   }
 
-  addDocumentOrder(order: OrderModel, driver: UserModel, text: any, docUrl: any, token: string) {
+  addDocumentOrder(order: OrderModel, driver: UserModel, text: any, docUrl: any, incidencia: any, token: string) {
     let headers = new Headers({
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8;'
     });
     let options = new RequestOptions({
       headers: headers
     });
-    let data = { pedido_id: order.id, conductor_id: driver.id, archivo_adjunto_pedido: docUrl, texto_nota: text, token: token };
+    let data = { pedido_id: order.id, conductor_id: driver.id, archivo_adjunto_pedido: docUrl, texto_nota: text, incidencia: incidencia, token: token };
     if (!text){
       data.texto_nota = "";
     }
