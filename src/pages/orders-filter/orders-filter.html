@@ -1,0 +1,17 @@
+<ion-list radio-group [(ngModel)]="filter" (ionChange)="changeFilter()">
+  <ion-list-header>
+    Filtrar por estado
+  </ion-list-header>
+  <ion-item>
+    <ion-label>Todos</ion-label>
+    <ion-radio value="all"></ion-radio>
+  </ion-item>
+  <ion-item>
+    <ion-label>En proceso</ion-label>
+    <ion-radio value="processing"></ion-radio>
+  </ion-item>
+  <ion-item>
+    <ion-label>Completados</ion-label>
+    <ion-radio value="completed"></ion-radio>
+  </ion-item>
+</ion-list>

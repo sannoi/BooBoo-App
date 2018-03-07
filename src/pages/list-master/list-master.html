@@ -1,25 +1,32 @@
 <ion-header>
 
-    <ion-navbar>
-        <button ion-button menuToggle>
+  <ion-navbar>
+    <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{ customTitle | translate }}</ion-title>
+    <ion-title>{{ customTitle | translate }}</ion-title>
 
-        <!--<ion-buttons end>
-      <button ion-button icon-only (click)="addItem()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-buttons>-->
-    </ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentFilter($event)">
+      <ion-icon name="more"></ion-icon>
+    </button>
+    </ion-buttons>
+  </ion-navbar>
 
-    </ion-header>
+</ion-header>
 
-    <ion-content>
+<ion-content>
 
-      <ion-list *ngIf="dataLoaded && orders && orders.length > 0">
-        <ion-item-sliding *ngFor="let item of orders | sortDescBy : 'id'">
-            <button ion-item (click)="orderInfo(item)">
+  <ion-card color="secondary" *ngIf="dataLoaded && filter && filter != 'all'">
+    <ion-card-content>
+      Estás viendo una lista filtrada por estado: <b>{{filtro()}}</b>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="dataLoaded && orders && orders.length > 0">
+
+    <ion-item-sliding *ngFor="let item of orders | sortDescBy : 'id'">
+      <button ion-item (click)="orderInfo(item)">
                 <ion-icon name="cube" item-start large></ion-icon>
                 <h2>Pedido #{{item.id}} <ion-badge [innerHtml]="item.estado_pedido_html"></ion-badge></h2>
                 <p>de {{item.datos.recogida.recogida_localidad}} a {{item.datos.envio.envio_localidad}}</p>
@@ -28,23 +35,19 @@
                 <p>{{item.tipo}} | {{item.datos.envio.envio_tipo_servicio}} | {{item.bultos_txt}} BULTOS | {{item.peso_txt}} Kgs.</p>
             </button>
 
-          <!--<ion-item-options>
+      <!--<ion-item-options>
             <button ion-button color="danger" (click)="deleteItem(item)">
               {{ 'DELETE_BUTTON' | translate }}
             </button>
           </ion-item-options>-->
-        </ion-item-sliding>
+    </ion-item-sliding>
 
-        </ion-list>
+  </ion-list>
 
-        <ion-list *ngIf="dataLoaded && (!orders || orders.length <= 0)">
-          <ion-item>
-        		<ion-card>
-          		<ion-card-content>
-          		    <h2 align="center">No hay pedidos</h2>
-          		</ion-card-content>
-        		</ion-card>
-      		</ion-item>
-        </ion-list>
+  <ion-card *ngIf="dataLoaded && (!orders || orders.length <= 0)">
+    <ion-card-content>
+      <h2 align="center">No hay pedidos</h2>
+    </ion-card-content>
+  </ion-card>
 
-        </ion-content>
+</ion-content>
