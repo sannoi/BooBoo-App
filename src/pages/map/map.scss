@@ -1,2 +1,11 @@
 page-map {
+  ion-card.message {
+    position: absolute;
+    left: 45px;
+    right: 0px;
+    height: auto;
+    z-index: 9999;
+    top: 0;
+    width: auto;
+  }
 }
