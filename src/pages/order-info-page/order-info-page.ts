@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { IonicPage, NavController, NavParams, MenuController, ModalController, AlertController, ToastController, LoadingController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, ModalController, AlertController, ToastController, LoadingController, ActionSheetController, ViewController } from 'ionic-angular';
 import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
@@ -26,11 +26,14 @@ export class OrderInfoPage extends ProtectedPage {
   loading: any;
   driver: any;
 
+  esModal: boolean = false;
+
   private order: OrderModel;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public viewCtrl: ViewController,
     public menuCtrl: MenuController,
     public modalCtrl: ModalController,
     public storage: Storage,
@@ -47,9 +50,10 @@ export class OrderInfoPage extends ProtectedPage {
     public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage, authService);
     this.order = navParams.get('order');
+    this.esModal = navParams.get('esModal');
   }
 
-  ionViewWillEnter() {
+  ionViewDidLoad() {
     this.center = new leaflet.LatLng(this.order.latitud.replace(',', '.'), this.order.longitud.replace(',', '.'));
     this.loadmap();
 
@@ -80,8 +84,16 @@ export class OrderInfoPage extends ProtectedPage {
     });
   }
 
+  ionViewCanLeave() {
+    //document.getElementById("map_order").outerHTML = "";
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
   loadmap() {
-    this.map = leaflet.map("map", {
+    this.map = leaflet.map("map_order", {
       center: this.center,
       zoom: 13
     });

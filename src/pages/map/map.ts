@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, ModalController } from 'ionic-angular';
 import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
@@ -8,6 +8,7 @@ import * as leaflet from 'leaflet';
 import 'leaflet-realtime';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 import {ConfigServiceProvider} from '../../providers/config-service/config-service';
+import {OrdersService} from '../../providers/orders-service';
 
 @IonicPage()
 @Component({
@@ -26,9 +27,11 @@ export class MapPage extends ProtectedPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
+    public modalCtrl: ModalController,
     public storage: Storage,
     public authService: AuthService,
     public configService: ConfigServiceProvider,
+    public ordersService: OrdersService,
     public locationService: LocationServiceProvider) {
     super(navCtrl, navParams, storage, authService);
   }
@@ -73,9 +76,15 @@ export class MapPage extends ProtectedPage {
     }
   }
 
-  test(feature: any) {
-    console.log("Clicked!", feature);
-    alert(JSON.stringify(feature));
+  orderInfo(feature: any) {
+    if (feature && feature.properties && feature.properties.id) {
+      this.ordersService.getOne(parseInt(feature.properties.id)).then(res => {
+        this.map.setView(new leaflet.LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]));
+        let modal = this.modalCtrl.create('OrderInfoPage', { order: res, esModal: true });
+        modal.present();
+      });
+
+    }
   }
 
   loadmap() {
@@ -97,15 +106,8 @@ export class MapPage extends ProtectedPage {
       }, {
           interval: 15 * 1000,
           onEachFeature: function(feature, layer) {
-<<<<<<< HEAD
-            layer.bindPopup(feature['properties'].content);
-=======
-            console.log(feature);
-					  /*var content = '<h4>'+feature['properties'].id+'<\/h4>' +
-					  '<p>Tipo: ' + feature['properties'].tipo + '<br \/>' +
-					  'Estado: ' + feature['properties'].estado + '<\/p>';*/
             layer.on('click', function(e) {
-              este.test(feature);
+              este.orderInfo(feature);
             });
             var _content = feature['properties'].content;
             layer.bindPopup(_content);
@@ -141,7 +143,6 @@ export class MapPage extends ProtectedPage {
               });
               return leaflet.marker(latlng, {icon: redMarker});
             }
->>>>>>> e5243c826d45654e64241365a20519f21ea6b976
           }
         }).addTo(this.map);
 
