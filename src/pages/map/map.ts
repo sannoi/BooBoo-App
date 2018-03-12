@@ -7,6 +7,7 @@ import { LocationServiceProvider } from '../../providers/location-service';
 import * as leaflet from 'leaflet';
 import 'leaflet-realtime';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
+import 'leaflet.markercluster';
 import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 import {OrdersService} from '../../providers/orders-service';
 
@@ -97,6 +98,9 @@ export class MapPage extends ProtectedPage {
       maxZoom: 18
     }).addTo(this.map);
 
+    var loc = this.locationService;
+    var clusterGroup = leaflet.markerClusterGroup().addTo(this.map);
+
     if (!this.realtime) {
       var este = this;
       this.realtime = leaflet.realtime({
@@ -105,6 +109,7 @@ export class MapPage extends ProtectedPage {
         type: 'json'
       }, {
           interval: 15 * 1000,
+          container: clusterGroup,
           onEachFeature: function(feature, layer) {
             layer.on('click', function(e) {
               este.orderInfo(feature);
@@ -148,7 +153,6 @@ export class MapPage extends ProtectedPage {
 
       var map1 = this.map;
       var rt = this.realtime;
-      var loc = this.locationService;
       var geo_ext_opt = this.configService.cfg.extensions.geolocation.active;
 
       this.realtime.on('update', function(data) {
@@ -176,10 +180,9 @@ export class MapPage extends ProtectedPage {
       if (result == true) {
         var redIcon = leaflet.icon({
           iconUrl: 'assets/img/marker-icon2.png',
-          shadowUrl: 'assets/img/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 40],
-          popupAnchor: [0, -38]
+          iconSize: [16, 16],
+          iconAnchor: [8, 0],
+          popupAnchor: [0, 0]
         });
 
         this.marker = new leaflet.Marker(this.center, { icon: redIcon });

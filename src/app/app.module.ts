@@ -28,6 +28,8 @@ import { MessagesServiceProvider } from '../providers/messages-service/messages-
 import { ConfigServiceProvider } from '../providers/config-service/config-service';
 import { NotificationsServiceProvider } from '../providers/notifications-service/notifications-service';
 
+import { TutorialPage } from '../pages/tutorial/tutorial';
+
 let storage = new Storage({
   name: '__boobooApp'
 });
@@ -46,6 +48,7 @@ export function createTranslateLoader(http: Http) {
 @NgModule({
   declarations: [
     MyApp,
+    TutorialPage
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,8 @@ export function createTranslateLoader(http: Http) {
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    TutorialPage
   ],
   providers: [
     StatusBar,

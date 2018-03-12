@@ -51,24 +51,24 @@ export class LocationServiceProvider {
   public checkEnableGeolocation() {
     return this.storage.get('user').then(usr => {
       if (this.configService.cfg.extensions.geolocation.active) {
-        if (usr && usr.categorias) {
+        /*if (usr && usr.categorias) {
           let categorias = JSON.parse(usr.categorias);
-          if (categorias[0] == '7') {
-            this.gps = this.configService.getAppSetting("geolocation");
-            if (this.gps != 'on') {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            return false;
-          }
+          if (categorias[0] == '7') {*/
+        this.gps = this.configService.getAppSetting("geolocation");
+        if (this.gps != 'on') {
+          return true;
         } else {
           return false;
         }
       } else {
         return false;
       }
+      /*} else {
+        return false;
+      }
+    } else {
+      return false;
+    }*/
     });
   }
 

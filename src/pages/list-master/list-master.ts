@@ -73,6 +73,9 @@ export class ListMasterPage extends ProtectedPage {
           orders = this.orders = this.orders.filter(function(x){
             var recogida_fecha_exp = x.datos.recogida.recogida_fecha.split('-');
             var fecha_recogida = recogida_fecha_exp[2] + '-' + recogida_fecha_exp[1] + '-' + recogida_fecha_exp[0];
+            if (recogida_fecha_exp[0].length == 4) {
+              fecha_recogida = recogida_fecha_exp[0] + '-' + recogida_fecha_exp[1] + '-' + recogida_fecha_exp[2];
+            }
             var date_rec = new Date(fecha_recogida);
             var date_from = new Date(este.dates_range.from);
             var date_to = new Date(este.dates_range.to);

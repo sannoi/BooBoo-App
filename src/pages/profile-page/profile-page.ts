@@ -4,6 +4,7 @@ import { ProtectedPage } from '../protected-page/protected-page';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
 import { ConfigServiceProvider } from '../../providers/config-service/config-service';
+import { TutorialPage } from '../tutorial/tutorial';
 
 @IonicPage()
 @Component({
@@ -24,6 +25,13 @@ export class ProfilePage extends ProtectedPage {
     public authService: AuthService,
     public configService: ConfigServiceProvider) {
     super(navCtrl, navParams, storage, authService);
+
+    this.storage.get('hasSeenTutorial')
+      .then((hasSeenTutorial) => {
+        if (!hasSeenTutorial) {
+          this.navCtrl.setRoot(TutorialPage);
+        }
+      });
   }
 
   ionViewDidLoad() {
