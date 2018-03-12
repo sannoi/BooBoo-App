@@ -62,10 +62,6 @@ export class MapPage extends ProtectedPage {
       }, {
           interval: 15 * 1000,
           onEachFeature: function(feature, layer) {
-            console.log(feature);
-					  /*var content = '<h4>'+feature['properties'].id+'<\/h4>' +
-					  '<p>Tipo: ' + feature['properties'].tipo + '<br \/>' +
-					  'Estado: ' + feature['properties'].estado + '<\/p>';*/
             layer.bindPopup(feature['properties'].content);
           }
         }).addTo(this.map);
@@ -75,12 +71,15 @@ export class MapPage extends ProtectedPage {
       var loc = this.locationService;
       var geo_ext_opt = this.configService.cfg.extensions.geolocation.active;
 
-      this.realtime.on('update', function() {
+      this.realtime.on('update', function(data) {
+        var featuresArr = Object.keys(data.features).map(function(k) {
+          return data.features[k]
+        });
         if (geo_ext_opt) {
           let result = loc.GPSStatus();
           if (result == true) {
             console.log("Realtime geolocation true");
-          } else if (rt.features && rt.features.length > 0) {
+          } else if (featuresArr && featuresArr.length > 0) {
             map1.fitBounds(rt.getBounds());
           }
         } else {

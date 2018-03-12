@@ -51,18 +51,6 @@ export class MessageInfoPage extends ProtectedPage {
   ionViewWillEnter() {
     this.contenido.scrollToBottom();
     this.markAsReaded();
-
-    /*this.loading = this.loadingCtr.create({ content: "Cargando mensaje..." });
-
-    this.loading.present().then(() => {*/
-      /*this.messagesService.getOne(this.message.id).then(updatedMessage => {
-        //console.log(updatedOrder);
-        this.message = updatedMessage;
-        //this.loading.dismiss();
-        this.scrollToBottom();
-        this.markAsReaded();
-      });*/
-    //});
   }
 
   ionViewDidLoad() {
@@ -84,7 +72,6 @@ export class MessageInfoPage extends ProtectedPage {
             subTitle: result.response_text,
             buttons: ['OK']
           });
-          //this.loading.dismiss();
           alert.present();
         } else {
           this.messagesService.getOne(this.message.id).then(updatedMsg => {
@@ -154,8 +141,6 @@ export class MessageInfoPage extends ProtectedPage {
 
       return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
-
-
     return day_diff == 0 && (
       diff < 60 && "ahora mismo" ||
       diff < 120 && "hace 1 minuto" ||

@@ -17,7 +17,6 @@ export class OrdersFilterPage {
     } else {
       this.filter = 'all';
     }
-    console.log(navParams);
   }
 
   changeFilter() {

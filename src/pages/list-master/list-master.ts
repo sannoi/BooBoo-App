@@ -93,6 +93,11 @@ export class ListMasterPage extends ProtectedPage {
           this.dataLoaded = true;
           return (valid_status.indexOf(item.estado) > -1);
         });
+      } else if (status == 'incidences') {
+        this.orders = orders.filter((item) => {
+          this.dataLoaded = true;
+          return (item.datos.notas && item.datos.notas.some(x => x.tipo === 'incidencia'));
+        });
       } else {
         this.dataLoaded = true;
         return this.orders;
@@ -105,6 +110,8 @@ export class ListMasterPage extends ProtectedPage {
       return 'Todos';
     } else if (this.filter == 'processing') {
       return 'En Proceso';
+    } else if (this.filter == 'incidences') {
+      return 'Incidencias';
     } else {
       return 'Completados';
     }
