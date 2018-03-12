@@ -145,7 +145,11 @@ export class ListMasterPage extends ProtectedPage {
     let options: CalendarModalOptions = {
       title: 'Selecciona un rango de fechas',
       pickMode: 'range',
-      canBackwardsSelected: true
+      canBackwardsSelected: true,
+      closeIcon: true,
+      doneIcon: true,
+      weekStart: 1,
+      weekdays: ['D', 'L', 'M', 'X', 'J', 'V', 'S']
     };
     if (this.dates_range && this.dates_range.from && this.dates_range.to) {
       options.defaultDateRange = { from: new Date(this.dates_range.from), to: new Date(this.dates_range.to) };

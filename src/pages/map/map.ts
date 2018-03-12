@@ -6,6 +6,7 @@ import { AuthService } from '../../providers/auth-service';
 import { LocationServiceProvider } from '../../providers/location-service';
 import * as leaflet from 'leaflet';
 import 'leaflet-realtime';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 import {ConfigServiceProvider} from '../../providers/config-service/config-service';
 
 @IonicPage()
@@ -19,6 +20,7 @@ export class MapPage extends ProtectedPage {
   center: any;
   realtime: any;
   gps: any;
+  filter_status: any;
 
   constructor(
     public navCtrl: NavController,
@@ -44,6 +46,38 @@ export class MapPage extends ProtectedPage {
     }
   }
 
+  filtro() {
+    if (this.filter_status && this.filter_status != 0) {
+      if (this.filter_status == 1) {
+        return "Sin Asignar";
+      } else if (this.filter_status == 5) {
+        return "En Ruta";
+      } else if (this.filter_status == 6) {
+        return "Esperando Recogida";
+      } else if (this.filter_status == 7) {
+        return "Almacenado";
+      } else {
+        return "";
+      }
+    } else {
+      return "";
+    }
+  }
+
+  filterByStatus(status: any) {
+    this.filter_status = status;
+    if (!status || status == 0) {
+      this.realtime.setUrl(this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.getUsr().id);
+    } else {
+      this.realtime.setUrl(this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.getUsr().id + '&filtro_estado=' + status);
+    }
+  }
+
+  test(feature: any) {
+    console.log("Clicked!", feature);
+    alert(JSON.stringify(feature));
+  }
+
   loadmap() {
     this.map = leaflet.map("map", {
       center: this.center,
@@ -55,6 +89,7 @@ export class MapPage extends ProtectedPage {
     }).addTo(this.map);
 
     if (!this.realtime) {
+      var este = this;
       this.realtime = leaflet.realtime({
         url: this.configService.apiUrl() + '/shop/pedido/realtimePedidos.json/?solo_usuario_actual=1&solo_disponibles=0&usuario_id=' + this.authService.getUsr().id,
         crossOrigin: true,
@@ -62,7 +97,51 @@ export class MapPage extends ProtectedPage {
       }, {
           interval: 15 * 1000,
           onEachFeature: function(feature, layer) {
+<<<<<<< HEAD
             layer.bindPopup(feature['properties'].content);
+=======
+            console.log(feature);
+					  /*var content = '<h4>'+feature['properties'].id+'<\/h4>' +
+					  '<p>Tipo: ' + feature['properties'].tipo + '<br \/>' +
+					  'Estado: ' + feature['properties'].estado + '<\/p>';*/
+            layer.on('click', function(e) {
+              este.test(feature);
+            });
+            var _content = feature['properties'].content;
+            layer.bindPopup(_content);
+          },
+          pointToLayer: function (feature, latlng) {
+            console.log(feature);
+            if (feature.properties.estado_id == "5") {
+              var blueMarker = leaflet.AwesomeMarkers.icon({
+                icon: 'truck',
+                prefix: 'fa',
+                markerColor: 'blue'
+              });
+              return leaflet.marker(latlng, {icon: blueMarker});
+            } else if (feature.properties.estado_id == "7") {
+              var orangeMarker = leaflet.AwesomeMarkers.icon({
+                icon: 'home',
+                prefix: 'fa',
+                markerColor: 'orange'
+              });
+              return leaflet.marker(latlng, {icon: orangeMarker});
+            } else if (feature.properties.estado_id == "6") {
+              var greenMarker = leaflet.AwesomeMarkers.icon({
+                icon: 'pause',
+                prefix: 'fa',
+                markerColor: 'green'
+              });
+              return leaflet.marker(latlng, {icon: greenMarker});
+            } else if (feature.properties.estado_id == "1") {
+              var redMarker = leaflet.AwesomeMarkers.icon({
+                icon: 'exclamation-circle',
+                prefix: 'fa',
+                markerColor: 'red'
+              });
+              return leaflet.marker(latlng, {icon: redMarker});
+            }
+>>>>>>> e5243c826d45654e64241365a20519f21ea6b976
           }
         }).addTo(this.map);
 

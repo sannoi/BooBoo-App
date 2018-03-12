@@ -14,8 +14,8 @@
 <ion-content no-padding>
   <!-- ACCIONES -->
   <ion-fab bottom right *ngIf="order" text-center>
-    <button padding ion-fab color="primary" (click)="viewNotes(order)"><ion-icon name="ios-attach"></ion-icon></button>{{ 'button.notes' | translate }}<br><br>
-    <button padding *ngIf="canDoActions(order) == true" ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon></button> <span *ngIf="canDoActions(order) == true">{{ 'button.actions' | translate }}</span>
+    <button padding ion-fab color="primary" (click)="viewNotes(order)" style="margin-bottom: 10px;"><ion-icon name="ios-attach"></ion-icon><div class="label">{{ 'button.notes' | translate }}</div></button>
+    <button padding *ngIf="canDoActions(order) == true" ion-fab color="primary" (click)="openActions(order)"><ion-icon name="arrow-dropup-circle"></ion-icon><div class="label">{{ 'button.actions' | translate }}</div></button>
   </ion-fab>
 
   <!--ion-fab top right edge>
@@ -43,7 +43,7 @@
     </ion-buttons>
 
     <ion-badge color="danger" *ngIf="ordersService.hasIncidences(order)" start>
-    <ion-icon name="alert" style="font-size: 1em;"></ion-icon> INCIDENCIAS
+    <ion-icon name="alert" style="font-size: 1em;"></ion-icon>
   </ion-badge>
 
     <!--ion-segment *ngIf="driver">
