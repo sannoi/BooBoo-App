@@ -1,0 +1,87 @@
+{
+  "items": [{
+      "name": "General",
+      "children": [{
+          "name": "Loren ipsum dolor",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        },
+        {
+          "name": "Sit amet",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "children": [{
+          "name": "Loren ipsum dolor",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        },
+        {
+          "name": "Sit amet",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        }
+      ]
+    },
+    {
+      "name": "Proveedores",
+      "children": [{
+          "name": "Gestión de envíos",
+          "children": [{
+              "name": "¿Cómo puedo consultar los envíos pendientes?",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            },
+            {
+              "name": "¿Cómo puedo aceptar un envío pendiente?",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            }
+          ]
+        },
+        {
+          "name": "Gestión de transportistas",
+          "children": [{
+              "name": "Loren ipsum dolor",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            },
+            {
+              "name": "Sit amet",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            },
+            {
+                "name": "Loren ipsum dolor",
+                "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+              },
+              {
+                "name": "Sit amet",
+                "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+              }
+          ]
+        },
+        {
+          "name": "Otras gestiones",
+          "children": [{
+              "name": "Loren ipsum dolor",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            },
+            {
+              "name": "Sit amet",
+              "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Transportistas",
+      "children": [{
+          "name": "Loren ipsum dolor",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        },
+        {
+          "name": "Sit amet",
+          "information": "Nam ut ante nec turpis viverra finibus. Nunc suscipit, felis a fringilla accumsan, felis eros pharetra lectus, eget tincidunt turpis lorem eget nunc. Nunc diam arcu, consectetur vel magna nec, bibendum elementum tellus."
+        }
+      ]
+    }
+  ]
+}

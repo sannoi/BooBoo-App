@@ -20,4 +20,12 @@ export class HelpPage {
     });
   }
 
+  gotoPage(component: any) {
+    this.navCtrl.push(component);
+  }
+
+  mailto(email) {
+     window.open('mailto:' + email, '_system');
+  }
+
 }

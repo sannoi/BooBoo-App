@@ -6,10 +6,27 @@
     <ion-title>{{ 'page.help' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding text-center>
+<ion-content padding>
 
-<button ion-button color="primary" (click)="verTutorial()">
-  Volver a ver el Tutorial de Introducción
-</button>
+  <div class="help-img" text-center>
+    <img src="assets/img/booboo_ico_inv.png">
+  </div>
+
+  <div class="help-list">
+    <ion-list>
+      <button ion-item (click)="gotoPage('FaqPage')">
+        Preguntas frecuentes
+      </button>
+      <button ion-item (click)="mailto('operaciones@booboo.eu')">
+        Contáctanos
+      </button>
+      <button ion-item (click)="gotoPage('LegalPage')">
+        Aviso legal
+      </button>
+      <button ion-item (click)="verTutorial()">
+        Tutorial de introducción
+      </button>
+    </ion-list>
+  </div>
 
 </ion-content>

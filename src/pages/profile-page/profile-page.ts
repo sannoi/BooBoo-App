@@ -30,6 +30,8 @@ export class ProfilePage extends ProtectedPage {
       .then((hasSeenTutorial) => {
         if (!hasSeenTutorial) {
           this.navCtrl.setRoot(TutorialPage);
+        } else {
+          this.menuCtrl.enable(true);
         }
       });
   }
@@ -45,23 +47,6 @@ export class ProfilePage extends ProtectedPage {
     if (this.configService.menu.pages[id_menu]) {
       this.configService.setActivePage(this.configService.menu.pages[id_menu]);
     }
-  }
-
-  follow() {
-    this.following = !this.following;
-    console.log('Follow user clicked');
-  }
-
-  imageTapped(post) {
-    console.log('Post image clicked');
-  }
-
-  comment(post) {
-    console.log('Comments clicked');
-  }
-
-  like(post) {
-    console.log('Like clicked');
   }
 
 }
