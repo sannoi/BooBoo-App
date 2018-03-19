@@ -69,7 +69,9 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
+      //this.statusBar.styleDefault();
+      //this.statusBar.overlaysWebView(true);
+      this.statusBar.backgroundColorByHexString('#43a7ff');
       this.splashScreen.hide();
 
       this.configService.initialize().then(res => {
