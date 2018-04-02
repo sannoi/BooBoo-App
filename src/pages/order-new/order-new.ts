@@ -13,7 +13,7 @@ export class OrderNewPage {
   url: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private sanitize: DomSanitizer, private configService: ConfigServiceProvider) {
-    this.url = sanitize.bypassSecurityTrustResourceUrl(configService.currentSite.baseUrl + "/es/Realizar-un-envio");
+    this.url = sanitize.bypassSecurityTrustResourceUrl(configService.currentSite.baseUrl + "/es/Confirmar-datos-de-usuario");
   }
 
   ionViewDidLoad() {
