@@ -103,6 +103,16 @@ export class MessagesPage extends ProtectedPage {
     });
   }
 
+  newTechServiceMessage() {
+    this.messagesService.getUserChat("634").then(chatResp => {
+      if (chatResp && chatResp.length == 1) {
+        this.messageInfo(chatResp[0]);
+      } else {
+        this.navCtrl.push('MessageNewPage', { destinatario: "634", pageTitle: "Servicio Técnico" });
+      }
+    });
+  }
+
   messageInfo(message: MessageModel) {
     this.navCtrl.push('MessageInfoPage', { message: message });
   }

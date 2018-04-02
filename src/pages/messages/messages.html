@@ -1,49 +1,44 @@
 <ion-header>
 
-    <ion-navbar>
-        <button ion-button menuToggle>
+  <ion-navbar>
+    <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{ customTitle | translate }}</ion-title>
+    <ion-title>{{ customTitle | translate }}</ion-title>
+  </ion-navbar>
 
-        <ion-buttons end>
-      <button ion-button icon-only (click)="newMessage()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-buttons>
-    </ion-navbar>
+</ion-header>
 
-    </ion-header>
+<ion-content>
 
-    <ion-content>
-
-      <ion-list *ngIf="dataLoaded">
-        <ion-item-sliding *ngFor="let item of messages | sortDescBy : 'fecha_ultima_respuesta'">
-            <button ion-item (click)="messageInfo(item)">
+  <ion-list *ngIf="dataLoaded">
+    <ion-item-sliding *ngFor="let item of messages | sortDescBy : 'fecha_ultima_respuesta'">
+      <button ion-item (click)="messageInfo(item)">
 				<text-avatar [text]="item.from_text" item-left></text-avatar>
-				<!--<ion-avatar item-start>
-				<img [src]="item.imagenes.md" />
-				</ion-avatar>-->
         <ion-badge float-right style="right: 15px; bottom: 15px; position: absolute;" *ngIf="hasResponsesNotReaded(item)">{{countResponsesNotReaded(item)}}</ion-badge>
         <ion-note float-right>
           <small>{{parseTwitterDate(item.fecha_ultima_respuesta)}}</small>
         </ion-note>
-
-                <!--<h3>{{item.from_text}}</h3>-->
 				<h2>{{item.from_text}}</h2>
 				<p>{{removeHTMLTags(item.preview_text)}}<p>
-
-
             </button>
-        </ion-item-sliding>
+    </ion-item-sliding>
 
-		<ion-item *ngIf="!messages || messages.length <= 0">
-		<ion-card>
-		<ion-card-content>
-		<h2 align="center">No hay mensajes</h2>
-		</ion-card-content>
-		</ion-card>
-		</ion-item>
+    <ion-item *ngIf="!messages || messages.length <= 0">
+      <ion-card>
+        <ion-card-content>
+          <h2 align="center">No hay mensajes</h2>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
 
-        </ion-list>
-        </ion-content>
+  </ion-list>
+
+  <ion-fab right bottom #fab>
+      <button ion-fab color="primary"><ion-icon name="add"></ion-icon><div class="label">Nuevo mensaje</div></button>
+      <ion-fab-list side="top">
+        <button ion-fab color="primary" (click)="fab.close();newTechServiceMessage()"><ion-icon name="contact"></ion-icon><div class="label">Servicio Técnico</div></button>
+        <button ion-fab color="alt" (click)="fab.close();newMessage()"><ion-icon name="people"></ion-icon><div class="label">Usuarios</div></button>
+      </ion-fab-list>
+    </ion-fab>
+</ion-content>
