@@ -7,7 +7,7 @@ export let menu = {
     { title: 'page.map', icon: 'map', component: 'MapPage', nav_params: { pageTitle: 'page.map' } },
     { title: 'page.settings', icon: 'cog', component: 'SettingsListPage', nav_params: { pageTitle: 'page.settings' } },
     { title: 'page.help', icon: 'help', component: 'HelpPage', nav_params: { pageTitle: 'page.help' } },
-    { title: 'Solicitar envío', icon: 'cart', component: 'OrderNewPage', nav_params: { pageTitle: 'Solicitar envío' } },
+    { title: 'Solicitar envío', icon: 'cart', require_user_type: 'cliente', component: 'OrderNewPage', nav_params: { pageTitle: 'Solicitar envío' } },
     { title: 'page.logout', icon: 'exit', component: 'WelcomePage', method: 'logout' }
   ]
 };
