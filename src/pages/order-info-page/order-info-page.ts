@@ -145,7 +145,7 @@ export class OrderInfoPage extends ProtectedPage {
   }
 
   canDoActions(order: OrderModel) {
-    if (this.canPickupOrder(order) == true || this.canStoreOrder(order) == true || this.canCompleteOrder(order) == true || this.canAddDocumentOrder(order) == true) {
+    if (this.canAssignOrder(order) == true || this.canPickupOrder(order) == true || this.canStoreOrder(order) == true || this.canCompleteOrder(order) == true || this.canAddDocumentOrder(order) == true) {
       return true;
     } else {
       return false;
@@ -184,6 +184,10 @@ export class OrderInfoPage extends ProtectedPage {
     } else {
       return false;
     }
+  }
+
+  canAssignOrder(order: OrderModel) {
+    return (this.isUserProvider() && this.order.proveedor_id == 0);
   }
 
   viewNotes(order: OrderModel) {

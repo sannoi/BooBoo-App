@@ -96,6 +96,12 @@ export class ListMasterPage extends ProtectedPage {
           this.dataLoaded = true;
           return (valid_status.indexOf(item.estado) > -1);
         });
+      } else if (status == 'pending_deliver') {
+        var valid_status = ["6"];
+        this.orders = orders.filter((item) => {
+          this.dataLoaded = true;
+          return (valid_status.indexOf(item.estado) > -1);
+        });
       } else if (status == 'incidences') {
         this.orders = orders.filter((item) => {
           this.dataLoaded = true;
@@ -113,6 +119,8 @@ export class ListMasterPage extends ProtectedPage {
       return 'Todos';
     } else if (this.filter == 'processing') {
       return 'En Proceso';
+    } else if (this.filter == 'pending_deliver') {
+      return 'Pendientes de entregar';
     } else if (this.filter == 'incidences') {
       return 'Incidencias';
     } else {

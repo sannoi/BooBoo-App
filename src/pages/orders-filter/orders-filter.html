@@ -6,6 +6,10 @@
     <ion-label>Todos</ion-label>
     <ion-radio value="all"></ion-radio>
   </ion-item>
+  <ion-item *ngIf="isUserDriver() || isUserProvider()">
+    <ion-label>Pendientes de entregar</ion-label>
+    <ion-radio value="pending_deliver"></ion-radio>
+  </ion-item>
   <ion-item>
     <ion-label>En proceso</ion-label>
     <ion-radio value="processing"></ion-radio>
